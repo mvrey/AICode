@@ -93,6 +93,9 @@
     <ClInclude Include="include\Agents\Soldier.h">
       <Filter>Header Files\Agents</Filter>
     </ClInclude>
+    <ClInclude Include="include\SimulationSpeedControls.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="include\Pathfinding\path.h">
       <Filter>Header Files\Pathfinding</Filter>
     </ClInclude>
@@ -349,6 +352,9 @@
     </ClCompile>
     <ClCompile Include="src\Pathfinding\path.cc">
       <Filter>Source Files\Pathfinding</Filter>
+    </ClCompile>
+    <ClCompile Include="src\SimulationSpeedControls.cc">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
