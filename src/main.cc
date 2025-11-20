@@ -22,8 +22,6 @@ MOMOS::SpriteHandle g_alarm_mode_img;
 
 /// Process user input
 void Input() {
-	GameStatus::get()->mouse_x = MOMOS::MousePositionX();
-	GameStatus::get()->mouse_y = MOMOS::MousePositionY();
 }
 
 

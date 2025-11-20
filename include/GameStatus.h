@@ -28,32 +28,33 @@ public:
 
 	static GameStatus* instance_;
 
-	//Save mouse coordinates
-	double mouse_x = 0.0;
-	double mouse_y = 0.0;
-
+	/// GENERAL STATUS ///
 	//In-game time
 	double game_time;
+	float simulation_speed_;
+	//----------------///
 
+	/// AGENTS MANAGEMENT ///
 	//Agent amounts to be created
 	bool g_agents_created = false;
-	int g_num_huge;
-	int g_num_normal;
-	int g_num_small;
 
-	PrisonMap* prison;
-	CostMap* map;
-
-	//Store crates
-	std::vector<Crate*> crates_;
-	unsigned int first_available_crate_index = 0;
-
-	// Agent-specific caches
 	std::vector<Guard*> guards_;
 	std::vector<Prisoner*> prisoners_;
 	std::vector<Soldier*> soldiers_;
+	//----------------///
 
+	/// PATHFINDING ///
+	PrisonMap* prison;
+	CostMap* map;
 	Pathfinder* pathfinder_;
+	//----------------///
+
+
+	/*********************
+	 * PRISON STATUS INFO *
+	 *********************/
+	std::vector<Crate*> crates_;
+	unsigned int first_available_crate_index = 0;
 
 	double working_shift_time_end;
 	short working_shift_ = 0;
@@ -61,7 +62,6 @@ public:
 	double alarm_mode_time_end_;
 	bool alarm_mode_ = false;
 
-	float simulation_speed_;
 
 protected:
 	GameStatus();

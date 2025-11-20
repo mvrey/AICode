@@ -28,6 +28,9 @@
     <Filter Include="Header Files\deps">
       <UniqueIdentifier>{a972001f-dfae-4927-9f35-c60dbb95a85f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Managers">
+      <UniqueIdentifier>{1d0730e5-4cad-4e0d-a5ce-26280e3d883a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\config.h">
