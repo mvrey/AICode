@@ -37,7 +37,7 @@ Soldier::~Soldier() {
 
 
 void Soldier::init() {
-	std::string path("src/PrisonEscape/data/agent" + std::to_string(rand() % 1) + ".png");
+	std::string path("data/agent" + std::to_string(rand() % 1) + ".png");
 	img_ = MOMOS::SpriteFromFile(path.c_str());
 }
 

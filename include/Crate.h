@@ -14,7 +14,7 @@
 
 class Crate {
 public:
-	Crate::Crate() { img_ = MOMOS::SpriteFromFile("src/PrisonEscape/data/crate.png"); };
+	Crate::Crate() { img_ = MOMOS::SpriteFromFile("data/crate.png"); };
 	Crate::~Crate() { MOMOS::SpriteRelease(img_); };
 
 	MOMOS::SpriteHandle img_;

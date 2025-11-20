@@ -27,7 +27,7 @@ MOMOS::Vec2 Path::NextPoint() {
 
 
 void Path::Print(CostMap *map) {
-	MOMOS::SpriteHandle sign = MOMOS::SpriteFromFile("src/PrisonEscape/data/bluedot.png");
+	MOMOS::SpriteHandle sign = MOMOS::SpriteFromFile("data/bluedot.png");
 	
 	for (unsigned int i = 0; i < path_.size(); i++) {
 		MOMOS::Vec2 src_coords = map->MapToScreenCoords(path_[i]);

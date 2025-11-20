@@ -9,7 +9,7 @@
 
 
 PrisonMap::PrisonMap() {
-	area_map_handle_ = MOMOS::SpriteFromFile("src/PrisonEscape/data/map_03_960x704_color.bmp");
+	area_map_handle_ = MOMOS::SpriteFromFile("data/map_03_960x704_color.bmp");
 
 	//Corners are listed starting top-left and rotating counter-clockwise
 

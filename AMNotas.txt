@@ -1,0 +1,179 @@
+- La historia tiene lugar en un mundo imaginario, donde la evolución del planeta y las especies puede ser distinta, pero las leyes físicas aún aplican.
+- No hay decisiones obvias. Añadir dilemas morales emergentes.
+
+- Tomar sistemas necesarios pero hacerlos de forma distinta para que no sea un clon de:
+
+	* Propiedad privada
+		Los items/objetos/edificios/etc. pertenencen a aquel que lo ha recolectado/construído/pagado. Se pueden regalar a individuos concretos o compartir con grupos, pero siempre tienen un propietario.
+		Los regalos mejoran la opinión del receptor sobre el emisor del regalo.
+		
+	* Herramientas
+		Para algunos trabajos son imprescindibles. Para otros, mejoran la velocidad, o la calidad del producto.
+	
+	* Sombras
+		Sistema de sombreado dinámico. Las sombras del sol también varían con los ciclos día/noche y estaciones.
+	
+	* Mapa
+		Dividido en chunks, y a su vez dividido en tiles
+		Generado proceduralmente y con continudad global en el mundo
+		Mares, ríos, montañas, pantanos, selvas, savanas, tundras... etc.
+	
+	* Personajes (aspecto)
+		TODO
+		Aspecto
+		Rasgos de personalidad
+		Necesidades
+		Inventario
+		Ropa
+		Skills
+		
+	* Investigación y conocimiento
+		El árbol de tecnologías solo debe ser usado para aquello que no pueda ser descubierto/inventado orgánicamente.
+		Solo es investigación aquello que no pueda ser hecho manualmente con el entorno (e.g. no se investigan canales, si no que se construyen orgánicamente para irrigar)
+		La domesticación de animales y plantas no se investiga. Cuando se encuentran estos animales se les intenta domesticar. Si se logra, entonces se desbloquea la tech (porque a menudo son prerequisitos para otros descubrimientos).
+		Investigable por individuos. Transmisible de persona en persona o libros o conferencias, clases... etc.
+		
+	* Temperatura
+		La temperatura depende del ciclo de las estaciones y del ciclo día/noche.
+		A la temperatura base se le suma o resta los modificadores de objetos de frío/calor.
+		La modificación de temperatura de un tile se expande a los tiles adyacentes de forma gradualmente decreciente.
+		
+	* Enfermedades
+		Transmisible de forma realista por proximidad, inmunidad adquirida... etc.
+		
+	* Guarida y edificios
+		TODO
+		Los edificios deberían permitir algún grado de personalización arquitectónica
+		
+	* Producción de bienes
+		TODO
+		
+	* Trabajos/Empleos
+		TODO
+		¿Cómo y cuando va a trabajar un personaje? Es decir, si se le dice que fabrique algo complejo no va a estar ahí sin parar hasta completarlo 5 semanas.
+		
+	* Comida 
+		TODO
+		Caza 
+		Pesca
+		Recolección
+		Agricultura
+		Ganadería
+	
+	* Flora
+		Las plantas presentes en el mapa son los ancestros de las variedades modernas domesticadas. Incluír mecánicas de domesticación de los cultivos.
+		
+	* Cultivos
+		Fertilidad del suelo
+		Rotación de cultivos y agotamiento del suelo
+		Domesticación de especies salvajes
+		Necesidades de temperatura, riego, sol
+		Enfermedades
+	
+	* Animales
+		Animales con características procedurales? (para que no sea obvio sus posibilidades) O quizás animales reales por bioma?
+		Simulación de ecosistemas
+		
+	* Mundo
+		Terra incognita. El mundo se revela a medida que se explora.
+		
+	* Recursos
+		Los elementos se encuentran en rocas reales (e.g. no hay vetas de silicio, si no de cuarzo SO2 u otros minerales). Éstas deben ser procesadas para obtener los minerales puros.
+		Minas y minerales: Estilo minecraft. Hay vetas de minerales repartidas a varias alturas del subsuelo y se debe ir excavando el mapa subterraneo para descubrirlas.
+		
+	* Listado de recursos
+		Piedra (genérica)
+		Ramas
+		Huesos
+		Obsidiana
+		Sílex
+		Hematita (Óxido férrico)
+		Frutas diversas
+		Pasto/Hierbas/Fibras vegetales
+		Bitumen (en charcos o piedras sólidas)
+		Charcoal / Ground coal
+		
+	* Listado de recursos fabricables
+		Herramientas: 
+		Hoguera (ramas + pasto + sílex. Una vez descubierto el arco se puede prescindir del sílex y usar arcos y cuerdas)
+		Lanza (solo con ramas o con hafting)
+		Pintura de hematita
+		Throwing stick
+		Pegamento 
+		Cama
+		Ropa
+		Arco y flechas
+		Balsa
+		Boomerang
+		Flauta
+		Mortero
+		Red de pesca
+		Pottery
+		Anzuelo
+		Lámparas de aceite
+		Pan
+		"Vino" de frutas fermentado accidentalmente 
+	
+	* Biomas
+		TODO
+		
+	* Items
+		Peso (basado en material). Tamaño (con representación visual).
+		Si el stack es de tamaño 1, el gráfico es diferente a si >1
+		Cada tipo de item tiene un atributo indicando unidades se pueden stackar juntas.
+		
+	* Crafting
+		Diversos materiales en el mismo tile o adyacentes dan opción a "experimentar" para descubrir cosas, o a "fabricar" si el personaje ya conoce la receta.
+		
+	* Dinámicas de fluídos
+		Fluyen hasta el punto más bajo
+		Evaporación por temperatura
+		Erosión
+		La lluvia llena las cuencas naturales
+		
+	* Liderazgo
+		TODO
+		Como surge un líder?
+		Qué papel tiene el líder?
+		
+	* Mapa de alturas
+		Hay elementos a varias alturas y en el mapa se puede hacer zoom in/out que muestra u oculta los elementos a esas alturas
+		En los edificios se pueden construir varias alturas y con el zoom ver la planta baja/1er piso/2º piso
+		También se puede excavar el suelo y revelar las rocas o minerales o materiales bajo el suelo
+		De este modo se pueden hacer minas subterraneas, sótanos y minas/canteras a cielo abierto
+		Para las construcciones a cielo abierto se ven los elementos, pero más lejos (más pequeños)
+		El terra incógnita también se aplica a los pisos subterraneos
+		
+	* Controles
+		Se puede manejar a cualquier personaje. LMB para Seleccionar y RMB para abrir ventana contextual de elecciones según en lo que clickes.
+		Ejemplo de opciones si se hace click sobre una rama al comenzar el juego: 
+			Ir a
+			Examinar NO (burbuja de pensamiento con las impresiones del personaje sobre el objeto, que den alguna info útil al jugador. e.g. Quizás pueda sacarle punta)
+				NO NO NO. Esto se muestra al ver el objeto en el inventario.
+			Coger (se lo pone en el inventario del personaje)
+			Investigar (Intenta modificar este objeto junto con otros de celdas adyacentes para dar lugar a descubrimientos. También pueden darse descubrimientos con 1 solo objeto)
+			
+	* Reproducción
+		Si 2 personajes se gustan (y su orientación sexual es compatible) pueden buscar privacidad y hacer el delicioso. Esto da una oportunidad de que la hembra preñe.
+		Al X tiempo puede dar a luz. El bebé necesita estar con su madre 24/7 durante un periodo de tiempo (ésto la hace ir más lenta, tener menos capacidad de carga).
+		El puto bebé llora cada vez que quiere algo y despierta a todos los que no estén suficientemente cansados como para dormirse bajo un bombardeo. A la madre la despierta siempre.
+		La gente cansada está de peor humor y rinde menos.
+		Un día el crío empieza a andar y ya se le puede manejar.
+		Su avatar va creciendo muy lentamente hasta alcanzar el tamaño de un adulto.
+		Sus habilidades están muy bajas y debe ir mejorándolas de forma natural al interactuar con el entorno. Algunas otras pueden subir solas junto con la edad de forma continua, o al observar a otros.
+		Se trackea su edad con el pasar de los días. En la pubertad tardía se convierte en adulto y ya puede reproducirse.
+		
+		
+	* Opiniones políticas
+		Cada opinión tiene un valor :[-1,+1] que indica su opinión con el asunto (se representan con barritas en el UI)
+		Los asuntos políticos cambian con el tiempo y con los descubrimientos
+		e.g. Al comenzar un asunto puede ser monogamia. -1 es desacuerdo absoluto (prohibida so pena capital) y +1 es obligatoria (obligatoria so pena capital)
+			Otros grados del espectro: encarcelamiento/destierro, multa, ignominia, indiferente
+		Más asuntos: centralización del poder
+		
+	* Dinero
+		Una vez se inventa el dinero, se pueden acuñar monedas utilizando metales fundidos. Para ello, hay un workstation con la opción de "acuñar monedas".
+		Se puede bien repartir el dinero entre la población o permitir que el "estado" compre bienes a cambio de dinero. Estos bienes adquiridos por el estado serán de carácter público. O se puede pagar a personajes para que hagan tareas públicas.
+		
+	* Cámara
+		TODO

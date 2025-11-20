@@ -1,0 +1,243 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{1C86E506-AA45-486B-ADB4-7ADE925F6327}</ProjectGuid>
+    <RootNamespace>My3IA_AStar</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <OutDir>/bin</OutDir>
+    <IncludePath>D:\Projects2025\MOMOS25\include\MOMOS;$(IncludePath)</IncludePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <OutDir>bin\</OutDir>
+    <IncludePath>D:\Projects2025\MOMOS25\include\MOMOS;$(IncludePath)</IncludePath>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>deps\src;deps\src\deps\glfw3_2_1\include;deps\src\deps\glfw3_2_1\src;deps\src\deps\glew2_0_0\include;deps\src\deps\glew2_0_0\src;deps\src\deps\glm-0_9_8_1;deps\src\deps\chipmunk-7.0.1\include;deps\src\deps\SOIL\src;src\deps\sqlite3;deps\include;..\extern\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>opengl32.lib;deps\build\windows\debug\Momos2D.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>deps\build\windows\debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>deps\src;deps\src\deps\glfw3_2_1\include;deps\src\deps\glfw3_2_1\src;deps\src\deps\glew2_0_0\include;deps\src\deps\glew2_0_0\src;deps\src\deps\glm-0_9_8_1;deps\src\deps\chipmunk-7.0.1\include;deps\src\deps\SOIL\src;src\deps\sqlite3;deps\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>opengl32.lib;deps\build\windows\debug\Momos2D.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>deps\build\windows\debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+    </ClCompile>
+    <Link>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+    </ClCompile>
+    <Link>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="deps\src\deps\glfw3_2_1\include\GLFW\glfw3.h" />
+    <ClInclude Include="deps\src\deps\glfw3_2_1\include\GLFW\glfw3native.h" />
+    <ClInclude Include="deps\src\deps\glfw3_2_1\src\cocoa_joystick.h" />
+    <ClInclude Include="deps\src\deps\glfw3_2_1\src\cocoa_platform.h" />
+    <ClInclude Include="deps\src\deps\glfw3_2_1\src\egl_context.h" />
+    <ClInclude Include="deps\src\deps\glfw3_2_1\src\glx_context.h" />
+    <ClInclude Include="deps\src\deps\glfw3_2_1\src\internal.h" />
+    <ClInclude Include="deps\src\deps\glfw3_2_1\src\linux_joystick.h" />
+    <ClInclude Include="deps\src\deps\glfw3_2_1\src\mir_platform.h" />
+    <ClInclude Include="deps\src\deps\glfw3_2_1\src\nsgl_context.h" />
+    <ClInclude Include="deps\src\deps\glfw3_2_1\src\posix_time.h" />
+    <ClInclude Include="deps\src\deps\glfw3_2_1\src\posix_tls.h" />
+    <ClInclude Include="deps\src\deps\glfw3_2_1\src\wgl_context.h" />
+    <ClInclude Include="deps\src\deps\glfw3_2_1\src\win32_joystick.h" />
+    <ClInclude Include="deps\src\deps\glfw3_2_1\src\win32_platform.h" />
+    <ClInclude Include="deps\src\deps\glfw3_2_1\src\wl_platform.h" />
+    <ClInclude Include="deps\src\deps\glfw3_2_1\src\x11_platform.h" />
+    <ClInclude Include="deps\src\deps\glfw3_2_1\src\xkb_unicode.h" />
+    <ClInclude Include="deps\src\deps\glew2_0_0\include\GL\eglew.h" />
+    <ClInclude Include="deps\src\deps\glew2_0_0\include\GL\glew.h" />
+    <ClInclude Include="deps\src\deps\glew2_0_0\include\GL\glxew.h" />
+    <ClInclude Include="deps\src\deps\glew2_0_0\include\GL\wglew.h" />
+    <ClInclude Include="deps\include\referenced.h" />
+    <ClInclude Include="deps\include\ref_ptr.h" />
+    <ClInclude Include="deps\include\types.h" />
+    <ClInclude Include="deps\include\Window.h" />
+    <ClInclude Include="deps\include\MOMOS\draw.h" />
+    <ClInclude Include="deps\include\MOMOS\input.h" />
+    <ClInclude Include="deps\include\MOMOS\math.h" />
+    <ClInclude Include="deps\include\MOMOS\momos.h" />
+    <ClInclude Include="deps\include\MOMOS\resource_manager.h" />
+    <ClInclude Include="deps\include\MOMOS\shader.h" />
+    <ClInclude Include="deps\include\MOMOS\sprite.h" />
+    <ClInclude Include="deps\include\MOMOS\sprite_renderer.h" />
+    <ClInclude Include="deps\include\MOMOS\texture.h" />
+    <ClInclude Include="deps\include\MOMOS\time.h" />
+    <ClInclude Include="deps\include\MOMOS\window.h" />
+    <ClInclude Include="deps\src\deps\chipmunk-7.0.1\include\chipmunk\chipmunk.h" />
+    <ClInclude Include="deps\src\deps\chipmunk-7.0.1\include\chipmunk\chipmunk_ffi.h" />
+    <ClInclude Include="deps\src\deps\chipmunk-7.0.1\include\chipmunk\chipmunk_private.h" />
+    <ClInclude Include="deps\src\deps\chipmunk-7.0.1\include\chipmunk\chipmunk_types.h" />
+    <ClInclude Include="deps\src\deps\chipmunk-7.0.1\include\chipmunk\chipmunk_unsafe.h" />
+    <ClInclude Include="deps\src\deps\chipmunk-7.0.1\include\chipmunk\cpArbiter.h" />
+    <ClInclude Include="deps\src\deps\chipmunk-7.0.1\include\chipmunk\cpBB.h" />
+    <ClInclude Include="deps\src\deps\chipmunk-7.0.1\include\chipmunk\cpBody.h" />
+    <ClInclude Include="deps\src\deps\chipmunk-7.0.1\include\chipmunk\cpConstraint.h" />
+    <ClInclude Include="deps\src\deps\chipmunk-7.0.1\include\chipmunk\cpDampedRotarySpring.h" />
+    <ClInclude Include="deps\src\deps\chipmunk-7.0.1\include\chipmunk\cpDampedSpring.h" />
+    <ClInclude Include="deps\src\deps\chipmunk-7.0.1\include\chipmunk\cpGearJoint.h" />
+    <ClInclude Include="deps\src\deps\chipmunk-7.0.1\include\chipmunk\cpGrooveJoint.h" />
+    <ClInclude Include="deps\src\deps\chipmunk-7.0.1\include\chipmunk\cpHastySpace.h" />
+    <ClInclude Include="deps\src\deps\chipmunk-7.0.1\include\chipmunk\cpMarch.h" />
+    <ClInclude Include="deps\src\deps\chipmunk-7.0.1\include\chipmunk\cpPinJoint.h" />
+    <ClInclude Include="deps\src\deps\chipmunk-7.0.1\include\chipmunk\cpPivotJoint.h" />
+    <ClInclude Include="deps\src\deps\chipmunk-7.0.1\include\chipmunk\cpPolyline.h" />
+    <ClInclude Include="deps\src\deps\chipmunk-7.0.1\include\chipmunk\cpPolyShape.h" />
+    <ClInclude Include="deps\src\deps\chipmunk-7.0.1\include\chipmunk\cpRatchetJoint.h" />
+    <ClInclude Include="deps\src\deps\chipmunk-7.0.1\include\chipmunk\cpRobust.h" />
+    <ClInclude Include="deps\src\deps\chipmunk-7.0.1\include\chipmunk\cpRotaryLimitJoint.h" />
+    <ClInclude Include="deps\src\deps\chipmunk-7.0.1\include\chipmunk\cpShape.h" />
+    <ClInclude Include="deps\src\deps\chipmunk-7.0.1\include\chipmunk\cpSimpleMotor.h" />
+    <ClInclude Include="deps\src\deps\chipmunk-7.0.1\include\chipmunk\cpSlideJoint.h" />
+    <ClInclude Include="deps\src\deps\chipmunk-7.0.1\include\chipmunk\cpSpace.h" />
+    <ClInclude Include="deps\src\deps\chipmunk-7.0.1\include\chipmunk\cpSpatialIndex.h" />
+    <ClInclude Include="deps\src\deps\chipmunk-7.0.1\include\chipmunk\cpTransform.h" />
+    <ClInclude Include="deps\src\deps\chipmunk-7.0.1\include\chipmunk\cpVect.h" />
+    <ClInclude Include="deps\src\deps\chipmunk-7.0.1\src\prime.h" />
+    <ClInclude Include="deps\include\fontstash\fontstash.h" />
+    <ClInclude Include="deps\include\fontstash\glfontstash.h" />
+    <ClInclude Include="deps\include\fontstash\stb_truetype.h" />
+    <ClInclude Include="deps\src\deps\SOIL\src\image_DXT.h" />
+    <ClInclude Include="deps\src\deps\SOIL\src\image_helper.h" />
+    <ClInclude Include="deps\src\deps\SOIL\src\SOIL.h" />
+    <ClInclude Include="deps\src\deps\SOIL\src\stbi_DDS_aug.h" />
+    <ClInclude Include="deps\src\deps\SOIL\src\stbi_DDS_aug_c.h" />
+    <ClInclude Include="deps\src\deps\SOIL\src\stb_image_aug.h" />
+    <ClInclude Include="deps\src\deps\sqlite3\sqlite3.h" />
+    <ClInclude Include="deps\src\deps\sqlite3\sqlite3ext.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="include\Agents\Agent.h" />
+    <ClInclude Include="include\Agents\Guard.h" />
+    <ClInclude Include="include\Agents\Messager.h" />
+    <ClInclude Include="include\Agents\Pathfinder.h" />
+    <ClInclude Include="include\Agents\Prisoner.h" />
+    <ClInclude Include="include\Agents\Soldier.h" />
+    <ClInclude Include="include\config.h" />
+    <ClInclude Include="include\Crate.h" />
+    <ClInclude Include="include\Door.h" />
+    <ClInclude Include="include\GameStatus.h" />
+    <ClInclude Include="include\Pathfinding\astar.h" />
+    <ClInclude Include="include\Pathfinding\cost_map.h" />
+    <ClInclude Include="include\Pathfinding\path.h" />
+    <ClInclude Include="include\PrisonMap.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\Agents\Agent.cc" />
+    <ClCompile Include="src\Agents\Guard.cc" />
+    <ClCompile Include="src\Agents\Messager.cc" />
+    <ClCompile Include="src\Agents\Pathfinder.cc" />
+    <ClCompile Include="src\Agents\Prisoner.cc" />
+    <ClCompile Include="src\Agents\Soldier.cc" />
+    <ClCompile Include="src\Door.cc" />
+    <ClCompile Include="src\GameStatus.cc" />
+    <ClCompile Include="src\main.cc" />
+    <ClCompile Include="src\Pathfinding\astar.cc" />
+    <ClCompile Include="src\Pathfinding\cost_map.cc" />
+    <ClCompile Include="src\Pathfinding\path.cc" />
+    <ClCompile Include="src\PrisonMap.cc" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

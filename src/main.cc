@@ -184,11 +184,11 @@ int main(int argc, char **argv) {
 	//Init variables and locations for this specific map
 	GameStatus::get()->prison = new PrisonMap();
 
-	g_shift_change_img = MOMOS::SpriteFromFile("src/PrisonEscape/data/shift.png");
-	g_alarm_mode_img = MOMOS::SpriteFromFile("src/PrisonEscape/data/alarm.png");
+	g_shift_change_img = MOMOS::SpriteFromFile("data/shift.png");
+	g_alarm_mode_img = MOMOS::SpriteFromFile("data/alarm.png");
 
 	GameStatus::get()->map = new CostMap();
-	GameStatus::get()->map->Load("src/PrisonEscape/data/map_03_60x44_bw.bmp", "src/PrisonEscape/data/map_03_960x704_layoutAB.bmp");
+	GameStatus::get()->map->Load("data/map_03_60x44_bw.bmp", "data/map_03_960x704_layoutAB.bmp");
 	GameStatus::get()->pathfinder_ = new Pathfinder();
 
 	//Sprinkle the loading area with crates
@@ -203,12 +203,12 @@ int main(int argc, char **argv) {
 	GameStatus::get()->prison->doors_[0]->is_open_ = false;
 	GameStatus::get()->prison->doors_[1]->is_open_ = false;
 
-	MOMOS::DrawSetTextFont("src/PrisonEscape/data/medieval.ttf");    
+	MOMOS::DrawSetTextFont("data/medieval.ttf");    
 	MOMOS::WindowSetMouseVisibility(true);
 	MOMOS::DrawSetFillColor(200, 50, 100, 255);
 
 	// 40ms per frame
-	float m_iTimeStep = 1000.0 / 25;
+	float m_iTimeStep = 16.0f;
 	double CurrentTime = MOMOS::Time();
 
 	checkGameStarted();
@@ -218,10 +218,7 @@ int main(int argc, char **argv) {
 
 	// Game loop with fixed update
 	while (MOMOS::WindowIsOpened()) {
-
-		// 40ms per frame
-		float m_iTimeStep = 16.0f;
-                
+        
 		Input();
 
 		double accumTime = MOMOS::Time() - CurrentTime;

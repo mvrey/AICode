@@ -40,7 +40,7 @@ Prisoner::~Prisoner() {
 
 
 void Prisoner::init() {
-	std::string path("src/PrisonEscape/data/prisoner" + std::to_string(rand() % 3) + ".png");
+	std::string path("data/prisoner" + std::to_string(rand() % 3) + ".png");
 	img_ = MOMOS::SpriteFromFile(path.c_str());
 }
 

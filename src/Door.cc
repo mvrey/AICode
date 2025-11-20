@@ -16,11 +16,11 @@ Door::Door(float x, float y, bool vertical) {
 	locked_open_time_ = 0;
 
 	if (is_vertical_) {
-		img_open_ = MOMOS::SpriteFromFile("src/PrisonEscape/data/door_v_open.bmp");
-		img_closed_ = MOMOS::SpriteFromFile("src/PrisonEscape/data/door_v_closed.bmp");
+		img_open_ = MOMOS::SpriteFromFile("data/door_v_open.bmp");
+		img_closed_ = MOMOS::SpriteFromFile("data/door_v_closed.bmp");
 	} else {
-		img_open_ = MOMOS::SpriteFromFile("src/PrisonEscape/data/door_h_open.bmp");
-		img_closed_ = MOMOS::SpriteFromFile("src/PrisonEscape/data/door_h_closed.bmp");
+		img_open_ = MOMOS::SpriteFromFile("data/door_h_open.bmp");
+		img_closed_ = MOMOS::SpriteFromFile("data/door_h_closed.bmp");
 	}
 };
 

@@ -41,7 +41,7 @@ Guard::~Guard() {
 
 
 void Guard::init() {
-	std::string path("src/PrisonEscape/data/guard" + std::to_string(rand()%4) + ".png");
+	std::string path("data/guard" + std::to_string(rand()%4) + ".png");
 	img_ = MOMOS::SpriteFromFile(path.c_str());
 }
 
