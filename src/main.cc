@@ -2,6 +2,7 @@
 #include <vector>
 #include <ctime>
 #include <thread>
+#include <algorithm>
 
 #include "../include/GameStatus.h"
 #include "../include/PrisonMap.h"
@@ -20,8 +21,180 @@ MOMOS::SpriteHandle g_shift_change_img;
 MOMOS::SpriteHandle g_alarm_mode_img;
 
 
+/// SPEED CONTROLS CODE STARTS HERE ///
+struct SpeedControlOption {
+	const char* label;
+	double multiplier;
+};
+
+const SpeedControlOption kSpeedControlOptions[] = {
+	{ "Paused", 0.0 },
+	{ "1x", 1.0 },
+	{ "2x", 2.0 },
+	{ "3x", 3.0 },
+	{ "4x", 4.0 },
+	{ "5x", 5.0 },
+};
+
+const int kSpeedControlCount = sizeof(kSpeedControlOptions) / sizeof(SpeedControlOption);
+
+int g_speed_index = 1;
+int g_last_nonzero_speed_index = 1;
+int g_speed_button_hover = -1;
+
+const float kSpeedUIRightPadding = 16.0f;
+const float kSpeedUITopPadding = 16.0f;
+const float kSpeedUIButtonWidth = 32.0f;
+const float kSpeedUIButtonHeight = 26.0f;
+const float kSpeedUIButtonSpacing = 4.0f;
+const float kSpeedUITextSize = 16.0f;
+const int kSpeedUIButtonCount = 3; // -, toggle, +
+
+float SpeedControlsTotalWidth() {
+	return kSpeedUIButtonCount * kSpeedUIButtonWidth + (kSpeedUIButtonCount - 1) * kSpeedUIButtonSpacing;
+}
+
+float SpeedControlsBaseX() {
+	return Screen::width - kSpeedUIRightPadding - SpeedControlsTotalWidth();
+}
+
+float SpeedControlsButtonsY() {
+	return kSpeedUITopPadding + kSpeedUITextSize + 6.0f;
+}
+
+float SpeedButtonX(int button_index) {
+	return SpeedControlsBaseX() + button_index * (kSpeedUIButtonWidth + kSpeedUIButtonSpacing);
+}
+
+bool IsPointInsideSpeedButton(int button_index, float x, float y) {
+	float bx = SpeedButtonX(button_index);
+	float by = SpeedControlsButtonsY();
+	return (x >= bx && x <= bx + kSpeedUIButtonWidth &&
+		y >= by && y <= by + kSpeedUIButtonHeight);
+}
+
+int GetSpeedButtonIndexAt(float x, float y) {
+	for (int i = 0; i < kSpeedUIButtonCount; ++i) {
+		if (IsPointInsideSpeedButton(i, x, y)) {
+			return i;
+		}
+	}
+	return -1;
+}
+
+void ApplySpeedIndex(int new_index) {
+	new_index = std::max(0, std::min(kSpeedControlCount - 1, new_index));
+	g_speed_index = new_index;
+	GameStatus::get()->simulation_speed_ = static_cast<float>(kSpeedControlOptions[new_index].multiplier);
+
+	if (kSpeedControlOptions[new_index].multiplier > 0.0) {
+		g_last_nonzero_speed_index = new_index;
+	}
+}
+
+void IncreaseSimulationSpeed() {
+	if (g_speed_index < kSpeedControlCount - 1) {
+		ApplySpeedIndex(g_speed_index + 1);
+	}
+}
+
+void DecreaseSimulationSpeed() {
+	if (g_speed_index > 0) {
+		ApplySpeedIndex(g_speed_index - 1);
+	}
+}
+
+void ToggleSimulationSpeed() {
+	if (kSpeedControlOptions[g_speed_index].multiplier == 0.0) {
+		int target = (g_last_nonzero_speed_index > 0) ? g_last_nonzero_speed_index : 1;
+		ApplySpeedIndex(target);
+	} else {
+		g_last_nonzero_speed_index = g_speed_index;
+		ApplySpeedIndex(0);
+	}
+}
+
+void HandleSimulationSpeedControls() {
+	float mx = static_cast<float>(MOMOS::MousePositionX());
+	float my = static_cast<float>(MOMOS::MousePositionY());
+	int hovered = GetSpeedButtonIndexAt(mx, my);
+	g_speed_button_hover = hovered;
+
+	if (hovered != -1 && MOMOS::MouseButtonDown(1)) {
+		switch (hovered) {
+		case 0:
+			DecreaseSimulationSpeed();
+			break;
+		case 1:
+			ToggleSimulationSpeed();
+			break;
+		case 2:
+			IncreaseSimulationSpeed();
+			break;
+		}
+	}
+}
+
+void DrawSimulationSpeedControls() {
+	const SpeedControlOption& current = kSpeedControlOptions[g_speed_index];
+	char label_text[32];
+	if (current.multiplier == 0.0) {
+		snprintf(label_text, sizeof(label_text), "Speed: Paused");
+	} else {
+		snprintf(label_text, sizeof(label_text), "Speed: %s", current.label);
+	}
+
+	MOMOS::DrawSetFillColor(240, 240, 240, 255);
+	MOMOS::DrawSetTextSize(kSpeedUITextSize);
+	MOMOS::DrawText(SpeedControlsBaseX(), kSpeedUITopPadding + kSpeedUITextSize, label_text);
+
+	const char* button_labels[kSpeedUIButtonCount];
+	button_labels[0] = "-";
+	button_labels[1] = (current.multiplier == 0.0) ? ">" : "||";
+	button_labels[2] = "+";
+
+	for (int i = 0; i < kSpeedUIButtonCount; ++i) {
+		float bx = SpeedButtonX(i);
+		float by = SpeedControlsButtonsY();
+
+		bool disabled = (i == 0 && g_speed_index == 0) ||
+			(i == 2 && g_speed_index >= kSpeedControlCount - 1 && current.multiplier != 0.0);
+
+		unsigned char baseColor = disabled ? 40 : 65;
+		unsigned char alpha = disabled ? 90 : 150;
+
+		if (i == g_speed_button_hover && !disabled) {
+			baseColor = 85;
+			alpha = 200;
+		}
+
+		float points[10] = {
+			bx, by,
+			bx + kSpeedUIButtonWidth, by,
+			bx + kSpeedUIButtonWidth, by + kSpeedUIButtonHeight,
+			bx, by + kSpeedUIButtonHeight,
+			bx, by
+		};
+
+		MOMOS::DrawSetFillColor(baseColor, baseColor, baseColor, alpha);
+		MOMOS::DrawSolidPath(points, 5);
+		MOMOS::DrawSetStrokeColor(220, 220, 220, 180);
+		MOMOS::DrawPath(points, 5);
+
+		MOMOS::DrawSetFillColor(240, 240, 240, disabled ? 120 : 255);
+		MOMOS::DrawSetTextSize(14.0f);
+		float text_x = bx + kSpeedUIButtonWidth / 2.0f - 6.0f;
+		float text_y = by + kSpeedUIButtonHeight / 2.0f + 5.0f;
+		MOMOS::DrawText(text_x, text_y, button_labels[i]);
+	}
+}
+
+/// SPEED CONTROLS CODE ENDS HERE ///
+
+
 /// Process user input
 void Input() {
+	HandleSimulationSpeedControls();
 }
 
 
@@ -97,6 +270,8 @@ void Draw() {
 		MOMOS::DrawSprite(g_shift_change_img, 20.0f, 50.0f);
 	}
 
+	DrawSimulationSpeedControls();
+
 	MOMOS::DrawEnd();
 	MOMOS::WindowFrame();
 }
@@ -146,7 +321,8 @@ bool checkGameStarted() {
 
 /// Main update loop
 void Update(double m_iTimeStep) {
-	GameStatus::get()->game_time += m_iTimeStep;
+	double effective_step = m_iTimeStep * GameStatus::get()->simulation_speed_;
+	GameStatus::get()->game_time += effective_step;
 
 	//Check working shift
 	if (GameStatus::get()->working_shift_time_end < GameStatus::get()->game_time) {
@@ -160,8 +336,9 @@ void Update(double m_iTimeStep) {
 		GameStatus::get()->alarm_mode_ = false;
 	}
 
-	if (checkGameStarted()) {
-		UpdateAI(m_iTimeStep);
+	bool started = checkGameStarted();
+	if (started && effective_step > 0.0) {
+		UpdateAI(effective_step);
 	}
 
 	//Alarm cheat
@@ -188,6 +365,7 @@ int main(int argc, char **argv) {
 	GameStatus::get()->map = new CostMap();
 	GameStatus::get()->map->Load("data/map_03_60x44_bw.bmp", "data/map_03_960x704_layoutAB.bmp");
 	GameStatus::get()->pathfinder_ = new Pathfinder();
+	GameStatus::get()->simulation_speed_ = static_cast<float>(kSpeedControlOptions[g_speed_index].multiplier);
 
 	//Sprinkle the loading area with crates
 	PrisonMap* prison = GameStatus::get()->prison;
