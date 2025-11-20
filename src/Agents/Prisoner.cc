@@ -205,16 +205,14 @@ void PrisonerMind::reason() {
 			status_ = kGoingToRest;
 		}
 		
-		MOMOS::Vec2 dest;
-
+		
 		//If no movement path is set
 		if (!owner_->getBody()->path_set_) {
 			if (!owner_->door_route_set_) {
-				dest = GameStatus::get()->map->MapToScreenCoords(GameStatus::get()->prison->doors_[owner_->current_target_door_]->getFrontalPoint(true));
 				owner_->clearMovement();
 				owner_->door_route_set_ = true;
 			}
-		
+			MOMOS::Vec2 dest = GameStatus::get()->map->MapToScreenCoords(GameStatus::get()->prison->doors_[owner_->current_target_door_]->getFrontalPoint(true));
 			owner_->setPathTo(dest);
 		} else {
 			//If current path is complete
