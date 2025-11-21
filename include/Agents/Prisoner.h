@@ -53,6 +53,7 @@ public:
 	virtual AgentBody* getBody() override;
 	virtual ::MOMOS::SpriteHandle getImg() override { return img_; };
 
+	bool goToRoom(Room room);
 	short GetWorkingShift() const;
 	void SetWorkingShift(short shift);
 

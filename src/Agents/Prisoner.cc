@@ -19,6 +19,57 @@ AgentBody* Prisoner::getBody() {
 	return body_;
 }
 
+bool Prisoner::goToRoom(Room room) {
+	auto& movement = GetMovementComponent();
+	auto& transform = GetTransformComponent();
+
+	CostMap* map = GameStatus::get()->map;
+	PrisonMap* prison = GameStatus::get()->prison;
+
+	if (!map || !prison) {
+		return false;
+	}
+
+	if (!movement.path_set) {
+		Room* current_room = prison->getRoomAt(map->ScreenToMapCoords(transform.position));
+		std::vector<::MOMOS::Vec2> waypoint_path;
+
+		if (current_room != nullptr) {
+			if (current_room->id_ == room.id_) {
+				MovementHelpers::ClearMovement(*this);
+				waypoint_path.push_back(prison->getRandomPointInRoom(room));
+			} else {
+				waypoint_path = prison->getPathToRoom(current_room, &room);
+			}
+		}
+
+		if (!waypoint_path.empty()) {
+			movement.path_set = true;
+			movement.deterministic_steps.clear();
+			for (const auto& waypoint : waypoint_path) {
+				movement.deterministic_steps.push_back(map->MapToScreenCoords(waypoint));
+			}
+			movement.deterministic_steps.push_back(
+				map->MapToScreenCoords(prison->getRandomPointInRoom(room)));
+			movement.deterministic_step_index = 0;
+			movement.movement_path = nullptr;
+			movement.path_command = nullptr;
+			movement.movement_finished = false;
+			SyncLegacyFromEcs();
+		} else {
+			::MOMOS::Vec2 point = map->MapToScreenCoords(prison->getRandomPointInRoom(room));
+			MovementHelpers::SetPathTo(*this, point);
+			SyncLegacyFromEcs();
+		}
+
+		return false;
+	}
+
+	const bool finished = MovementHelpers::MoveFollowingPath(*this);
+	SyncLegacyFromEcs();
+	return finished;
+}
+
 Prisoner::Prisoner() {
 	body_ = new PrisonerBody();
 	mind_ = new PrisonerMind();
