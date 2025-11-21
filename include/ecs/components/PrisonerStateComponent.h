@@ -5,6 +5,7 @@
 
 class Crate;
 class Agent;
+class Prisoner;
 
 namespace ECS {
 
@@ -16,7 +17,8 @@ struct PrisonerStateComponent {
 	Crate* carried_crate = nullptr;
 	float original_speed = 0.0f;
 
-	Agent* pursuit_target = nullptr;
+	Prisoner* pursuit_target = nullptr;
+	Prisoner* owner = nullptr;
 };
 
 } // namespace ECS
