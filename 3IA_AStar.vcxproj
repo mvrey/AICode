@@ -220,6 +220,8 @@
     <ClInclude Include="include\ecs\components\TransformComponent.h" />
     <ClInclude Include="include\ecs\Registry.h" />
     <ClInclude Include="include\ecs\System.h" />
+    <ClInclude Include="include\ecs\PrisonerInput.h" />
+    <ClInclude Include="include\ecs\PrisonerEcsSystems.h" />
     <ClInclude Include="include\ecs\system\PrisonerAISystem.h" />
     <ClInclude Include="include\ecs\system\PrisonerMovementSystem.h" />
     <ClInclude Include="include\ecs\system\PrisonerRenderSystem.h" />
@@ -260,6 +262,8 @@
     <ClCompile Include="src\ecs\system\PrisonerAISystem.cc" />
     <ClCompile Include="src\ecs\system\PrisonerMovementSystem.cc" />
     <ClCompile Include="src\ecs\system\PrisonerRenderSystem.cc" />
+    <ClCompile Include="src\ecs\PrisonerInput.cc" />
+    <ClCompile Include="src\ecs\PrisonerEcsSystems.cc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

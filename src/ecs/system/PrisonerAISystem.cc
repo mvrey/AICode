@@ -19,7 +19,7 @@ void PrisonerAISystem::Update(Registry& registry, double delta_time) {
 		}
 
 		// Simplified AI: just move horizontally based on working shift.
-		transform.direction = state.status == kEscaping ? MOMOS::Vec2{ 1.0f, 0.0f } : MOMOS::Vec2{ -1.0f, 0.0f };
+		transform.direction = state.status == kEscaping ? ::MOMOS::Vec2{ 1.0f, 0.0f } : ::MOMOS::Vec2{ -1.0f, 0.0f };
 		movement.speed = (state.status == kEscaping ? 0.15f : 0.08f) * GameStatus::get()->simulation_speed_;
 	});
 }

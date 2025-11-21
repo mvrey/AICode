@@ -39,7 +39,7 @@ public:
 
 	//Status-changing flags
 	bool door_spotted_ = false;
-	MOMOS::Vec2 door_pos_;
+	::MOMOS::Vec2 door_pos_;
 	bool soldier_spotted_ = false;
 };
 
@@ -56,17 +56,17 @@ public:
 	void render() override;
 
 	virtual AgentBody* getBody() { return reinterpret_cast<GuardBody*>(body_); };
-	virtual MOMOS::SpriteHandle getImg() override { return img_; };
+	virtual ::MOMOS::SpriteHandle getImg() override { return img_; };
 
 	GuardMind* mind_;
 	GuardBody* body_;
 
-	MOMOS::SpriteHandle img_;
+	::MOMOS::SpriteHandle img_;
 	
 	///Returns vision orientation
-	float getVisionSign(MOMOS::Vec2 p1, MOMOS::Vec2 p2, MOMOS::Vec2 p3);
+	float getVisionSign(::MOMOS::Vec2 p1, ::MOMOS::Vec2 p2, ::MOMOS::Vec2 p3);
 	///Checks if a given point is inside the vision cone
-	bool isPointSighted(MOMOS::Vec2 pt);
+	bool isPointSighted(::MOMOS::Vec2 pt);
 	///Calculates the array of points that form the vision cone
 	void calculateVision();
 	///Removes sections of the vision cone that collide with walls, effectively making walls stop vision
@@ -78,7 +78,7 @@ public:
 	float vision_cone_length_ = 200.0f;
 	//Vision cone width
 	float vision_cone_amplitude_ = 80.0f;
-	MOMOS::Vec2 vision_cone_points_[300];
+	::MOMOS::Vec2 vision_cone_points_[300];
 	float vision_cone_translated_points_[300 * 2];
 
 private:

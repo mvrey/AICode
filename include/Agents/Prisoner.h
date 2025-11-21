@@ -51,7 +51,7 @@ public:
 	void render() override;
 
 	virtual AgentBody* getBody() override;
-	virtual MOMOS::SpriteHandle getImg() override { return img_; };
+	virtual ::MOMOS::SpriteHandle getImg() override { return img_; };
 
 	short GetWorkingShift() const;
 	void SetWorkingShift(short shift);
@@ -61,7 +61,7 @@ public:
 	PrisonerMind* mind_;
 	PrisonerBody* body_;
 
-	MOMOS::SpriteHandle img_;
+	::MOMOS::SpriteHandle img_;
 
 	ECS::PrisonerStateComponent& GetStateComponent();
 

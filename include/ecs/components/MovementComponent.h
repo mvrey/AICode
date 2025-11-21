@@ -14,7 +14,7 @@ struct MovementComponent {
 	double last_movement_update = 0.0;
 	double movement_threshold = 0.0;
 
-	std::vector<MOMOS::Vec2> deterministic_steps;
+	std::vector<::MOMOS::Vec2> deterministic_steps;
 	unsigned int deterministic_step_index = 0;
 
 	bool path_set = false;

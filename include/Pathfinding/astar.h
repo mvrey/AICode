@@ -30,6 +30,6 @@ public:
 	~AStar();
 
 	bool PreProcess(CostMap *map);
-	bool GeneratePath(MOMOS::Vec2 origin, MOMOS::Vec2 destination, Path *path);
+	bool GeneratePath(::MOMOS::Vec2 origin, ::MOMOS::Vec2 destination, Path *path);
 };
 #endif // __ASTAR__

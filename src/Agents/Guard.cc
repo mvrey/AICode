@@ -42,7 +42,7 @@ Guard::~Guard() {
 
 void Guard::init() {
 	std::string path("data/guard" + std::to_string(rand()%4) + ".png");
-	img_ = MOMOS::SpriteFromFile(path.c_str());
+	img_ = ::MOMOS::SpriteFromFile(path.c_str());
 }
 
 
@@ -61,7 +61,7 @@ void Guard::render() {
 	std::string status_name;
 	std::string status_names[] = { "NORMAL", "SUSPICIOUS", "ALERT" };
 	status_name = status_names[static_cast<int>(mind_->status_)];
-	MOMOS::DrawText(body_->pos_.x, body_->pos_.y + 65.0f, status_name.c_str());
+	::MOMOS::DrawText(body_->pos_.x, body_->pos_.y + 65.0f, status_name.c_str());
 
 	//Draw vision cone
 	renderVision();
@@ -178,7 +178,7 @@ void GuardMind::reason() {
 	case kNormal:
 		if (!owner_->getBody()->path_set_) {
 			//Pick random point in prison
-			MOMOS::Vec2 point = { (float)(rand() % Screen::width),(float)( rand() % Screen::height) };
+			::MOMOS::Vec2 point = { (float)(rand() % Screen::width),(float)( rand() % Screen::height) };
 
 			//Check area type
 			Room* room = GameStatus::get()->prison->getRoomAt(GameStatus::get()->map->ScreenToMapCoords(point));
@@ -223,7 +223,7 @@ void GuardMind::reason() {
 				}
 			} else {
 				//Pick random point in prison
-				MOMOS::Vec2 point = { (float)(rand() % Screen::width), (float)(rand() % Screen::height) };
+				::MOMOS::Vec2 point = { (float)(rand() % Screen::width), (float)(rand() % Screen::height) };
 
 				//Check area type
 				Room* room = GameStatus::get()->prison->getRoomAt(GameStatus::get()->map->ScreenToMapCoords(point));
@@ -326,15 +326,15 @@ void Guard::removeXRayPowers() {
 	//For every point (segment) in the vision cone, raytrace from vision origin
 	for(int k=0; k < vision_cone_amplitude_; k++) {
 		//Get common starting point
-		MOMOS::Vec2 p = { vision_cone_translated_points_[0], vision_cone_translated_points_[1] };
-		MOMOS::Vec2 start = GameStatus::get()->map->ScreenToMapCoords(MOMOS::Vec2(p));
+		::MOMOS::Vec2 p = { vision_cone_translated_points_[0], vision_cone_translated_points_[1] };
+		::MOMOS::Vec2 start = GameStatus::get()->map->ScreenToMapCoords(::MOMOS::Vec2(p));
 	
 		//Get cone base point (raycast end point)
 		p = { vision_cone_translated_points_[k * 2 + 2], vision_cone_translated_points_[k * 2 + 3] };
-		MOMOS::Vec2 end = GameStatus::get()->map->ScreenToMapCoords(MOMOS::Vec2(p));
+		::MOMOS::Vec2 end = GameStatus::get()->map->ScreenToMapCoords(::MOMOS::Vec2(p));
 		
 		//Calculate axis steps
-		MOMOS::Vec2 current_end_point = end;
+		::MOMOS::Vec2 current_end_point = end;
 
 		float dx = (end.x - start.x);
 		float dy = abs(end.y - start.y);
@@ -403,8 +403,8 @@ void Guard::renderVision() {
 			break;
 		}
 
-		MOMOS::DrawSetStrokeColor(200, 200, 200, 200);
-		MOMOS::DrawSetFillColor(color[0], color[1], color[2], color[3]);
-		MOMOS::DrawSolidPath(vision_cone_translated_points_, (int)vision_cone_amplitude_+1);
+		::MOMOS::DrawSetStrokeColor(200, 200, 200, 200);
+		::MOMOS::DrawSetFillColor(color[0], color[1], color[2], color[3]);
+		::MOMOS::DrawSolidPath(vision_cone_translated_points_, (int)vision_cone_amplitude_+1);
 	}
 }

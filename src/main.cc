@@ -11,6 +11,7 @@
 #include "../include/SimulationSpeedControls.h"
 #include "../include/FpsCounter.h"
 #include "../include/VSyncToggle.h"
+#include "../include/ecs/PrisonerEcsSystems.h"
 #include <MOMOS/momos.h>
 
 #include "../include/Agents/Soldier.h"
@@ -112,6 +113,7 @@ void Draw() {
 		MOMOS::DrawSprite(g_shift_change_img, 20.0f, 50.0f);
 	}
 
+	PrisonerECS::Systems::Get().Render(0.0);
 	g_fps_counter.Draw();
 	g_vsync_toggle.Draw(g_fps_counter.GetTextRight(), g_fps_counter.GetTextBaselineY());
 	g_speed_controls.Draw();
@@ -183,6 +185,8 @@ void Update(double m_iTimeStep) {
 	if (started && effective_step > 0.0) {
 		UpdateAI(effective_step);
 	}
+
+	PrisonerECS::Systems::Get().Update(effective_step);
 
 	//Alarm cheat
 	if (MOMOS::IsKeyPressed('L')) {

@@ -16,7 +16,7 @@ typedef float Cost;
 
 // Use one of the next declarations
 typedef struct cell_s {
-	MOMOS::Vec2 position_ = {0,0};
+	::MOMOS::Vec2 position_ = {0,0};
 	bool is_walkable_ = true;
 	Cost cost_ = 0.0f;
 	int f, g, h = 0;
@@ -30,8 +30,8 @@ class CostMap
 	int height_;
 	std::vector<std::vector<Cell*>> cost_map_;
 
-	MOMOS::SpriteHandle cost_img_handle_;
-	MOMOS::SpriteHandle terrain_img_handle_;
+	::MOMOS::SpriteHandle cost_img_handle_;
+	::MOMOS::SpriteHandle terrain_img_handle_;
 
 public:
 	CostMap();
@@ -49,16 +49,16 @@ public:
 	Cell* getCellAt(int x, int y);
 
 	/// Returns if the given coordinate is walkable in CostMap coordinates
-	bool isWalkable(MOMOS::Vec2 position);
+	bool isWalkable(::MOMOS::Vec2 position);
 
 	/// Translates window coordinates to internal map coordinates
-	MOMOS::Vec2 ScreenToMapCoords(MOMOS::Vec2 pos);
+	::MOMOS::Vec2 ScreenToMapCoords(MOMOS::Vec2 pos);
 
 	/// Translates internal map coordinates into window coordinates
-	MOMOS::Vec2 MapToScreenCoords(MOMOS::Vec2 pos);
+	::MOMOS::Vec2 MapToScreenCoords(::MOMOS::Vec2 pos);
 
 	/// Returns if the given coordinate is walkable in Screen coordinates
-	bool isWalkableInScreenCoords(MOMOS::Vec2 pos);
+	bool isWalkableInScreenCoords(::MOMOS::Vec2 pos);
 
 	/// Prints the cells of cost_map
 	void Print();

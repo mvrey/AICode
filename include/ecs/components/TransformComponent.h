@@ -6,8 +6,8 @@
 namespace ECS {
 
 struct TransformComponent {
-	MOMOS::Vec2 position = { 0.0f, 0.0f };
-	MOMOS::Vec2 direction = { 1.0f, 0.0f };
+	::MOMOS::Vec2 position = { 0.0f, 0.0f };
+	::MOMOS::Vec2 direction = { 1.0f, 0.0f };
 	float rotation = 0.0f;
 };
 

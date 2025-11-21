@@ -70,8 +70,8 @@ void AgentBody::stop() {
 
 void Agent::render() {
 	//Draw sprite
-	MOMOS::Vec2 drawing_pos = { getBody()->pos_.x - MOMOS::SpriteWidth(getImg()) / 2.0f, getBody()->pos_.y - MOMOS::SpriteHeight(getImg()) / 2.0f, };
-	MOMOS::DrawSprite(getImg(), drawing_pos.x, drawing_pos.y);
+	::MOMOS::Vec2 drawing_pos = { getBody()->pos_.x - ::MOMOS::SpriteWidth(getImg()) / 2.0f, getBody()->pos_.y - ::MOMOS::SpriteHeight(getImg()) / 2.0f, };
+	::MOMOS::DrawSprite(getImg(), drawing_pos.x, drawing_pos.y);
 };
 
 void AgentMind::sendMessage(Message m) {
@@ -100,7 +100,7 @@ void Agent::moveDeterministic() {
 
 	last_movement_update_ = GameStatus::get()->game_time;
 	//Go from the current position to A, then to B, back to A and so on
-	MOMOS::Vec2 dest = deterministic_steps_[deterministic_step_num_];
+	::MOMOS::Vec2 dest = deterministic_steps_[deterministic_step_num_];
 	float dist = getBody()->getDistanceTo(dest);
 
 	//Mark the next point as destination if we're very close to the target
@@ -114,7 +114,7 @@ void Agent::moveDeterministic() {
 		}
 	}
 
-	MOMOS::Vec2 normalized = { (dest.x - getBody()->pos_.x) / dist, (dest.y - getBody()->pos_.y) / dist };
+	::MOMOS::Vec2 normalized = { (dest.x - getBody()->pos_.x) / dist, (dest.y - getBody()->pos_.y) / dist };
 	getBody()->direction_.x = normalized.x;
 	getBody()->direction_.y = normalized.y;
 }
@@ -147,10 +147,10 @@ void Agent::moveTracking() {
 
 		float mx = target_->getBody()->pos_.x;
 		float my = target_->getBody()->pos_.y;
-		MOMOS::Vec2 m = { mx, my };
+		::MOMOS::Vec2 m = { mx, my };
 
 		float dist = getBody()->getDistanceTo(m);
-		MOMOS::Vec2 normalized = { (mx - getBody()->pos_.x) / dist, (my - getBody()->pos_.y) / dist };
+		::MOMOS::Vec2 normalized = { (mx - getBody()->pos_.x) / dist, (my - getBody()->pos_.y) / dist };
 
 		getBody()->direction_.x = normalized.x;
 		getBody()->direction_.y = normalized.y;
@@ -280,7 +280,7 @@ bool Agent::goToRoom(Room room) {
 
 		//Search for a preprocessed waypoints path
 		Room* current_room = prison->getRoomAt(GameStatus::get()->map->ScreenToMapCoords(getBody()->pos_));
-		std::vector<MOMOS::Vec2> waypoint_path;
+		std::vector<::MOMOS::Vec2> waypoint_path;
 
 		if (current_room != nullptr) {
 			if (current_room->id_ == room.id_) {
@@ -307,7 +307,7 @@ bool Agent::goToRoom(Room room) {
 		} else {
 			
 			//If there are no waypoints available, generate an A* path
-			MOMOS::Vec2 point = map->MapToScreenCoords(prison->getRandomPointInRoom(room));
+			::MOMOS::Vec2 point = map->MapToScreenCoords(prison->getRandomPointInRoom(room));
 			setPathTo(point);
 		}
 	} else {
@@ -321,7 +321,7 @@ bool Agent::goToRoom(Room room) {
 
 	if (!getBody()->path_set_) {
 		//Pick random point in resting room
-		MOMOS::Vec2 point = map->MapToScreenCoords(prison->getRandomPointInRoom(room));
+		::MOMOS::Vec2 point = map->MapToScreenCoords(prison->getRandomPointInRoom(room));
 		setPathTo(point);
 	} else {
 		return moveFollowingPath();
@@ -334,7 +334,7 @@ bool Agent::goToRoom(Room room) {
 bool Agent::moveFollowingPath() {
 	//check if the next step is a currently walkable point
 	if (!mind_->movement_finished_ && getBody()->path_set_) {
-		MOMOS::Vec2 cell_coords = GameStatus::get()->map->ScreenToMapCoords(deterministic_steps_[deterministic_step_num_]);
+		::MOMOS::Vec2 cell_coords = GameStatus::get()->map->ScreenToMapCoords(deterministic_steps_[deterministic_step_num_]);
 		Cell* cell = GameStatus::get()->map->getCellAt((int)cell_coords.x, (int)cell_coords.y);
 		if (cell->is_walkable_) {
 			moveDeterministic();

@@ -126,6 +126,12 @@
     <ClInclude Include="include\ecs\components\TransformComponent.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="include\ecs\PrisonerInput.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ecs\PrisonerEcsSystems.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="include\ecs\system\PrisonerAISystem.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -420,6 +426,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\ecs\system\PrisonerRenderSystem.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ecs\PrisonerInput.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ecs\PrisonerEcsSystems.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

@@ -21,12 +21,12 @@ public:
 	bool open();
 	bool close();
 
-	MOMOS::SpriteHandle getImg();
+	::MOMOS::SpriteHandle getImg();
 	///Returns a map point right in front of the door (inside or outside the prison)
-	MOMOS::Vec2 getFrontalPoint(bool in = true);
+	::MOMOS::Vec2 getFrontalPoint(bool in = true);
 
-	MOMOS::SpriteHandle img_open_;
-	MOMOS::SpriteHandle img_closed_;
+	::MOMOS::SpriteHandle img_open_;
+	::MOMOS::SpriteHandle img_closed_;
 	
 	bool is_vertical_;
 	bool is_open_ = false;

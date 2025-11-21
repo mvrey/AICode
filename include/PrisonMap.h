@@ -17,7 +17,7 @@
 typedef struct {
 	unsigned int id_;
 	std::string name_;
-	std::vector<MOMOS::Vec2> corners_;
+	std::vector<::MOMOS::Vec2> corners_;
 } Room;
 
 
@@ -29,18 +29,18 @@ public:
 	virtual ~PrisonMap();
 
 	///Returns the type of area that lies on the given coordinates, based on the sprite's color
-	PrisonAreaType getAreaTypeAt(MOMOS::Vec2 area_coords);
+	PrisonAreaType getAreaTypeAt(::MOMOS::Vec2 area_coords);
 
 	///Returns the room in a given coordinate
-	Room* getRoomAt(MOMOS::Vec2 coords);
+	Room* getRoomAt(::MOMOS::Vec2 coords);
 
 	///Returns a map random point in a given room
-	MOMOS::Vec2 getRandomPointInRoom(Room room);
+	::MOMOS::Vec2 getRandomPointInRoom(Room room);
 	
 	///Calculates a path between 2 rooms using waypoints
-	std::vector<MOMOS::Vec2> getPathToRoom(Room* start, Room* end);
+	std::vector<::MOMOS::Vec2> getPathToRoom(Room* start, Room* end);
 
-	MOMOS::SpriteHandle area_map_handle_;
+	::MOMOS::SpriteHandle area_map_handle_;
 
 	//Doors
 	std::vector<Door*> doors_;
@@ -60,7 +60,7 @@ public:
 	std::vector<Room*> rooms_;
 
 	//Holds all the waypoints
-	std::vector<MOMOS::Vec2> waypoints_;
+	std::vector<::MOMOS::Vec2> waypoints_;
 };
 
 #endif /* PRISONMAP_H */

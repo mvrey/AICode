@@ -31,7 +31,7 @@ class PathCommand {
 public:
 	PathCommand() { path_ = new Path(); }
 	//Start and end points to calculate
-	MOMOS::Vec2 start, end;
+	::MOMOS::Vec2 start, end;
 	//If the path has been already calculates
 	bool calculated = false;
 	//If the path is waiting in line to be calculates

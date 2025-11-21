@@ -14,12 +14,12 @@
 
 class Crate {
 public:
-	Crate::Crate() { img_ = MOMOS::SpriteFromFile("data/crate.png"); };
-	Crate::~Crate() { MOMOS::SpriteRelease(img_); };
+	Crate::Crate() { img_ = ::MOMOS::SpriteFromFile("data/crate.png"); };
+	Crate::~Crate() { ::MOMOS::SpriteRelease(img_); };
 
-	MOMOS::SpriteHandle img_;
+	::MOMOS::SpriteHandle img_;
 	//In screen coordinates
-	MOMOS::Vec2 pos_;
+	::MOMOS::Vec2 pos_;
 };
 
 #endif /* CRATE_H */

@@ -48,15 +48,15 @@ public:
 	void render() override;
 
 	virtual AgentBody* getBody() { return reinterpret_cast<SoldierBody*>(body_); };
-	virtual MOMOS::SpriteHandle getImg() override { return img_; };
+	virtual ::MOMOS::SpriteHandle getImg() override { return img_; };
 
 	SoldierMind* mind_;
 	SoldierBody* body_;
 
-	MOMOS::SpriteHandle img_;
+	::MOMOS::SpriteHandle img_;
 
 	// Current agent being hunted, if any
-	MOMOS::Vec2 target_;
+	::MOMOS::Vec2 target_;
 
 	int current_target_door_ = 1;
 	//The soldier is moving to the scape base

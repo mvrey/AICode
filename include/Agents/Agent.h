@@ -31,14 +31,14 @@ class AgentBody {
     virtual void update(double accumTime);
 	void stop();
 
-	void setDirection(MOMOS::Vec2 pos);
-	void move(MOMOS::Vec2 dir, double accumTime);
-	float getDistanceTo(MOMOS::Vec2 dest);
+	void setDirection(::MOMOS::Vec2 pos);
+	void move(::MOMOS::Vec2 dir, double accumTime);
+	float getDistanceTo(::MOMOS::Vec2 dest);
 
 	Agent* owner_;
 
-	MOMOS::Vec2 pos_;
-	MOMOS::Vec2 direction_;
+	::MOMOS::Vec2 pos_;
+	::MOMOS::Vec2 direction_;
     int color_[4] = { 0, 0, 0, 200 };
     int size_ = 30;
 	bool path_set_ = false;
@@ -89,10 +89,10 @@ public:
   unsigned int id_;
   
   virtual AgentBody* getBody() { return nullptr; };
-  virtual MOMOS::SpriteHandle getImg() { return img_; };
+  virtual ::MOMOS::SpriteHandle getImg() { return img_; };
 
   /// Searches for the best path to the destination
-  void setPathTo(MOMOS::Vec2 dest);
+  void setPathTo(::MOMOS::Vec2 dest);
   /// Searches for a path to a specific room
   bool goToRoom(Room room);
   /// Returns true if the current path has been completed
@@ -115,7 +115,7 @@ public:
   std::vector<PatternStep> pattern_steps_;
   int step_num_;
 
-  std::vector<MOMOS::Vec2> deterministic_steps_;
+  std::vector<::MOMOS::Vec2> deterministic_steps_;
   unsigned int deterministic_step_num_;
 
   float speed_;
@@ -129,7 +129,7 @@ public:
   PathCommand* path_cmd_;
 
 protected:
-  MOMOS::SpriteHandle img_;
+	::MOMOS::SpriteHandle img_;
   
 private:
   

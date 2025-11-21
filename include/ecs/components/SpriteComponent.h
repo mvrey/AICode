@@ -6,7 +6,7 @@
 namespace ECS {
 
 struct SpriteComponent {
-	MOMOS::SpriteHandle sprite = nullptr;
+	::MOMOS::SpriteHandle sprite = nullptr;
 	float width = 0.0f;
 	float height = 0.0f;
 	bool visible = true;

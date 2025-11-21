@@ -40,7 +40,7 @@ typedef enum {
 typedef struct {
   Agent* sender;
   Agent* receiver;
-  MOMOS::Vec2 pos;
+  ::MOMOS::Vec2 pos;
   Response res;
 } Message;
 
