@@ -108,6 +108,24 @@
     <ClInclude Include="include\ecs\Entity.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="include\ecs\PrisonerEcs.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ecs\components\MovementComponent.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ecs\components\PrisonerComponents.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ecs\components\PrisonerStateComponent.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ecs\components\SpriteComponent.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ecs\components\TransformComponent.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="include\ecs\Registry.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -381,6 +399,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\ecs\Registry.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ecs\PrisonerEcs.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

@@ -3,6 +3,8 @@
 
 #include "Agent.h"
 #include "../Pathfinding/astar.h"
+#include "../ecs/PrisonerEcs.h"
+#include "../ecs/components/PrisonerComponents.h"
 #include <cstdlib>
 
 class Prisoner;
@@ -51,24 +53,29 @@ public:
 	virtual AgentBody* getBody() { return reinterpret_cast<PrisonerBody*>(body_); };
 	virtual MOMOS::SpriteHandle getImg() override { return img_; };
 
+	short GetWorkingShift() const;
+	void SetWorkingShift(short shift);
+
+	ECS::Entity GetEntity() const { return ecs_entity_; }
+
 	PrisonerMind* mind_;
 	PrisonerBody* body_;
 
 	MOMOS::SpriteHandle img_;
 
-	//Crate being carried, if any
-	Crate* crate_;
+	ECS::PrisonerStateComponent& GetStateComponent();
 
-	//Prisoner will rest out of their own working shift
-	short working_shift_;
-	//The prisoner is moving to a door
-	bool door_route_set_ = false;
-	int current_target_door_ = 1;
-	//The prisoner is moving to the scape base
-	bool escape_route_set_ = false;
-	float original_speed_;
 
 private:
+	const ECS::PrisonerStateComponent& GetStateComponent() const;
+	ECS::MovementComponent& GetMovementComponent();
+	ECS::TransformComponent& GetTransformComponent();
+	ECS::SpriteComponent& GetSpriteComponent();
+
+	void InitializeEcsComponents();
+	void SyncEcsComponentsFromLegacy();
+
+	ECS::Entity ecs_entity_;
 
 	
 };

@@ -212,6 +212,12 @@
     <ClInclude Include="include\SimulationSpeedControls.h" />
     <ClInclude Include="include\ecs\ComponentPool.h" />
     <ClInclude Include="include\ecs\Entity.h" />
+    <ClInclude Include="include\ecs\PrisonerEcs.h" />
+    <ClInclude Include="include\ecs\components\MovementComponent.h" />
+    <ClInclude Include="include\ecs\components\PrisonerComponents.h" />
+    <ClInclude Include="include\ecs\components\PrisonerStateComponent.h" />
+    <ClInclude Include="include\ecs\components\SpriteComponent.h" />
+    <ClInclude Include="include\ecs\components\TransformComponent.h" />
     <ClInclude Include="include\ecs\Registry.h" />
     <ClInclude Include="include\ecs\System.h" />
     <ClInclude Include="include\Agents\Agent.h" />
@@ -247,6 +253,7 @@
     <ClCompile Include="src\Pathfinding\path.cc" />
     <ClCompile Include="src\PrisonMap.cc" />
     <ClCompile Include="src\ecs\Registry.cc" />
+    <ClCompile Include="src\ecs\PrisonerEcs.cc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
