@@ -1,3 +1,4 @@
+
 #include "../../include/Agents/Prisoner.h"
 #include "../../include/ecs/PrisonerEcs.h"
 #include <MOMOS/sprite.h>
@@ -6,6 +7,12 @@
 /************ AGENT **********/
 /*****************************/
 
+AgentBody* Prisoner::getBody() {
+	auto& transform = GetTransformComponent();
+	body_->pos_ = transform.position;
+	body_->direction_ = transform.direction;
+	return body_;
+}
 
 Prisoner::Prisoner() {
 	body_ = new PrisonerBody();
@@ -51,14 +58,34 @@ void Prisoner::update(double accumTime) {
 	if (aliveStatus_ == kDead)
 		return;
 	
+	// Legacy mind/body remain for now but rely on ECS data
+	auto& registry = PrisonerECS::GetRegistry();
+	auto& transform = registry.GetComponent<ECS::TransformComponent>(ecs_entity_);
+	auto& sprite = registry.GetComponent<ECS::SpriteComponent>(ecs_entity_);
+
+	body_->pos_ = transform.position;
+	body_->direction_ = transform.direction;
+	img_ = sprite.sprite;
+
 	mind_->update(accumTime);
 	body_->update(accumTime);
-	SyncEcsComponentsFromLegacy();
+
+	transform.position = body_->pos_;
+	transform.direction = body_->direction_;
 }
 
 
 void Prisoner::render() {
-	Agent::render();
+	auto& registry = PrisonerECS::GetRegistry();
+	if (registry.HasComponent<ECS::SpriteComponent>(ecs_entity_)) {
+		auto& sprite = registry.GetComponent<ECS::SpriteComponent>(ecs_entity_);
+		auto& transform = registry.GetComponent<ECS::TransformComponent>(ecs_entity_);
+		if (sprite.sprite) {
+			float draw_x = transform.position.x - sprite.width / 2.0f;
+			float draw_y = transform.position.y - sprite.height / 2.0f;
+			MOMOS::DrawSprite(sprite.sprite, draw_x, draw_y);
+		}
+	}
 
 	//Draw status indicator
 	std::string status_name;

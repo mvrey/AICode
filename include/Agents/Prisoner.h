@@ -50,7 +50,7 @@ public:
 	void update(double accumTime) override;
 	void render() override;
 
-	virtual AgentBody* getBody() { return reinterpret_cast<PrisonerBody*>(body_); };
+	virtual AgentBody* getBody() override;
 	virtual MOMOS::SpriteHandle getImg() override { return img_; };
 
 	short GetWorkingShift() const;
