@@ -96,6 +96,9 @@
     <ClInclude Include="include\SimulationSpeedControls.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="include\FpsCounter.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="include\Pathfinding\path.h">
       <Filter>Header Files\Pathfinding</Filter>
     </ClInclude>
@@ -354,6 +357,9 @@
       <Filter>Source Files\Pathfinding</Filter>
     </ClCompile>
     <ClCompile Include="src\SimulationSpeedControls.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\FpsCounter.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

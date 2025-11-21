@@ -207,6 +207,7 @@
     <ClInclude Include="deps\src\deps\sqlite3\sqlite3ext.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="include\FpsCounter.h" />
     <ClInclude Include="include\SimulationSpeedControls.h" />
     <ClInclude Include="include\Agents\Agent.h" />
     <ClInclude Include="include\Agents\Guard.h" />
@@ -224,6 +225,7 @@
     <ClInclude Include="include\PrisonMap.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\FpsCounter.cc" />
     <ClCompile Include="src\SimulationSpeedControls.cc" />
     <ClCompile Include="src\Agents\Agent.cc" />
     <ClCompile Include="src\Agents\Guard.cc" />

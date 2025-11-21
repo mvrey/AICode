@@ -2,12 +2,15 @@
 #include <vector>
 #include <ctime>
 #include <thread>
+#include <cstring>
 
 #include "../include/GameStatus.h"
 #include "../include/PrisonMap.h"
 #include "../include/config.h"
 #include "../include/Pathfinding/astar.h"
 #include "../include/SimulationSpeedControls.h"
+#include "../include/FpsCounter.h"
+#include <MOMOS/momos.h>
 
 #include "../include/Agents/Soldier.h"
 #include "../include/Agents/Guard.h"
@@ -21,6 +24,7 @@ MOMOS::SpriteHandle g_shift_change_img;
 MOMOS::SpriteHandle g_alarm_mode_img;
 
 SimulationSpeedControls g_speed_controls;
+FpsCounter g_fps_counter;
 
 
 /// Process user input
@@ -101,6 +105,7 @@ void Draw() {
 		MOMOS::DrawSprite(g_shift_change_img, 20.0f, 50.0f);
 	}
 
+	g_fps_counter.Draw();
 	g_speed_controls.Draw();
 
 	MOMOS::DrawEnd();
@@ -227,6 +232,8 @@ int main(int argc, char **argv) {
 	while (MOMOS::WindowIsOpened()) {
         
 		Input();
+
+		g_fps_counter.Update();
 
 		double accumTime = MOMOS::Time() - CurrentTime;
 		while (accumTime >= m_iTimeStep) {
