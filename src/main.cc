@@ -49,12 +49,17 @@ void UpdateAI(double accumTime) {
 	int j = (Agent::last_updated_id_ == -1) ? 0 : Agent::last_updated_id_;
 
 	for (unsigned int i = j; i < Agent::agents_.size() && !timeout; i++) {
+		Agent* agent = Agent::agents_[i];
+		if (dynamic_cast<Prisoner*>(agent) != nullptr) {
+			continue;
+		}
+
 		start = GameStatus::get()->game_time;
-		Agent::agents_[i]->update(accumTime);
+		agent->update(accumTime);
 		end = GameStatus::get()->game_time;
 
-		if (Agent::agents_[i]->getBody() && Agent::agents_[i]->getBody()->pos_.y > Screen::height)
-			Agent::agents_[i]->aliveStatus_ = kDead;
+		if (agent->getBody() && agent->getBody()->pos_.y > Screen::height)
+			agent->aliveStatus_ = kDead;
 
 		accumTime -= end - start;
 		if (accumTime <= 0.0f) {

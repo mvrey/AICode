@@ -124,11 +124,6 @@ void Prisoner::update(double accumTime) {
 	img_ = sprite.sprite;
 
 	SyncLegacyFromEcs();
-
-	mind_->update(accumTime);
-	body_->update(accumTime);
-
-	SyncEcsComponentsFromLegacy();
 }
 
 
@@ -212,35 +207,6 @@ void Prisoner::InitializeEcsComponents() {
 }
 
 
-
-void Prisoner::SyncEcsComponentsFromLegacy() {
-	auto& registry = PrisonerECS::GetRegistry();
-
-	auto& transform = registry.GetComponent<ECS::TransformComponent>(ecs_entity_);
-	transform.position = body_->pos_;
-	transform.direction = body_->direction_;
-
-	auto& sprite = registry.GetComponent<ECS::SpriteComponent>(ecs_entity_);
-	sprite.sprite = img_;
-	sprite.width = img_ ? static_cast<float>(MOMOS::SpriteWidth(img_)) : 0.0f;
-	sprite.height = img_ ? static_cast<float>(MOMOS::SpriteHeight(img_)) : 0.0f;
-
-	auto& movement = registry.GetComponent<ECS::MovementComponent>(ecs_entity_);
-	movement.speed = speed_;
-	movement.last_movement_update = last_movement_update_;
-	movement.movement_threshold = movement_threshold_;
-	movement.deterministic_steps = deterministic_steps_;
-	movement.deterministic_step_index = deterministic_step_num_;
-	movement.path_set = getBody()->path_set_;
-	movement.movement_path = movement_path_;
-	movement.path_command = path_cmd_;
-	movement.movement_finished = mind_ ? mind_->movement_finished_ : movement.movement_finished;
-
-	auto& state = registry.GetComponent<ECS::PrisonerStateComponent>(ecs_entity_);
-	state.owner = this;
-	state.pursuit_target = mind_ ? mind_->target_ : nullptr;
-	state.original_speed = (state.original_speed == 0.0f) ? speed_ : state.original_speed;
-}
 
 void Prisoner::SyncLegacyFromEcs() {
 	auto& registry = PrisonerECS::GetRegistry();

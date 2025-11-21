@@ -70,12 +70,10 @@ public:
 	ECS::SpriteComponent& GetSpriteComponent();
 	const ECS::PrisonerStateComponent& GetStateComponent() const;
 	void SyncLegacyFromEcs();
-
 private:
 	friend class PrisonerMind;
 
 	void InitializeEcsComponents();
-	void SyncEcsComponentsFromLegacy();
 
 	ECS::Entity ecs_entity_;
 	
