@@ -1,4 +1,4 @@
-#include "../include/ecs/Registry.h"
+#include "../../include/ecs/Registry.h"
 
 namespace ECS {
 

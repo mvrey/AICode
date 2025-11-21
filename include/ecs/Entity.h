@@ -2,11 +2,14 @@
 #define ECS_ENTITY_H
 
 #include <cstdint>
+#include <cstddef>
+#include <functional>
+#include <climits>
 
 namespace ECS {
 
 struct Entity {
-	static constexpr std::uint32_t kInvalidId = UINT32_MAX;
+	static constexpr std::uint32_t kInvalidId = static_cast<std::uint32_t>(-1);
 
 	Entity() : id(kInvalidId) {}
 	explicit Entity(std::uint32_t value) : id(value) {}
