@@ -11,7 +11,9 @@
 FpsCounter::FpsCounter()
 	: next_update_ms_(0.0)
 	, last_frame_count_(0)
-	, cached_fps_(0.0) {
+	, cached_fps_(0.0)
+	, last_text_right_(0.0f)
+	, last_text_baseline_y_(18.0f) {
 }
 
 void FpsCounter::Update() {
@@ -37,5 +39,8 @@ void FpsCounter::Draw() const {
 	MOMOS::DrawSetFillColor(240, 240, 240, 255);
 	MOMOS::DrawSetTextSize(18.0f);
 	MOMOS::DrawText(text_x, text_y, buffer);
+
+	last_text_right_ = text_x + text_width_estimate;
+	last_text_baseline_y_ = text_y;
 }
 

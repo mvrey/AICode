@@ -208,6 +208,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\FpsCounter.h" />
+    <ClInclude Include="include\VSyncToggle.h" />
     <ClInclude Include="include\SimulationSpeedControls.h" />
     <ClInclude Include="include\Agents\Agent.h" />
     <ClInclude Include="include\Agents\Guard.h" />
@@ -226,6 +227,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\FpsCounter.cc" />
+    <ClCompile Include="src\VSyncToggle.cc" />
     <ClCompile Include="src\SimulationSpeedControls.cc" />
     <ClCompile Include="src\Agents\Agent.cc" />
     <ClCompile Include="src\Agents\Guard.cc" />

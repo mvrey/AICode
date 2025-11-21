@@ -10,6 +10,7 @@
 #include "../include/Pathfinding/astar.h"
 #include "../include/SimulationSpeedControls.h"
 #include "../include/FpsCounter.h"
+#include "../include/VSyncToggle.h"
 #include <MOMOS/momos.h>
 
 #include "../include/Agents/Soldier.h"
@@ -25,11 +26,17 @@ MOMOS::SpriteHandle g_alarm_mode_img;
 
 SimulationSpeedControls g_speed_controls;
 FpsCounter g_fps_counter;
+VSyncToggle g_vsync_toggle;
 
 
 /// Process user input
 void Input() {
 	g_speed_controls.HandleInput();
+	if (MOMOS::MouseButtonDown(1)) {
+		float mx = static_cast<float>(MOMOS::MousePositionX());
+		float my = static_cast<float>(MOMOS::MousePositionY());
+		g_vsync_toggle.HandleClick(mx, my);
+	}
 }
 
 
@@ -106,6 +113,7 @@ void Draw() {
 	}
 
 	g_fps_counter.Draw();
+	g_vsync_toggle.Draw(g_fps_counter.GetTextRight(), g_fps_counter.GetTextBaselineY());
 	g_speed_controls.Draw();
 
 	MOMOS::DrawEnd();
@@ -191,6 +199,7 @@ int main(int argc, char **argv) {
 	srand(static_cast<unsigned int>(time(NULL)));
 
 	MOMOS::WindowInit(Screen::width, Screen::height);
+	g_vsync_toggle.Initialize(false);
 
 	//Init variables and locations for this specific map
 	GameStatus::get()->prison = new PrisonMap();
