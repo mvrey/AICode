@@ -147,7 +147,7 @@ bool checkGameStarted() {
 		}
 
 		//Create prisoners
-		for (int i = 0; i < 10; i++) {
+		for (int i = 0; i < 400; i++) {
 			Prisoner* agent = new Prisoner();
 
 			if (i > 10/2)
