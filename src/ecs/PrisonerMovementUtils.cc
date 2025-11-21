@@ -18,6 +18,9 @@ void MirrorMovementToLegacy(Prisoner& prisoner, const ECS::MovementComponent& mo
 	prisoner.movement_path_ = movement.movement_path;
 	prisoner.path_cmd_ = movement.path_command;
 	prisoner.last_movement_update_ = movement.last_movement_update;
+	if (prisoner.mind_) {
+		prisoner.mind_->movement_finished_ = movement.movement_finished;
+	}
 }
 
 void ApplyDirection(Prisoner& prisoner, const ::MOMOS::Vec2& direction) {
@@ -102,6 +105,7 @@ bool SetPathTo(Prisoner& prisoner, const ::MOMOS::Vec2& destination) {
 				movement.deterministic_steps.push_back(map->MapToScreenCoords(point));
 			}
 			movement.deterministic_step_index = 0;
+			movement.movement_finished = false;
 			if (prisoner.mind_) {
 				prisoner.mind_->movement_finished_ = false;
 			}
@@ -120,7 +124,10 @@ bool MoveFollowingPath(Prisoner& prisoner) {
 		return true;
 	}
 
-	if (prisoner.mind_->movement_finished_ || !movement.path_set || movement.deterministic_steps.empty()) {
+	if (movement.movement_finished || !movement.path_set || movement.deterministic_steps.empty()) {
+		if (movement.path_set && movement.deterministic_steps.empty()) {
+			movement.path_set = false;
+		}
 		MirrorMovementToLegacy(prisoner, movement);
 		return true;
 	}
@@ -148,7 +155,10 @@ bool MoveFollowingPath(Prisoner& prisoner) {
 
 	if (dist < 5.0f) {
 		if (movement.deterministic_step_index + 1 >= movement.deterministic_steps.size()) {
-			prisoner.mind_->movement_finished_ = true;
+			movement.movement_finished = true;
+			if (prisoner.mind_) {
+				prisoner.mind_->movement_finished_ = true;
+			}
 		} else {
 			movement.deterministic_step_index =
 				(movement.deterministic_step_index + 1) % movement.deterministic_steps.size();
@@ -156,10 +166,14 @@ bool MoveFollowingPath(Prisoner& prisoner) {
 			dx = target.x - transform.position.x;
 			dy = target.y - transform.position.y;
 			dist = std::sqrt(dx * dx + dy * dy);
+			movement.movement_finished = false;
+			if (prisoner.mind_) {
+				prisoner.mind_->movement_finished_ = false;
+			}
 		}
 	}
 
-	if (!prisoner.mind_->movement_finished_) {
+	if (!movement.movement_finished) {
 		if (dist > 0.0001f) {
 			::MOMOS::Vec2 direction{ dx / dist, dy / dist };
 			ApplyDirection(prisoner, direction);
@@ -169,7 +183,7 @@ bool MoveFollowingPath(Prisoner& prisoner) {
 	}
 
 	MirrorMovementToLegacy(prisoner, movement);
-	return prisoner.mind_->movement_finished_;
+	return movement.movement_finished;
 }
 
 void ClearMovement(Prisoner& prisoner) {
@@ -181,6 +195,7 @@ void ClearMovement(Prisoner& prisoner) {
 	movement.path_set = false;
 	movement.last_movement_update = 0.0;
 
+	movement.movement_finished = false;
 	if (prisoner.mind_) {
 		prisoner.mind_->movement_finished_ = false;
 	}

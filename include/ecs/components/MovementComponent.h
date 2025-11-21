@@ -24,6 +24,8 @@ struct MovementComponent {
 	bool door_route_set = false;
 	bool escape_route_set = false;
 	int current_target_door = 1;
+
+	bool movement_finished = true;
 };
 
 } // namespace ECS

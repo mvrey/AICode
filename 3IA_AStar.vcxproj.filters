@@ -138,6 +138,9 @@
     <ClInclude Include="include\ecs\system\PrisonerAISystem.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="include\ecs\system\PrisonerPathFollowSystem.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="include\ecs\system\PrisonerMovementSystem.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -426,6 +429,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\ecs\system\PrisonerAISystem.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ecs\system\PrisonerPathFollowSystem.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\ecs\system\PrisonerMovementSystem.cc">

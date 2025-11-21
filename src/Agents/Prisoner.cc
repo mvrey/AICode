@@ -72,6 +72,8 @@ void Prisoner::update(double accumTime) {
 	body_->direction_ = transform.direction;
 	img_ = sprite.sprite;
 
+	SyncLegacyFromEcs();
+
 	mind_->update(accumTime);
 	body_->update(accumTime);
 
@@ -148,6 +150,7 @@ void Prisoner::InitializeEcsComponents() {
 	movement.path_set = body_->path_set_;
 	movement.movement_path = movement_path_;
 	movement.path_command = path_cmd_;
+	movement.movement_finished = mind_ ? mind_->movement_finished_ : false;
 
 	auto& state = registry.AddComponent<ECS::PrisonerStateComponent>(ecs_entity_);
 	state.status = mind_->status_;
@@ -179,12 +182,32 @@ void Prisoner::SyncEcsComponentsFromLegacy() {
 	movement.path_set = getBody()->path_set_;
 	movement.movement_path = movement_path_;
 	movement.path_command = path_cmd_;
+	movement.movement_finished = mind_ ? mind_->movement_finished_ : movement.movement_finished;
 
 	auto& state = registry.GetComponent<ECS::PrisonerStateComponent>(ecs_entity_);
 	state.status = mind_->status_;
 	state.time_end_status = mind_->time_end_status_;
 	state.pursuit_target = mind_->target_;
 	state.original_speed = (state.original_speed == 0.0f) ? speed_ : state.original_speed;
+}
+
+void Prisoner::SyncLegacyFromEcs() {
+	auto& registry = PrisonerECS::GetRegistry();
+	auto& movement = registry.GetComponent<ECS::MovementComponent>(ecs_entity_);
+
+	speed_ = movement.speed;
+	last_movement_update_ = movement.last_movement_update;
+	movement_threshold_ = movement.movement_threshold;
+	deterministic_steps_ = movement.deterministic_steps;
+	deterministic_step_num_ = movement.deterministic_step_index;
+	movement_path_ = movement.movement_path;
+	path_cmd_ = movement.path_command;
+	if (body_) {
+		body_->path_set_ = movement.path_set;
+	}
+	if (mind_) {
+		mind_->movement_finished_ = movement.movement_finished;
+	}
 }
 
 

@@ -1,6 +1,7 @@
 #include "../../include/ecs/PrisonerEcsSystems.h"
 #include "../../include/ecs/PrisonerEcs.h"
 #include "../../include/ecs/system/PrisonerAISystem.h"
+#include "../../include/ecs/system/PrisonerPathFollowSystem.h"
 #include "../../include/ecs/system/PrisonerMovementSystem.h"
 #include "../../include/ecs/system/PrisonerRenderSystem.h"
 
@@ -10,6 +11,9 @@ Systems& Systems::Get() {
 	static Systems instance;
 	if (!instance.ai_system_) {
 		instance.ai_system_ = new ECS::PrisonerAISystem();
+	}
+	if (!instance.path_system_) {
+		instance.path_system_ = new ECS::PrisonerPathFollowSystem();
 	}
 	if (!instance.movement_system_) {
 		instance.movement_system_ = new ECS::PrisonerMovementSystem();
@@ -23,6 +27,7 @@ Systems& Systems::Get() {
 void Systems::Update(double delta_time) {
 	auto& registry = PrisonerECS::GetRegistry();
 	ai_system_->Update(registry, delta_time);
+	path_system_->Update(registry, delta_time);
 	movement_system_->Update(registry, delta_time);
 }
 

@@ -224,6 +224,7 @@
     <ClInclude Include="include\ecs\PrisonerInput.h" />
     <ClInclude Include="include\ecs\PrisonerEcsSystems.h" />
     <ClInclude Include="include\ecs\system\PrisonerAISystem.h" />
+    <ClInclude Include="include\ecs\system\PrisonerPathFollowSystem.h" />
     <ClInclude Include="include\ecs\system\PrisonerMovementSystem.h" />
     <ClInclude Include="include\ecs\system\PrisonerRenderSystem.h" />
     <ClInclude Include="include\Agents\Agent.h" />
@@ -262,6 +263,7 @@
     <ClCompile Include="src\ecs\PrisonerEcs.cc" />
     <ClCompile Include="src\ecs\PrisonerMovementUtils.cc" />
     <ClCompile Include="src\ecs\system\PrisonerAISystem.cc" />
+    <ClCompile Include="src\ecs\system\PrisonerPathFollowSystem.cc" />
     <ClCompile Include="src\ecs\system\PrisonerMovementSystem.cc" />
     <ClCompile Include="src\ecs\system\PrisonerRenderSystem.cc" />
     <ClCompile Include="src\ecs\PrisonerInput.cc" />

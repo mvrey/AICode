@@ -68,6 +68,7 @@ public:
 	ECS::TransformComponent& GetTransformComponent();
 	ECS::SpriteComponent& GetSpriteComponent();
 	const ECS::PrisonerStateComponent& GetStateComponent() const;
+	void SyncLegacyFromEcs();
 
 private:
 	friend class PrisonerMind;

@@ -5,6 +5,7 @@
 
 namespace ECS {
 class PrisonerAISystem;
+class PrisonerPathFollowSystem;
 class PrisonerMovementSystem;
 class PrisonerRenderSystem;
 } // namespace ECS
@@ -22,6 +23,7 @@ private:
 	Systems() = default;
 
 	ECS::PrisonerAISystem* ai_system_ = nullptr;
+	ECS::PrisonerPathFollowSystem* path_system_ = nullptr;
 	ECS::PrisonerMovementSystem* movement_system_ = nullptr;
 	ECS::PrisonerRenderSystem* render_system_ = nullptr;
 };
