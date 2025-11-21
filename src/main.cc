@@ -146,7 +146,6 @@ bool checkGameStarted() {
 			if (i > 10/2)
 				agent->SetWorkingShift(1);
 
-			Agent::agents_.push_back(agent);
 			GameStatus::get()->prisoners_.push_back(agent);
 		}
 

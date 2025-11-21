@@ -141,7 +141,7 @@ void Prisoner::InitializeEcsComponents() {
 	movement.movement_threshold = movement_threshold_;
 	movement.deterministic_steps = deterministic_steps_;
 	movement.deterministic_step_index = deterministic_step_num_;
-	movement.path_set = getBody()->path_set_;
+	movement.path_set = body_->path_set_;
 	movement.movement_path = movement_path_;
 	movement.path_command = path_cmd_;
 
@@ -152,6 +152,8 @@ void Prisoner::InitializeEcsComponents() {
 	state.current_target_door = 1;
 	state.original_speed = speed_;
 }
+
+
 
 void Prisoner::SyncEcsComponentsFromLegacy() {
 	auto& registry = PrisonerECS::GetRegistry();
@@ -213,14 +215,14 @@ void PrisonerMind::reason() {
 	//Refactored here instead of added to every single state
 	if (GameStatus::get()->alarm_mode_) {
 		if (status_ != kEscaping)
-			owner_->clearMovement();
+			owner->clearMovement();
 
 		status_ = kEscaping;
 	}
 
 	switch (status_) {
 	case kIdle:
-		owner_->getBody()->stop();
+		owner->getBody()->stop();
 		status_ = kGoingToRest;
 		break;
 	case kGoingToWork:
@@ -240,9 +242,9 @@ void PrisonerMind::reason() {
 		break;
 	case kWorkingLoaded:
 		if (GameStatus::get()->working_shift_ != state.working_shift) {
-			owner_->speed_ = state.original_speed;
+			owner->speed_ = state.original_speed;
 			status_ = kGoingToRest;
-			owner_->clearMovement();
+			owner->clearMovement();
 			break;
 		}
 
@@ -276,8 +278,8 @@ void PrisonerMind::reason() {
 
 		if (GameStatus::get()->working_shift_ != state.working_shift) {
 			status_ = kGoingToRest;
-			owner_->clearMovement();
-			owner_->speed_ = state.original_speed;
+			owner->clearMovement();
+			owner->speed_ = state.original_speed;
 			break;
 		}
 
@@ -300,7 +302,7 @@ void PrisonerMind::reason() {
 	case kResting:
 		//wander around randomly while resting
 		if (GameStatus::get()->working_shift_ == state.working_shift) {
-			owner_->clearMovement();
+			owner->clearMovement();
 			status_ = kGoingToWork;
 		} else {
 			if (owner->goToRoom(prison->resting_room_)) {
@@ -309,12 +311,12 @@ void PrisonerMind::reason() {
 		}
 		break;
 	case kEscaping:
-		owner_->speed_ = state.original_speed;
+		owner->speed_ = state.original_speed;
 
 		//Stop updating if the prisoner reaches an exit
-		PrisonAreaType area = GameStatus::get()->prison->getAreaTypeAt(owner_->getBody()->pos_);
+		PrisonAreaType area = GameStatus::get()->prison->getAreaTypeAt(owner->getBody()->pos_);
 		if (area == kBase) {
-			owner_->aliveStatus_ = kDead;
+			owner->aliveStatus_ = kDead;
 			return;
 		}
 
@@ -326,27 +328,27 @@ void PrisonerMind::reason() {
 		
 		
 		//If no movement path is set
-		if (!owner_->getBody()->path_set_) {
+		if (!owner->getBody()->path_set_) {
 			if (!state.door_route_set) {
-				owner_->clearMovement();
+				owner->clearMovement();
 				state.door_route_set = true;
 			}
 			MOMOS::Vec2 dest = GameStatus::get()->map->MapToScreenCoords(GameStatus::get()->prison->doors_[state.current_target_door]->getFrontalPoint(true));
-			owner_->setPathTo(dest);
+			owner->setPathTo(dest);
 		} else {
 			//If current path is complete
-			if (owner_->moveFollowingPath()) {
+			if (owner->moveFollowingPath()) {
 				//if going to a door
 				if (state.door_route_set) {
 					if (GameStatus::get()->prison->doors_[state.current_target_door]->is_open_) {
 						//If door is open
 						MOMOS::Vec2 dest = { Screen::width - 100 , Screen::height - 50 };
-						owner_->clearMovement();
-						owner_->setPathTo(dest);
+						owner->clearMovement();
+						owner->setPathTo(dest);
 					} else {
 						//If door is closed
 						state.current_target_door = (state.current_target_door + 1) % 2;
-						owner_->clearMovement();
+						owner->clearMovement();
 						state.door_route_set = false;
 					}
 				}
