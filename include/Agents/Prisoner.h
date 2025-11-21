@@ -64,25 +64,18 @@ public:
 	::MOMOS::SpriteHandle img_;
 
 	ECS::PrisonerStateComponent& GetStateComponent();
-
-
-private:
-	friend class PrisonerMind;
-
-	const ECS::PrisonerStateComponent& GetStateComponent() const;
 	ECS::MovementComponent& GetMovementComponent();
 	ECS::TransformComponent& GetTransformComponent();
 	ECS::SpriteComponent& GetSpriteComponent();
+	const ECS::PrisonerStateComponent& GetStateComponent() const;
+
+private:
+	friend class PrisonerMind;
 
 	void InitializeEcsComponents();
 	void SyncEcsComponentsFromLegacy();
 
 	ECS::Entity ecs_entity_;
-
-	bool door_route_set_ = false;
-	bool escape_route_set_ = false;
-	int current_target_door_ = 1;
-
 	
 };
 

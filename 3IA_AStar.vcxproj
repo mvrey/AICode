@@ -213,6 +213,7 @@
     <ClInclude Include="include\ecs\ComponentPool.h" />
     <ClInclude Include="include\ecs\Entity.h" />
     <ClInclude Include="include\ecs\PrisonerEcs.h" />
+    <ClInclude Include="include\ecs\PrisonerMovementUtils.h" />
     <ClInclude Include="include\ecs\components\MovementComponent.h" />
     <ClInclude Include="include\ecs\components\PrisonerComponents.h" />
     <ClInclude Include="include\ecs\components\PrisonerStateComponent.h" />
@@ -259,6 +260,7 @@
     <ClCompile Include="src\PrisonMap.cc" />
     <ClCompile Include="src\ecs\Registry.cc" />
     <ClCompile Include="src\ecs\PrisonerEcs.cc" />
+    <ClCompile Include="src\ecs\PrisonerMovementUtils.cc" />
     <ClCompile Include="src\ecs\system\PrisonerAISystem.cc" />
     <ClCompile Include="src\ecs\system\PrisonerMovementSystem.cc" />
     <ClCompile Include="src\ecs\system\PrisonerRenderSystem.cc" />

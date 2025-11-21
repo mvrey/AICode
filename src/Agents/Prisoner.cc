@@ -1,7 +1,12 @@
 
 #include "../../include/Agents/Prisoner.h"
 #include "../../include/ecs/PrisonerEcs.h"
+#include "../../include/ecs/PrisonerMovementUtils.h"
 #include <MOMOS/sprite.h>
+
+namespace {
+namespace MovementHelpers = PrisonerECS::MovementUtils;
+}
 
 /*****************************/
 /************ AGENT **********/
@@ -143,9 +148,6 @@ void Prisoner::InitializeEcsComponents() {
 	movement.path_set = body_->path_set_;
 	movement.movement_path = movement_path_;
 	movement.path_command = path_cmd_;
-	movement.door_route_set = door_route_set_;
-	movement.escape_route_set = escape_route_set_;
-	movement.current_target_door = current_target_door_;
 
 	auto& state = registry.AddComponent<ECS::PrisonerStateComponent>(ecs_entity_);
 	state.status = mind_->status_;
@@ -177,9 +179,6 @@ void Prisoner::SyncEcsComponentsFromLegacy() {
 	movement.path_set = getBody()->path_set_;
 	movement.movement_path = movement_path_;
 	movement.path_command = path_cmd_;
-	movement.door_route_set = door_route_set_;
-	movement.escape_route_set = escape_route_set_;
-	movement.current_target_door = current_target_door_;
 
 	auto& state = registry.GetComponent<ECS::PrisonerStateComponent>(ecs_entity_);
 	state.status = mind_->status_;
@@ -215,12 +214,14 @@ void PrisonerMind::reason() {
 	CostMap* map = GameStatus::get()->map;
 	PrisonMap* prison = GameStatus::get()->prison;
 	auto& state = owner->GetStateComponent();
+	auto& movement = owner->GetMovementComponent();
 
 	//Refactored here instead of added to every single state
 	if (GameStatus::get()->alarm_mode_) {
-		if (status_ != kEscaping)
-			owner->clearMovement();
-
+		if (status_ != kEscaping) {
+			MovementHelpers::ClearMovement(*owner);
+		}
+		MovementHelpers::SetEscapeRouteActive(*owner, true);
 		status_ = kEscaping;
 	}
 
@@ -237,7 +238,7 @@ void PrisonerMind::reason() {
 
 		//If movement to loading area has finished
 		if (owner->goToRoom(prison->loading_area_)) {
-			owner->clearMovement();
+			MovementHelpers::ClearMovement(*owner);
 
 			status_ = kWorkingLoaded;
 			time_end_status_ = GameStatus::get()->game_time + 5000.0;
@@ -248,7 +249,7 @@ void PrisonerMind::reason() {
 		if (GameStatus::get()->working_shift_ != state.working_shift) {
 			owner->speed_ = state.original_speed;
 			status_ = kGoingToRest;
-			owner->clearMovement();
+			MovementHelpers::ClearMovement(*owner);
 			break;
 		}
 
@@ -265,7 +266,7 @@ void PrisonerMind::reason() {
 
 			//Mark unloading zone as destination
 			if (owner->goToRoom(prison->unloading_area_)) {
-				owner->clearMovement();
+				MovementHelpers::ClearMovement(*owner);
 
 				status_ = kWorkingUnloaded;
 				time_end_status_ = GameStatus::get()->game_time + 5000.0;
@@ -282,13 +283,13 @@ void PrisonerMind::reason() {
 
 		if (GameStatus::get()->working_shift_ != state.working_shift) {
 			status_ = kGoingToRest;
-			owner->clearMovement();
+			MovementHelpers::ClearMovement(*owner);
 			owner->speed_ = state.original_speed;
 			break;
 		}
 
 		if (owner->goToRoom(prison->loading_area_)) {
-			owner->clearMovement();
+			MovementHelpers::ClearMovement(*owner);
 
 			status_ = kWorkingLoaded;
 			time_end_status_ = GameStatus::get()->game_time + 5000.0;
@@ -297,7 +298,7 @@ void PrisonerMind::reason() {
 	case kGoingToRest:
 		//If movement to loading area has finished
 		if (owner->goToRoom(prison->resting_room_)) {
-			owner->clearMovement();
+			MovementHelpers::ClearMovement(*owner);
 
 			status_ = kResting;
 			//time_end_status_ = GameStatus::get()->game_time + 5000.0;
@@ -306,11 +307,11 @@ void PrisonerMind::reason() {
 	case kResting:
 		//wander around randomly while resting
 		if (GameStatus::get()->working_shift_ == state.working_shift) {
-			owner->clearMovement();
+			MovementHelpers::ClearMovement(*owner);
 			status_ = kGoingToWork;
 		} else {
 			if (owner->goToRoom(prison->resting_room_)) {
-				owner->clearMovement();
+				MovementHelpers::ClearMovement(*owner);
 			}
 		}
 		break;
@@ -320,40 +321,53 @@ void PrisonerMind::reason() {
 		//Stop updating if the prisoner reaches an exit
 		PrisonAreaType area = GameStatus::get()->prison->getAreaTypeAt(owner->getBody()->pos_);
 		if (area == kBase) {
+			MovementHelpers::SetEscapeRouteActive(*owner, false);
 			owner->aliveStatus_ = kDead;
 			return;
 		}
 
 		if (!GameStatus::get()->alarm_mode_ && movement_finished_) {
-			owner->escape_route_set_ = false;
-			owner->door_route_set_ = false;
+			MovementHelpers::SetEscapeRouteActive(*owner, false);
+			MovementHelpers::SetDoorRouteActive(*owner, false);
 			status_ = kGoingToRest;
+			break;
 		}
 		
 		
 		//If no movement path is set
-		if (!owner->getBody()->path_set_) {
-			if (!owner->door_route_set_) {
-				owner->clearMovement();
-				owner->door_route_set_ = true;
+		if (!movement.path_set) {
+			if (!movement.door_route_set) {
+				MovementHelpers::ClearMovement(*owner);
+				MovementHelpers::SetDoorRouteActive(*owner, true);
 			}
-			MOMOS::Vec2 dest = GameStatus::get()->map->MapToScreenCoords(GameStatus::get()->prison->doors_[owner->current_target_door_]->getFrontalPoint(true));
-			owner->setPathTo(dest);
+			const int door_count = static_cast<int>(prison->doors_.size());
+			if (door_count > 0) {
+				if (movement.current_target_door >= door_count) {
+					MovementHelpers::SetDoorTarget(*owner, movement.current_target_door % door_count);
+				}
+				MOMOS::Vec2 dest = map->MapToScreenCoords(
+					prison->doors_[movement.current_target_door]->getFrontalPoint(true));
+				MovementHelpers::SetPathTo(*owner, dest);
+			}
 		} else {
 			//If current path is complete
-			if (owner->moveFollowingPath()) {
+			if (MovementHelpers::MoveFollowingPath(*owner)) {
 				//if going to a door
-				if (owner->door_route_set_) {
-					if (GameStatus::get()->prison->doors_[owner->current_target_door_]->is_open_) {
+				if (movement.door_route_set) {
+					const int door_count = static_cast<int>(prison->doors_.size());
+					if (door_count == 0) {
+						break;
+					}
+					if (prison->doors_[movement.current_target_door]->is_open_) {
 						//If door is open
 						MOMOS::Vec2 dest = { Screen::width - 100 , Screen::height - 50 };
-						owner->clearMovement();
-						owner->setPathTo(dest);
+						MovementHelpers::ClearMovement(*owner);
+						MovementHelpers::SetPathTo(*owner, dest);
 					} else {
 						//If door is closed
-						owner->current_target_door_ = (owner->current_target_door_ + 1) % 2;
-						owner->clearMovement();
-						owner->door_route_set_ = false;
+						MovementHelpers::CycleDoorTarget(*owner, door_count);
+						MovementHelpers::ClearMovement(*owner);
+						MovementHelpers::SetDoorRouteActive(*owner, false);
 					}
 				}
 			}
