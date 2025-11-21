@@ -133,14 +133,14 @@ bool checkGameStarted() {
 		Agent::agents_.push_back(GameStatus::get()->pathfinder_);
 
 		//Create prison guards
-		for (int i = 0; i < 10; i++) {
+		for (int i = 0; i < 100; i++) {
 			Guard* agent = new Guard();
 			Agent::agents_.push_back(agent);
 			GameStatus::get()->guards_.push_back(agent);
 		}
 
 		//Create prisoners
-		for (int i = 0; i < 10; i++) {
+		for (int i = 0; i < 100; i++) {
 			Prisoner* agent = new Prisoner();
 
 			if (i > 10/2)
@@ -151,7 +151,7 @@ bool checkGameStarted() {
 		}
 
 		//Create soldiers
-		for (int i = 0; i < 10; i++) {
+		for (int i = 0; i < 100; i++) {
 			Soldier* agent = new Soldier();
 			agent->getBody()->pos_ = { (float)(rand() % 200) + 30.0f, Screen::height - 50.0f };
 			Agent::agents_.push_back(agent);

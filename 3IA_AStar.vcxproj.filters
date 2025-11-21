@@ -102,6 +102,18 @@
     <ClInclude Include="include\VSyncToggle.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="include\ecs\ComponentPool.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ecs\Entity.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ecs\Registry.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ecs\System.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="include\Pathfinding\path.h">
       <Filter>Header Files\Pathfinding</Filter>
     </ClInclude>
@@ -366,6 +378,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\VSyncToggle.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ecs\Registry.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

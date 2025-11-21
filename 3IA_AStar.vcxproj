@@ -210,6 +210,10 @@
     <ClInclude Include="include\FpsCounter.h" />
     <ClInclude Include="include\VSyncToggle.h" />
     <ClInclude Include="include\SimulationSpeedControls.h" />
+    <ClInclude Include="include\ecs\ComponentPool.h" />
+    <ClInclude Include="include\ecs\Entity.h" />
+    <ClInclude Include="include\ecs\Registry.h" />
+    <ClInclude Include="include\ecs\System.h" />
     <ClInclude Include="include\Agents\Agent.h" />
     <ClInclude Include="include\Agents\Guard.h" />
     <ClInclude Include="include\Agents\Messager.h" />
@@ -242,6 +246,7 @@
     <ClCompile Include="src\Pathfinding\cost_map.cc" />
     <ClCompile Include="src\Pathfinding\path.cc" />
     <ClCompile Include="src\PrisonMap.cc" />
+    <ClCompile Include="src\ecs\Registry.cc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
