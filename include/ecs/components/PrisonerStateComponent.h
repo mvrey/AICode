@@ -14,9 +14,6 @@ struct PrisonerStateComponent {
 	double time_end_status = 0.0;
 
 	Crate* carried_crate = nullptr;
-	bool door_route_set = false;
-	int current_target_door = 1;
-	bool escape_route_set = false;
 	float original_speed = 0.0f;
 
 	Agent* pursuit_target = nullptr;

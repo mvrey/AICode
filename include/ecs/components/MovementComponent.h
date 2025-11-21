@@ -20,6 +20,10 @@ struct MovementComponent {
 	bool path_set = false;
 	Path* movement_path = nullptr;
 	PathCommand* path_command = nullptr;
+
+	bool door_route_set = false;
+	bool escape_route_set = false;
+	int current_target_door = 1;
 };
 
 } // namespace ECS

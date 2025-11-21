@@ -70,8 +70,7 @@ void Prisoner::update(double accumTime) {
 	mind_->update(accumTime);
 	body_->update(accumTime);
 
-	transform.position = body_->pos_;
-	transform.direction = body_->direction_;
+	SyncEcsComponentsFromLegacy();
 }
 
 
@@ -144,12 +143,14 @@ void Prisoner::InitializeEcsComponents() {
 	movement.path_set = body_->path_set_;
 	movement.movement_path = movement_path_;
 	movement.path_command = path_cmd_;
+	movement.door_route_set = door_route_set_;
+	movement.escape_route_set = escape_route_set_;
+	movement.current_target_door = current_target_door_;
 
 	auto& state = registry.AddComponent<ECS::PrisonerStateComponent>(ecs_entity_);
 	state.status = mind_->status_;
 	state.time_end_status = mind_->time_end_status_;
 	state.working_shift = 0;
-	state.current_target_door = 1;
 	state.original_speed = speed_;
 }
 
@@ -176,6 +177,9 @@ void Prisoner::SyncEcsComponentsFromLegacy() {
 	movement.path_set = getBody()->path_set_;
 	movement.movement_path = movement_path_;
 	movement.path_command = path_cmd_;
+	movement.door_route_set = door_route_set_;
+	movement.escape_route_set = escape_route_set_;
+	movement.current_target_door = current_target_door_;
 
 	auto& state = registry.GetComponent<ECS::PrisonerStateComponent>(ecs_entity_);
 	state.status = mind_->status_;
@@ -321,35 +325,35 @@ void PrisonerMind::reason() {
 		}
 
 		if (!GameStatus::get()->alarm_mode_ && movement_finished_) {
-			state.escape_route_set = false;
-			state.door_route_set = false;
+			owner->escape_route_set_ = false;
+			owner->door_route_set_ = false;
 			status_ = kGoingToRest;
 		}
 		
 		
 		//If no movement path is set
 		if (!owner->getBody()->path_set_) {
-			if (!state.door_route_set) {
+			if (!owner->door_route_set_) {
 				owner->clearMovement();
-				state.door_route_set = true;
+				owner->door_route_set_ = true;
 			}
-			MOMOS::Vec2 dest = GameStatus::get()->map->MapToScreenCoords(GameStatus::get()->prison->doors_[state.current_target_door]->getFrontalPoint(true));
+			MOMOS::Vec2 dest = GameStatus::get()->map->MapToScreenCoords(GameStatus::get()->prison->doors_[owner->current_target_door_]->getFrontalPoint(true));
 			owner->setPathTo(dest);
 		} else {
 			//If current path is complete
 			if (owner->moveFollowingPath()) {
 				//if going to a door
-				if (state.door_route_set) {
-					if (GameStatus::get()->prison->doors_[state.current_target_door]->is_open_) {
+				if (owner->door_route_set_) {
+					if (GameStatus::get()->prison->doors_[owner->current_target_door_]->is_open_) {
 						//If door is open
 						MOMOS::Vec2 dest = { Screen::width - 100 , Screen::height - 50 };
 						owner->clearMovement();
 						owner->setPathTo(dest);
 					} else {
 						//If door is closed
-						state.current_target_door = (state.current_target_door + 1) % 2;
+						owner->current_target_door_ = (owner->current_target_door_ + 1) % 2;
 						owner->clearMovement();
-						state.door_route_set = false;
+						owner->door_route_set_ = false;
 					}
 				}
 			}
