@@ -4,7 +4,7 @@
 
 namespace PrisonerECS {
 
-ECS::Entity Manager::CreatePrisonerEntity(Nothing) {
+ECS::Entity Manager::CreatePrisonerEntity() {
 	return PrisonerECS::CreatePrisonerEntity();
 }
 

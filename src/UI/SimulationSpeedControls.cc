@@ -1,7 +1,7 @@
-#include "../include/SimulationSpeedControls.h"
+#include "../../include/UI/SimulationSpeedControls.h"
 
-#include "../include/GameStatus.h"
-#include "../include/config.h"
+#include "../../include/GameStatus.h"
+#include "../../include/config.h"
 
 #include <MOMOS/draw.h>
 #include <MOMOS/input.h>

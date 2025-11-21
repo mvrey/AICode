@@ -8,7 +8,7 @@ class Prisoner;
 namespace PrisonerECS {
 
 struct Manager {
-	static ECS::Entity CreatePrisonerEntity(Nothing);
+	static ECS::Entity CreatePrisonerEntity();
 	static void DestroyPrisonerEntity(ECS::Entity entity);
 };
 

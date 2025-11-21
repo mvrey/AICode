@@ -1,9 +1,9 @@
-#include "../include/FpsCounter.h"
+#include "../../include/UI/FpsCounter.h"
 
 #include <MOMOS/momos.h>
 #include <MOMOS/draw.h>
 #include <MOMOS/time.h>
-#include "../include/config.h"
+#include "../../include/config.h"
 
 #include <cstring>
 #include <cstdio>

@@ -246,9 +246,9 @@
   <ItemGroup>
     <ClCompile Include="src\Crate.cc" />
     <ClCompile Include="src\ecs\PrisonerEcsManager.cc" />
-    <ClCompile Include="src\FpsCounter.cc" />
-    <ClCompile Include="src\VSyncToggle.cc" />
-    <ClCompile Include="src\SimulationSpeedControls.cc" />
+    <ClCompile Include="src\UI\FpsCounter.cc" />
+    <ClCompile Include="src\UI\VSyncToggle.cc" />
+    <ClCompile Include="src\UI\SimulationSpeedControls.cc" />
     <ClCompile Include="src\Agents\Agent.cc" />
     <ClCompile Include="src\Agents\Guard.cc" />
     <ClCompile Include="src\Agents\Messager.cc" />

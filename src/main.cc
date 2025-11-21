@@ -8,9 +8,9 @@
 #include "../include/PrisonMap.h"
 #include "../include/config.h"
 #include "../include/Pathfinding/astar.h"
-#include "../include/SimulationSpeedControls.h"
-#include "../include/FpsCounter.h"
-#include "../include/VSyncToggle.h"
+#include "../include/UI/SimulationSpeedControls.h"
+#include "../include/UI/FpsCounter.h"
+#include "../include/UI/VSyncToggle.h"
 #include "../include/ecs/PrisonerEcsSystems.h"
 #include <MOMOS/momos.h>
 
