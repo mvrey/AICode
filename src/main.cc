@@ -19,6 +19,8 @@
 #include "../include/Agents/Prisoner.h"
 #include "../include/Agents/Pathfinder.h"
 
+#include "../include/Managers/AgentsManager.h"
+
 
 // Global vars
 double g_shift_change_time_end = 0;
@@ -133,8 +135,8 @@ void Draw() {
  **/
 bool checkGameStarted() {
 
-	if (!GameStatus::get()->g_agents_created) {
-		GameStatus::get()->g_agents_created = true;
+	if (!GameStatus::get()->agents_manager->g_agents_created) {
+		GameStatus::get()->agents_manager->g_agents_created = true;
 
 		//Pathfinder manager should be the 1st one to update each frame
 		Agent::agents_.push_back(GameStatus::get()->pathfinder_);
@@ -143,7 +145,7 @@ bool checkGameStarted() {
 		for (int i = 0; i < 10; i++) {
 			Guard* agent = new Guard();
 			Agent::agents_.push_back(agent);
-			GameStatus::get()->guards_.push_back(agent);
+			GameStatus::get()->agents_manager->GetGuards().push_back(agent);
 		}
 
 		//Create prisoners
@@ -153,7 +155,7 @@ bool checkGameStarted() {
 			if (i > 10/2)
 				agent->SetWorkingShift(1);
 
-			GameStatus::get()->prisoners_.push_back(agent);
+			GameStatus::get()->agents_manager->GetPrisoners().push_back(agent);
 		}
 
 		//Create soldiers
@@ -161,11 +163,11 @@ bool checkGameStarted() {
 			Soldier* agent = new Soldier();
 			agent->getBody()->pos_ = { (float)(rand() % 200) + 30.0f, Screen::height - 50.0f };
 			Agent::agents_.push_back(agent);
-			GameStatus::get()->soldiers_.push_back(agent);
+			GameStatus::get()->agents_manager->GetSoldiers().push_back(agent);
 		}
 	}
 
-	return GameStatus::get()->g_agents_created;
+	return GameStatus::get()->agents_manager->g_agents_created;
 }
 
 

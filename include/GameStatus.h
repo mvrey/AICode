@@ -14,6 +14,7 @@
 #include "PrisonMap.h"
 #include "Crate.h"
 #include "Pathfinding/cost_map.h"
+#include "Managers/AgentsManager.h"
 
 class Pathfinder;
 
@@ -34,13 +35,8 @@ public:
 	float simulation_speed_;
 	//----------------///
 
-	/// AGENTS MANAGEMENT ///
-	//Agent amounts to be created
-	bool g_agents_created = false;
+	AgentsManager* agents_manager;
 
-	std::vector<Guard*> guards_;
-	std::vector<Prisoner*> prisoners_;
-	std::vector<Soldier*> soldiers_;
 	//----------------///
 
 	/// PATHFINDING ///

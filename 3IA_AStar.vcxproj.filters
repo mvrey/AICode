@@ -49,6 +49,12 @@
     <Filter Include="Source Files\ecs\system">
       <UniqueIdentifier>{9bb1d111-8a62-486d-abce-e6781eeb8fa6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Managers">
+      <UniqueIdentifier>{55dc6c61-f7be-490c-9414-4569a9eb85bb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Managers">
+      <UniqueIdentifier>{454b9a6d-8bec-47de-9605-76e55af987f7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\config.h">
@@ -390,6 +396,9 @@
     <ClInclude Include="include\ecs\PrisonerEcsManager.h">
       <Filter>Header Files\ecs</Filter>
     </ClInclude>
+    <ClInclude Include="include\Managers\AgentsManager.h">
+      <Filter>Header Files\Managers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Door.cc">
@@ -431,15 +440,6 @@
     <ClCompile Include="src\Pathfinding\path.cc">
       <Filter>Source Files\Pathfinding</Filter>
     </ClCompile>
-    <ClCompile Include="src\VSyncToggle.cc">
-      <Filter>Source Files\UI</Filter>
-    </ClCompile>
-    <ClCompile Include="src\FpsCounter.cc">
-      <Filter>Source Files\UI</Filter>
-    </ClCompile>
-    <ClCompile Include="src\SimulationSpeedControls.cc">
-      <Filter>Source Files\UI</Filter>
-    </ClCompile>
     <ClCompile Include="src\ecs\PrisonerEcs.cc">
       <Filter>Source Files\ecs</Filter>
     </ClCompile>
@@ -472,6 +472,18 @@
     </ClCompile>
     <ClCompile Include="src\Crate.cc">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\UI\VSyncToggle.cc">
+      <Filter>Source Files\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="src\UI\SimulationSpeedControls.cc">
+      <Filter>Source Files\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="src\UI\FpsCounter.cc">
+      <Filter>Source Files\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Managers\AgentsManager.cc">
+      <Filter>Source Files\Managers</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -117,8 +117,8 @@ void GuardMind::sense() {
 
 
 	//Search for soldiers within vision cone
-	for(unsigned int i = 0; i < GameStatus::get()->soldiers_.size(); i++) {
-		Soldier* soldier = GameStatus::get()->soldiers_[i];
+	for(unsigned int i = 0; i < GameStatus::get()->agents_manager->GetSoldiers().size(); i++) {
+		Soldier* soldier = GameStatus::get()->agents_manager->GetSoldiers()[i];
 
 		if (owner_->isPointSighted(soldier->getBody()->pos_)) {
 			soldier_spotted_ = true;
@@ -134,8 +134,8 @@ void GuardMind::sense() {
 
 	//On alarm mode, also chase prisoners
 	if (status_ == kAlert) {
-		for (unsigned int i = 0; i < GameStatus::get()->prisoners_.size(); i++) {
-			Prisoner* prisoner = GameStatus::get()->prisoners_[i];
+		for (unsigned int i = 0; i < GameStatus::get()->agents_manager->GetPrisoners().size(); i++) {
+			Prisoner* prisoner = GameStatus::get()->agents_manager->GetPrisoners()[i];
 
 			if (owner_->isPointSighted(prisoner->getBody()->pos_)) {
 

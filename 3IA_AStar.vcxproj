@@ -206,6 +206,7 @@
     <ClInclude Include="deps\src\deps\sqlite3\sqlite3.h" />
     <ClInclude Include="deps\src\deps\sqlite3\sqlite3ext.h" />
     <ClInclude Include="include\ecs\PrisonerEcsManager.h" />
+    <ClInclude Include="include\Managers\AgentsManager.h" />
     <ClInclude Include="include\UI\FpsCounter.h" />
     <ClInclude Include="include\UI\SimulationSpeedControls.h" />
     <ClInclude Include="include\UI\VSyncToggle.h" />
@@ -246,6 +247,7 @@
   <ItemGroup>
     <ClCompile Include="src\Crate.cc" />
     <ClCompile Include="src\ecs\PrisonerEcsManager.cc" />
+    <ClCompile Include="src\Managers\AgentsManager.cc" />
     <ClCompile Include="src\UI\FpsCounter.cc" />
     <ClCompile Include="src\UI\VSyncToggle.cc" />
     <ClCompile Include="src\UI\SimulationSpeedControls.cc" />
