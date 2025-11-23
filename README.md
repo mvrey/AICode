@@ -4,6 +4,8 @@ This project depends on the MOMOS2D graphics engine, whose code can be downloade
 
 For operating systems other than Windows x64, or for release builds, the engine code must be compiled manually.
 
+If you want to run the project without the hassle of setting it up, there's a windows executable under the /bin directory.
+
 
 # 1. Project Description
 
