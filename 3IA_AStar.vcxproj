@@ -69,11 +69,15 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <OutDir>bin</OutDir>
+    <OutDir>bin/Debug</OutDir>
     <IncludePath>D:\Projects2025\MOMOS25\include\MOMOS;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <OutDir>bin\</OutDir>
+    <IncludePath>D:\Projects2025\MOMOS25\include\MOMOS;$(IncludePath)</IncludePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <OutDir>bin/Release</OutDir>
     <IncludePath>D:\Projects2025\MOMOS25\include\MOMOS;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -120,10 +124,13 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>deps\src;deps\src\deps\glfw3_2_1\include;deps\src\deps\glfw3_2_1\src;deps\src\deps\glew2_0_0\include;deps\src\deps\glew2_0_0\src;deps\src\deps\glm-0_9_8_1;deps\src\deps\chipmunk-7.0.1\include;deps\src\deps\SOIL\src;src\deps\sqlite3;deps\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalLibraryDirectories>deps\build\windows\release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>opengl32.lib;deps\build\windows\release\Momos2D.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -236,7 +243,6 @@
     <ClInclude Include="include\Agents\Prisoner.h" />
     <ClInclude Include="include\Agents\Soldier.h" />
     <ClInclude Include="include\config.h" />
-    <ClInclude Include="include\Crate.h" />
     <ClInclude Include="include\Door.h" />
     <ClInclude Include="include\GameStatus.h" />
     <ClInclude Include="include\Pathfinding\astar.h" />
@@ -245,7 +251,6 @@
     <ClInclude Include="include\PrisonMap.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\Crate.cc" />
     <ClCompile Include="src\ecs\PrisonerEcsManager.cc" />
     <ClCompile Include="src\Managers\AgentsManager.cc" />
     <ClCompile Include="src\UI\FpsCounter.cc" />
