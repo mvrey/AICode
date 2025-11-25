@@ -14,8 +14,6 @@
 #include "../include/ecs/PrisonerEcsSystems.h"
 #include <MOMOS/momos.h>
 
-#include "../include/Agents/Soldier.h"
-#include "../include/Agents/Guard.h"
 #include "../include/Agents/Prisoner.h"
 #include "../include/Agents/Pathfinder.h"
 
@@ -96,12 +94,6 @@ void Draw() {
 		}
 	}
 
-	//Draw crates
-	std::vector<Crate*> crates = GameStatus::get()->crates_;
-	for (unsigned int i = 0; i < crates.size(); i++) {
-		MOMOS::Vec2 map_crates = crates[i]->pos_;
-		MOMOS::DrawSprite(crates[i]->img_, map_crates.x, map_crates.y);
-	}
 
 
 	//Draw doors
@@ -141,29 +133,14 @@ bool checkGameStarted() {
 		//Pathfinder manager should be the 1st one to update each frame
 		Agent::agents_.push_back(GameStatus::get()->pathfinder_);
 
-		//Create prison guards
-		for (int i = 0; i < 10; i++) {
-			Guard* agent = new Guard();
-			Agent::agents_.push_back(agent);
-			GameStatus::get()->agents_manager->GetGuards().push_back(agent);
-		}
-
 		//Create prisoners
-		for (int i = 0; i < 400; i++) {
+		for (int i = 0; i < 100; i++) {
 			Prisoner* agent = new Prisoner();
 
 			if (i > 10/2)
 				agent->SetWorkingShift(1);
 
 			GameStatus::get()->agents_manager->GetPrisoners().push_back(agent);
-		}
-
-		//Create soldiers
-		for (int i = 0; i < 10; i++) {
-			Soldier* agent = new Soldier();
-			agent->getBody()->pos_ = { (float)(rand() % 200) + 30.0f, Screen::height - 50.0f };
-			Agent::agents_.push_back(agent);
-			GameStatus::get()->agents_manager->GetSoldiers().push_back(agent);
 		}
 	}
 
@@ -222,13 +199,7 @@ int main(int argc, char **argv) {
 	GameStatus::get()->pathfinder_ = new Pathfinder();
 	g_speed_controls.Initialize();
 
-	//Sprinkle the loading area with crates
 	PrisonMap* prison = GameStatus::get()->prison;
-	for (int i = 0; i < 200; i++) {
-		Crate* crate = new Crate();
-		crate->pos_ = GameStatus::get()->map->MapToScreenCoords(prison->getRandomPointInRoom(prison->loading_area_));
-		GameStatus::get()->crates_.push_back(crate);
-	}
 
 	//Close doors
 	GameStatus::get()->prison->doors_[0]->is_open_ = false;

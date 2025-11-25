@@ -12,14 +12,6 @@ AgentsManager::AgentsManager() {}
 AgentsManager::AgentsManager(const AgentsManager& orig) {}
 AgentsManager::~AgentsManager() {}
 
-std::vector<Guard*> AgentsManager::GetGuards() {
-	return guards_;
-}
-
 std::vector<Prisoner*> AgentsManager::GetPrisoners() {
 	return prisoners_;
-}
-
-std::vector<Soldier*> AgentsManager::GetSoldiers() {
-	return soldiers_;
 }

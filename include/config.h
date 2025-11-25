@@ -70,20 +70,6 @@ typedef enum {
 	kEscaping
 } PrisonerStatus;
 
-
-typedef enum {
-	kNormal,
-	kSuspect,
-	kAlert
-} GuardStatus;
-
-
-typedef enum {
-	kStandard,
-	kRunning
-} SoldierStatus;
-
-
 typedef enum {
 	kNONE,
 	kRiver,

@@ -12,7 +12,6 @@
 
 #include "config.h"
 #include "PrisonMap.h"
-#include "Crate.h"
 #include "Pathfinding/cost_map.h"
 #include "Managers/AgentsManager.h"
 
@@ -49,7 +48,6 @@ public:
 	/*********************
 	 * PRISON STATUS INFO *
 	 *********************/
-	std::vector<Crate*> crates_;
 	unsigned int first_available_crate_index = 0;
 
 	double working_shift_time_end;

@@ -60,12 +60,6 @@
     <ClInclude Include="include\config.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\Crate.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Door.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="include\GameStatus.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -102,9 +96,6 @@
     <ClInclude Include="include\Pathfinding\cost_map.h">
       <Filter>Header Files\Pathfinding</Filter>
     </ClInclude>
-    <ClInclude Include="include\Agents\Guard.h">
-      <Filter>Header Files\Agents</Filter>
-    </ClInclude>
     <ClInclude Include="include\Agents\Messager.h">
       <Filter>Header Files\Agents</Filter>
     </ClInclude>
@@ -112,9 +103,6 @@
       <Filter>Header Files\Agents</Filter>
     </ClInclude>
     <ClInclude Include="include\Agents\Pathfinder.h">
-      <Filter>Header Files\Agents</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Agents\Soldier.h">
       <Filter>Header Files\Agents</Filter>
     </ClInclude>
     <ClInclude Include="include\Pathfinding\path.h">
@@ -401,9 +389,6 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\Door.cc">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\GameStatus.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -416,9 +401,6 @@
     <ClCompile Include="src\Agents\Agent.cc">
       <Filter>Source Files\Agents</Filter>
     </ClCompile>
-    <ClCompile Include="src\Agents\Guard.cc">
-      <Filter>Source Files\Agents</Filter>
-    </ClCompile>
     <ClCompile Include="src\Agents\Messager.cc">
       <Filter>Source Files\Agents</Filter>
     </ClCompile>
@@ -426,9 +408,6 @@
       <Filter>Source Files\Agents</Filter>
     </ClCompile>
     <ClCompile Include="src\Agents\Prisoner.cc">
-      <Filter>Source Files\Agents</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Agents\Soldier.cc">
       <Filter>Source Files\Agents</Filter>
     </ClCompile>
     <ClCompile Include="src\Pathfinding\astar.cc">
@@ -469,9 +448,6 @@
     </ClCompile>
     <ClCompile Include="src\ecs\system\PrisonerRenderSystem.cc">
       <Filter>Source Files\ecs\system</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Crate.cc">
-      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\UI\VSyncToggle.cc">
       <Filter>Source Files\UI</Filter>

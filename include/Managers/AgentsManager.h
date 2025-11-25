@@ -24,15 +24,11 @@ public:
 	
 	bool g_agents_created = false;
 
-	std::vector<Guard*> GetGuards();
 	std::vector<Prisoner*> GetPrisoners();
-	std::vector<Soldier*> GetSoldiers();
 
 private:
 
-	std::vector<Guard*> guards_;
 	std::vector<Prisoner*> prisoners_;
-	std::vector<Soldier*> soldiers_;
 };
 
 #endif /* AGENTSMANAGER_h */

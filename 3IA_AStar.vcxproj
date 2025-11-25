@@ -237,13 +237,10 @@
     <ClInclude Include="include\ecs\system\PrisonerMovementSystem.h" />
     <ClInclude Include="include\ecs\system\PrisonerRenderSystem.h" />
     <ClInclude Include="include\Agents\Agent.h" />
-    <ClInclude Include="include\Agents\Guard.h" />
     <ClInclude Include="include\Agents\Messager.h" />
     <ClInclude Include="include\Agents\Pathfinder.h" />
     <ClInclude Include="include\Agents\Prisoner.h" />
-    <ClInclude Include="include\Agents\Soldier.h" />
     <ClInclude Include="include\config.h" />
-    <ClInclude Include="include\Door.h" />
     <ClInclude Include="include\GameStatus.h" />
     <ClInclude Include="include\Pathfinding\astar.h" />
     <ClInclude Include="include\Pathfinding\cost_map.h" />
@@ -257,12 +254,9 @@
     <ClCompile Include="src\UI\VSyncToggle.cc" />
     <ClCompile Include="src\UI\SimulationSpeedControls.cc" />
     <ClCompile Include="src\Agents\Agent.cc" />
-    <ClCompile Include="src\Agents\Guard.cc" />
     <ClCompile Include="src\Agents\Messager.cc" />
     <ClCompile Include="src\Agents\Pathfinder.cc" />
     <ClCompile Include="src\Agents\Prisoner.cc" />
-    <ClCompile Include="src\Agents\Soldier.cc" />
-    <ClCompile Include="src\Door.cc" />
     <ClCompile Include="src\GameStatus.cc" />
     <ClCompile Include="src\main.cc" />
     <ClCompile Include="src\Pathfinding\astar.cc" />

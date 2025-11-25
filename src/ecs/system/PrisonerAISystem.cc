@@ -132,15 +132,13 @@ void PrisonerAISystem::Update(Registry& registry, double /*delta_time*/) {
 				break;
 			}
 
-			if (status->first_available_crate_index < status->crates_.size()) {
+			if (status->first_available_crate_index < 100) {
 				if (state.carried_crate == nullptr) {
-					state.carried_crate = status->crates_[status->first_available_crate_index];
 					status->first_available_crate_index++;
 					movement.speed = ClampPositive(state.original_speed * 0.5f);
 				}
 
 				if (state.carried_crate != nullptr) {
-					state.carried_crate->pos_ = transform.position;
 				}
 
 				if (goToRoom(prison->unloading_area_)) {

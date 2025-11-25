@@ -11,7 +11,6 @@
 #define PRISONMAP_H
 
 #include "config.h"
-#include "Crate.h"
 #include "Door.h"
 
 typedef struct {
