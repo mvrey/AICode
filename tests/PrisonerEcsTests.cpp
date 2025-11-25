@@ -30,6 +30,7 @@ void EnsureGameStatus() {
     }
 }
 
+// Validates that the movement system advances deterministic steps forward.
 void TestMovementPathProgression() {
     ResetPrisonerRegistry();
     EnsureGameStatus();
@@ -65,6 +66,7 @@ void TestMovementPathProgression() {
                "Step index should stay within deterministic step bounds.");
 }
 
+// Checks render pass leaves transform data untouched for static sprites.
 void TestRenderTransformConsistency() {
     ResetPrisonerRegistry();
     auto& registry = PrisonerECS::GetRegistry();

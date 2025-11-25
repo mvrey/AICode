@@ -6,6 +6,7 @@
 #include "RegistryTests.h"
 #include "PrisonerEcsTests.h"
 
+// Runs every discrete test suite so CI can invoke a single entry point.
 int AncientMythosTests() {
     try {
         RegistryTests();

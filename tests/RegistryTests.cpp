@@ -17,6 +17,7 @@ struct VelocityComponent {
     float vy = 0.0f;
 };
 
+// Verifies that destroyed entity IDs are recycled correctly by the registry.
 void TestEntityReuse() {
     Registry registry;
     Entity e1 = registry.CreateEntity();
@@ -29,6 +30,7 @@ void TestEntityReuse() {
     TEST_CHECK(e3 == e1, "Entity ids should be reused after destruction.");
 }
 
+// Exercises add/get/remove flow for a single component on an entity.
 void TestAddGetComponent() {
     Registry registry;
     Entity e = registry.CreateEntity();
@@ -44,6 +46,7 @@ void TestAddGetComponent() {
     TEST_CHECK(!registry.HasComponent<PositionComponent>(e), "Component removal should clear presence flag.");
 }
 
+// Confirms ForEach visits every entity with the component and allows mutation.
 void TestIteration() {
     Registry registry;
     Entity e1 = registry.CreateEntity();
@@ -67,6 +70,7 @@ void TestIteration() {
     TEST_CHECK(registry.GetComponent<PositionComponent>(e3).y == 7.0f, "Iteration should mutate last component.");
 }
 
+// Ensures destroying an entity also removes every attached component.
 void TestDestroyRemovesComponents() {
     Registry registry;
     Entity e = registry.CreateEntity();
