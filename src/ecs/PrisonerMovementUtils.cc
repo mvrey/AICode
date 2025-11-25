@@ -1,50 +1,54 @@
-//------------------------------------------------------------------------------
-// File: PrisonerMovementUtils.cc
-// Purpose: Implements bridges that keep legacy Prisoner instances synchronized
-//          with ECS movement data and pathfinding requests.
-//------------------------------------------------------------------------------
 #include "../../include/ecs/PrisonerMovementUtils.h"
 
-#include <algorithm>
-#include <cmath>
-
-#include "../../include/Agents/Prisoner.h"
 #include "../../include/Agents/Pathfinder.h"
 #include "../../include/GameStatus.h"
-#include "../../include/Pathfinding/astar.h"
-#include "../../include/Pathfinding/cost_map.h"
+
+#include <cmath>
+#include <vector>
+
 
 namespace {
 
-// Copies ECS movement data back to the legacy Prisoner for compatibility.
-void MirrorMovementToLegacy(Prisoner& prisoner, const ECS::MovementComponent& movement) {
-	prisoner.deterministic_steps_ = movement.deterministic_steps;
-	prisoner.deterministic_step_num_ = movement.deterministic_step_index;
-	prisoner.getBody()->path_set_ = movement.path_set;
-	prisoner.movement_path_ = movement.movement_path;
-	prisoner.path_cmd_ = movement.path_command;
-	prisoner.last_movement_update_ = movement.last_movement_update;
-	if (prisoner.mind_) {
-		prisoner.mind_->movement_finished_ = movement.movement_finished;
+::MOMOS::Vec2 SnapToWalkable(CostMap* map, ::MOMOS::Vec2 coords, const ::MOMOS::Vec2& dest) {
+	if (!map) {
+		return coords;
 	}
+
+	while (true) {
+		Cell* cell = map->getCellAt(static_cast<int>(coords.x), static_cast<int>(coords.y));
+		if (cell == nullptr || cell->is_walkable_) {
+			break;
+		}
+		if (dest.x > coords.x) {
+			coords.x += 1.0f;
+		}
+		if (dest.y > coords.y) {
+			coords.y += 1.0f;
+		}
+	}
+
+	return coords;
 }
 
-// Writes the current direction into both ECS and legacy body data.
-void ApplyDirection(Prisoner& prisoner, const ::MOMOS::Vec2& direction) {
-	auto& transform = prisoner.GetTransformComponent();
-	transform.direction = direction;
-	prisoner.getBody()->direction_ = direction;
+void PopulateDeterministicSteps(ECS::MovementComponent& movement, CostMap* map, const std::vector<::MOMOS::Vec2>& path) {
+	movement.deterministic_steps.clear();
+	if (!map) {
+		return;
+	}
+
+	for (const auto& point : path) {
+		movement.deterministic_steps.push_back(map->MapToScreenCoords(point));
+	}
+
+	movement.deterministic_step_index = 0;
 }
 
-// Produces a normalized vector from the current position toward the target.
-::MOMOS::Vec2 Normalize(const ::MOMOS::Vec2& from, const ::MOMOS::Vec2& to) {
-	float dx = to.x - from.x;
-	float dy = to.y - from.y;
-	float dist = std::sqrt(dx * dx + dy * dy);
-	if (dist <= 0.0001f) {
-		return { 0.0f, 0.0f };
+void PopulateDeterministicSteps(ECS::MovementComponent& movement, CostMap* map, const std::vector<::MOMOS::Vec2>& path, const ::MOMOS::Vec2& extra) {
+	PopulateDeterministicSteps(movement, map, path);
+	if (map) {
+		movement.deterministic_steps.push_back(map->MapToScreenCoords(extra));
 	}
-	return { dx / dist, dy / dist };
+	movement.deterministic_step_index = 0;
 }
 
 } // namespace
@@ -52,177 +56,126 @@ void ApplyDirection(Prisoner& prisoner, const ::MOMOS::Vec2& direction) {
 namespace PrisonerECS {
 namespace MovementUtils {
 
-// Requests a path for the prisoner and mirrors the resulting steps into ECS.
-bool SetPathTo(Prisoner& prisoner, const ::MOMOS::Vec2& destination) {
-	auto& movement = prisoner.GetMovementComponent();
-	auto& transform = prisoner.GetTransformComponent();
-
-	CostMap* map = GameStatus::get()->map;
-	if (!map) {
-		return false;
-	}
-
-	::MOMOS::Vec2 current_map_pos = map->ScreenToMapCoords(transform.position);
-	::MOMOS::Vec2 dest_map_pos = map->ScreenToMapCoords(destination);
-	bool displaced = false;
-
-	while (true) {
-		Cell* cell = map->getCellAt(static_cast<int>(current_map_pos.x), static_cast<int>(current_map_pos.y));
-		if (cell == nullptr || cell->is_walkable_) {
-			break;
-		}
-		if (dest_map_pos.x > current_map_pos.x) current_map_pos.x++;
-		if (dest_map_pos.y > current_map_pos.y) current_map_pos.y++;
-		displaced = true;
-	}
-
-	if (displaced) {
-		::MOMOS::Vec2 screen_pos = map->MapToScreenCoords(current_map_pos);
-		transform.position = screen_pos;
-		prisoner.getBody()->pos_ = screen_pos;
-	}
-
-	if (!movement.path_set) {
-		if (movement.path_command == nullptr) {
-			auto* command = new PathCommand();
-			command->start = current_map_pos;
-			command->end = dest_map_pos;
-			command->calculated = false;
-			command->pending_ = true;
-			GameStatus::get()->pathfinder_->search(command);
-			movement.path_command = command;
-			prisoner.path_cmd_ = command;
-		}
-
-		if (movement.path_command && movement.path_command->pending_) {
-			MirrorMovementToLegacy(prisoner, movement);
-			return false;
-		}
-
-		if (movement.path_command && movement.path_command->calculated) {
-			movement.movement_path = movement.path_command->path_;
-			prisoner.movement_path_ = movement.movement_path;
-			delete movement.path_command;
-			movement.path_command = nullptr;
-			prisoner.path_cmd_ = nullptr;
-		}
-
-		if (movement.movement_path && movement.movement_path->path_.size() > 1) {
-			movement.path_set = true;
-			movement.deterministic_steps.clear();
-			for (const auto& point : movement.movement_path->path_) {
-				movement.deterministic_steps.push_back(map->MapToScreenCoords(point));
-			}
-			movement.deterministic_step_index = 0;
-			movement.movement_finished = false;
-			if (prisoner.mind_) {
-				prisoner.mind_->movement_finished_ = false;
-			}
-		}
-	}
-
-	MirrorMovementToLegacy(prisoner, movement);
-	return movement.path_set;
-}
-
-// Advances the prisoner along its deterministic steps and tracks completion.
-bool MoveFollowingPath(Prisoner& prisoner) {
-	auto& movement = prisoner.GetMovementComponent();
-	auto& transform = prisoner.GetTransformComponent();
-
-	if (!prisoner.mind_) {
-		return true;
-	}
-
-	if (movement.movement_finished || !movement.path_set || movement.deterministic_steps.empty()) {
-		if (movement.path_set && movement.deterministic_steps.empty()) {
-			movement.path_set = false;
-		}
-		MirrorMovementToLegacy(prisoner, movement);
-		return true;
-	}
-
-	CostMap* map = GameStatus::get()->map;
-	if (!map) {
-		return true;
-	}
-
-	::MOMOS::Vec2 target = movement.deterministic_steps[movement.deterministic_step_index];
-	::MOMOS::Vec2 target_cell = map->ScreenToMapCoords(target);
-	Cell* cell = map->getCellAt(static_cast<int>(target_cell.x), static_cast<int>(target_cell.y));
-
-	if (!cell || !cell->is_walkable_) {
-		ClearMovement(prisoner);
-		MirrorMovementToLegacy(prisoner, movement);
-		return true;
-	}
-
-	movement.last_movement_update = GameStatus::get()->game_time;
-
-	float dx = target.x - transform.position.x;
-	float dy = target.y - transform.position.y;
-	float dist = std::sqrt(dx * dx + dy * dy);
-
-	if (dist < 5.0f) {
-		if (movement.deterministic_step_index + 1 >= movement.deterministic_steps.size()) {
-			movement.movement_finished = true;
-			if (prisoner.mind_) {
-				prisoner.mind_->movement_finished_ = true;
-			}
-		} else {
-			movement.deterministic_step_index =
-				(movement.deterministic_step_index + 1) % movement.deterministic_steps.size();
-			target = movement.deterministic_steps[movement.deterministic_step_index];
-			dx = target.x - transform.position.x;
-			dy = target.y - transform.position.y;
-			dist = std::sqrt(dx * dx + dy * dy);
-			movement.movement_finished = false;
-			if (prisoner.mind_) {
-				prisoner.mind_->movement_finished_ = false;
-			}
-		}
-	}
-
-	if (!movement.movement_finished) {
-		if (dist > 0.0001f) {
-			::MOMOS::Vec2 direction{ dx / dist, dy / dist };
-			ApplyDirection(prisoner, direction);
-		}
-	} else {
-		ApplyDirection(prisoner, { 0.0f, 0.0f });
-	}
-
-	MirrorMovementToLegacy(prisoner, movement);
-	return movement.movement_finished;
-}
-
-// Resets both ECS and legacy movement state, halting the prisoner immediately.
-void ClearMovement(Prisoner& prisoner) {
-	auto& movement = prisoner.GetMovementComponent();
-	auto& transform = prisoner.GetTransformComponent();
+void ClearMovement(ECS::Registry& registry, ECS::Entity entity) {
+	auto& movement = registry.GetComponent<ECS::MovementComponent>(entity);
+	auto& transform = registry.GetComponent<ECS::TransformComponent>(entity);
 
 	movement.deterministic_steps.clear();
 	movement.deterministic_step_index = 0;
 	movement.path_set = false;
-	movement.last_movement_update = 0.0;
-
 	movement.movement_finished = false;
-	if (prisoner.mind_) {
-		prisoner.mind_->movement_finished_ = false;
+	movement.movement_path = nullptr;
+	if (movement.path_command) {
+		delete movement.path_command;
+		movement.path_command = nullptr;
 	}
 
-	::MOMOS::Vec2 zero_dir{ 0.0f, 0.0f };
-	transform.direction = zero_dir;
-	if (prisoner.getBody()) {
-		prisoner.getBody()->stop();
-		prisoner.getBody()->direction_ = zero_dir;
-		prisoner.getBody()->path_set_ = false;
+	transform.direction = { 0.0f, 0.0f };
+	movement.door_route_set = false;
+	movement.escape_route_set = false;
+}
+
+bool TryFinalizePath(ECS::Registry& registry, ECS::Entity entity) {
+	auto& movement = registry.GetComponent<ECS::MovementComponent>(entity);
+	if (!movement.path_command || movement.path_command->pending_) {
+		return false;
 	}
 
-	prisoner.deterministic_steps_.clear();
-	prisoner.deterministic_step_num_ = 0;
+	auto* status = GameStatus::get();
+	if (!status || !status->map) {
+		return false;
+	}
 
-	MirrorMovementToLegacy(prisoner, movement);
+	PopulateDeterministicSteps(movement, status->map, movement.path_command->path_->path_);
+	movement.path_set = true;
+	movement.movement_finished = false;
+	movement.movement_path = movement.path_command->path_;
+	delete movement.path_command;
+	movement.path_command = nullptr;
+	return true;
+}
+
+bool RequestPathTo(ECS::Registry& registry, ECS::Entity entity, const ::MOMOS::Vec2& destination) {
+	auto* status = GameStatus::get();
+	if (!status || !status->map || !status->pathfinder_) {
+		return false;
+	}
+
+	auto& movement = registry.GetComponent<ECS::MovementComponent>(entity);
+	auto& transform = registry.GetComponent<ECS::TransformComponent>(entity);
+	auto* map = status->map;
+
+	if (movement.path_command) {
+		delete movement.path_command;
+		movement.path_command = nullptr;
+	}
+
+	movement.movement_path = nullptr;
+	auto start = map->ScreenToMapCoords(transform.position);
+	auto target = map->ScreenToMapCoords(destination);
+	auto snapped = SnapToWalkable(map, start, target);
+
+	transform.position = map->MapToScreenCoords(snapped);
+
+	auto* command = new PathCommand();
+	command->start = snapped;
+	command->end = target;
+	command->calculated = false;
+	command->pending_ = true;
+	status->pathfinder_->search(command);
+	movement.path_command = command;
+	return true;
+}
+
+bool BuildRoomWaypointPath(ECS::Registry& registry, ECS::Entity entity, const Room& room, PrisonMap* prison, CostMap* map) {
+	if (!prison || !map) {
+		return false;
+	}
+
+	auto& movement = registry.GetComponent<ECS::MovementComponent>(entity);
+	auto& transform = registry.GetComponent<ECS::TransformComponent>(entity);
+
+	auto* current_room = prison->getRoomAt(map->ScreenToMapCoords(transform.position));
+	std::vector<::MOMOS::Vec2> waypoint_path;
+
+	if (current_room != nullptr) {
+		if (current_room->id_ == room.id_) {
+			ClearMovement(registry, entity);
+			waypoint_path.push_back(prison->getRandomPointInRoom(room));
+		} else {
+			waypoint_path = prison->getPathToRoom(current_room, &room);
+		}
+	}
+
+	if (waypoint_path.empty()) {
+		return false;
+	}
+
+	PopulateDeterministicSteps(movement, map, waypoint_path, prison->getRandomPointInRoom(room));
+	movement.path_set = true;
+	movement.movement_finished = false;
+	movement.movement_path = nullptr;
+	return true;
+}
+
+void SetDoorRouteActive(ECS::Registry& registry, ECS::Entity entity, bool active) {
+	registry.GetComponent<ECS::MovementComponent>(entity).door_route_set = active;
+}
+
+void SetEscapeRouteActive(ECS::Registry& registry, ECS::Entity entity, bool active) {
+	registry.GetComponent<ECS::MovementComponent>(entity).escape_route_set = active;
+}
+
+void CycleDoorTarget(ECS::Registry& registry, ECS::Entity entity, int totalDoors) {
+	if (totalDoors <= 0) {
+		return;
+	}
+	auto& movement = registry.GetComponent<ECS::MovementComponent>(entity);
+	movement.current_target_door = (movement.current_target_door + 1) % totalDoors;
+}
+
+void SetDoorTarget(ECS::Registry& registry, ECS::Entity entity, int target) {
+	registry.GetComponent<ECS::MovementComponent>(entity).current_target_door = target;
 }
 
 } // namespace MovementUtils

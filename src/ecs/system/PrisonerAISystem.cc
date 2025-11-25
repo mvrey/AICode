@@ -7,7 +7,6 @@
 #include "../../../include/ecs/Registry.h"
 #include "../../../include/ecs/components/PrisonerComponents.h"
 #include "../../../include/ecs/PrisonerMovementUtils.h"
-#include "../../../include/Agents/Prisoner.h"
 #include "../../../include/GameStatus.h"
 #include "../../../include/PrisonMap.h"
 #include "../../../include/Pathfinding/cost_map.h"
@@ -17,17 +16,16 @@
 
 namespace {
 
-inline float ClampPositive(float value) {
-	return value < 0.0f ? 0.0f : value;
+inline bool HasArrived(const ECS::MovementComponent& movement) {
+	return movement.movement_finished && !movement.path_set;
 }
 
 } // namespace
 
 namespace ECS {
 
-// Evaluates every prisoner's AI status and issues movement/path requests.
 void PrisonerAISystem::Update(Registry& registry, double /*delta_time*/) {
-	GameStatus* status = GameStatus::get();
+	auto* status = GameStatus::get();
 	if (!status || !status->prison || !status->map) {
 		return;
 	}
@@ -41,39 +39,32 @@ void PrisonerAISystem::Update(Registry& registry, double /*delta_time*/) {
 			return;
 		}
 
-		auto& transform = registry.GetComponent<TransformComponent>(entity);
 		auto& movement = registry.GetComponent<MovementComponent>(entity);
-		Prisoner* owner = state.owner;
+		auto& transform = registry.GetComponent<TransformComponent>(entity);
 
 		auto clearMovement = [&]() {
-			if (owner) {
-				PrisonerECS::MovementUtils::ClearMovement(*owner);
-			} else {
-				movement.deterministic_steps.clear();
-				movement.deterministic_step_index = 0;
-				movement.path_set = false;
-				movement.movement_finished = false;
-			}
+			MovementUtils::ClearMovement(registry, entity);
 		};
 
 		auto goToRoom = [&](const Room& room) -> bool {
-			if (!owner) {
+			if (HasArrived(movement)) {
+				return true;
+			}
+
+			if (movement.path_set) {
 				return false;
 			}
-			return owner->goToRoom(room);
-		};
 
-		auto moveFollowingPath = [&]() -> bool {
-			if (!owner) {
-				return movement.movement_finished;
+			if (MovementUtils::TryFinalizePath(registry, entity)) {
+				return false;
 			}
-			return PrisonerECS::MovementUtils::MoveFollowingPath(*owner);
-		};
 
-		auto setPathTo = [&](const ::MOMOS::Vec2& dest) {
-			if (owner) {
-				PrisonerECS::MovementUtils::SetPathTo(*owner, dest);
+			if (MovementUtils::BuildRoomWaypointPath(registry, entity, room, prison, map)) {
+				return false;
 			}
+
+			MovementUtils::RequestPathTo(registry, entity, map->MapToScreenCoords(prison->getRandomPointInRoom(room)));
+			return false;
 		};
 
 		switch (state.status) {
@@ -104,10 +95,7 @@ void PrisonerAISystem::Update(Registry& registry, double /*delta_time*/) {
 			if (status->first_available_crate_index < 100) {
 				if (state.carried_crate == nullptr) {
 					status->first_available_crate_index++;
-					movement.speed = ClampPositive(state.original_speed * 0.5f);
-				}
-
-				if (state.carried_crate != nullptr) {
+					movement.speed = state.original_speed * 0.5f;
 				}
 
 				if (goToRoom(prison->unloading_area_)) {
@@ -126,8 +114,8 @@ void PrisonerAISystem::Update(Registry& registry, double /*delta_time*/) {
 			}
 
 			if (status->working_shift_ != state.working_shift) {
-				state.status = kGoingToRest;
 				clearMovement();
+				state.status = kGoingToRest;
 				movement.speed = state.original_speed;
 				break;
 			}
@@ -152,31 +140,25 @@ void PrisonerAISystem::Update(Registry& registry, double /*delta_time*/) {
 				goToRoom(prison->resting_room_);
 			}
 			break;
-		case kEscaping: {
+		case kEscaping:
 			movement.speed = state.original_speed;
-			setEscapeRouteActive(true);
+			MovementUtils::SetEscapeRouteActive(registry, entity, true);
 
 			PrisonAreaType area = prison->getAreaTypeAt(transform.position);
 			if (area == kBase) {
-				if (owner) {
-					setEscapeRouteActive(false);
-					owner->aliveStatus_ = kDead;
-				}
-				return;
+				MovementUtils::SetEscapeRouteActive(registry, entity, false);
+				clearMovement();
+				state.status = kIdle;
+				break;
 			}
 
 			if (!movement.path_set) {
 				if (!movement.door_route_set) {
 					clearMovement();
-					setDoorRouteActive(true);
-				}
-			} else {
-				if (moveFollowingPath()) {
-					
+					MovementUtils::SetDoorRouteActive(registry, entity, true);
 				}
 			}
 			break;
-		}
 		default:
 			break;
 		}

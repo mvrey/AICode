@@ -13,7 +13,7 @@ GameStatus* GameStatus::instance_ = nullptr;
 GameStatus::GameStatus() {
 	game_time = 0;
 	simulation_speed_ = 1.0f;
-	agents_manager = new AgentsManager();
+	prisoners_created = false;
 }
 
 GameStatus::GameStatus(const GameStatus& orig) {}

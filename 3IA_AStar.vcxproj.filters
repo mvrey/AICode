@@ -99,12 +99,6 @@
     <ClInclude Include="include\Pathfinding\cost_map.h">
       <Filter>Header Files\Pathfinding</Filter>
     </ClInclude>
-    <ClInclude Include="include\Agents\Messager.h">
-      <Filter>Header Files\Agents</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Agents\Prisoner.h">
-      <Filter>Header Files\Agents</Filter>
-    </ClInclude>
     <ClInclude Include="include\Agents\Pathfinder.h">
       <Filter>Header Files\Agents</Filter>
     </ClInclude>
@@ -384,11 +378,11 @@
     <ClInclude Include="include\ecs\PrisonerEcsSystems.h">
       <Filter>Header Files\ecs</Filter>
     </ClInclude>
-    <ClInclude Include="include\ecs\PrisonerEcsManager.h">
+    <ClInclude Include="include\ecs\PrisonerFactory.h">
       <Filter>Header Files\ecs</Filter>
     </ClInclude>
-    <ClInclude Include="include\Managers\AgentsManager.h">
-      <Filter>Header Files\Managers</Filter>
+    <ClInclude Include="include\ecs\PrisonerEcsManager.h">
+      <Filter>Header Files\ecs</Filter>
     </ClInclude>
     <ClInclude Include="tests\AncientMythosTests.h">
       <Filter>Tests</Filter>
@@ -416,13 +410,7 @@
     <ClCompile Include="src\Agents\Agent.cc">
       <Filter>Source Files\Agents</Filter>
     </ClCompile>
-    <ClCompile Include="src\Agents\Messager.cc">
-      <Filter>Source Files\Agents</Filter>
-    </ClCompile>
     <ClCompile Include="src\Agents\Pathfinder.cc">
-      <Filter>Source Files\Agents</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Agents\Prisoner.cc">
       <Filter>Source Files\Agents</Filter>
     </ClCompile>
     <ClCompile Include="src\Pathfinding\astar.cc">
@@ -435,6 +423,9 @@
       <Filter>Source Files\Pathfinding</Filter>
     </ClCompile>
     <ClCompile Include="src\ecs\PrisonerEcs.cc">
+      <Filter>Source Files\ecs</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ecs\PrisonerFactory.cc">
       <Filter>Source Files\ecs</Filter>
     </ClCompile>
     <ClCompile Include="src\ecs\PrisonerEcsSystems.cc">
@@ -472,9 +463,6 @@
     </ClCompile>
     <ClCompile Include="src\UI\FpsCounter.cc">
       <Filter>Source Files\UI</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Managers\AgentsManager.cc">
-      <Filter>Source Files\Managers</Filter>
     </ClCompile>
     <ClCompile Include="tests\AncientMythosTests.cpp">
       <Filter>Tests</Filter>

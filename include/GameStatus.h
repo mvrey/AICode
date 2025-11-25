@@ -13,8 +13,6 @@
 #include "config.h"
 #include "PrisonMap.h"
 #include "Pathfinding/cost_map.h"
-#include "Managers/AgentsManager.h"
-
 class Pathfinder;
 
 //forward declarations for agent cache
@@ -34,7 +32,7 @@ public:
 	float simulation_speed_;
 	//----------------///
 
-	AgentsManager* agents_manager;
+	bool prisoners_created = false;
 
 	//----------------///
 

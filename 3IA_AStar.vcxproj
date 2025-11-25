@@ -214,7 +214,6 @@
     <ClInclude Include="deps\src\deps\sqlite3\sqlite3.h" />
     <ClInclude Include="deps\src\deps\sqlite3\sqlite3ext.h" />
     <ClInclude Include="include\ecs\PrisonerEcsManager.h" />
-    <ClInclude Include="include\Managers\AgentsManager.h" />
     <ClInclude Include="include\UI\FpsCounter.h" />
     <ClInclude Include="include\UI\SimulationSpeedControls.h" />
     <ClInclude Include="include\UI\VSyncToggle.h" />
@@ -237,14 +236,13 @@
     <ClInclude Include="include\ecs\System.h" />
     <ClInclude Include="include\ecs\PrisonerInput.h" />
     <ClInclude Include="include\ecs\PrisonerEcsSystems.h" />
+    <ClInclude Include="include\ecs\PrisonerFactory.h" />
     <ClInclude Include="include\ecs\system\PrisonerAISystem.h" />
     <ClInclude Include="include\ecs\system\PrisonerPathFollowSystem.h" />
     <ClInclude Include="include\ecs\system\PrisonerMovementSystem.h" />
     <ClInclude Include="include\ecs\system\PrisonerRenderSystem.h" />
     <ClInclude Include="include\Agents\Agent.h" />
-    <ClInclude Include="include\Agents\Messager.h" />
     <ClInclude Include="include\Agents\Pathfinder.h" />
-    <ClInclude Include="include\Agents\Prisoner.h" />
     <ClInclude Include="include\config.h" />
     <ClInclude Include="include\GameStatus.h" />
     <ClInclude Include="include\Pathfinding\astar.h" />
@@ -255,14 +253,11 @@
   <ItemGroup>
     <ClCompile Include="src\ecs\PrisonerEcsManager.cc" />
     <ClCompile Include="src\game.cc" />
-    <ClCompile Include="src\Managers\AgentsManager.cc" />
     <ClCompile Include="src\UI\FpsCounter.cc" />
     <ClCompile Include="src\UI\VSyncToggle.cc" />
     <ClCompile Include="src\UI\SimulationSpeedControls.cc" />
     <ClCompile Include="src\Agents\Agent.cc" />
-    <ClCompile Include="src\Agents\Messager.cc" />
     <ClCompile Include="src\Agents\Pathfinder.cc" />
-    <ClCompile Include="src\Agents\Prisoner.cc" />
     <ClCompile Include="src\GameStatus.cc" />
     <ClCompile Include="src\main.cc" />
     <ClCompile Include="src\Pathfinding\astar.cc" />
@@ -271,6 +266,7 @@
     <ClCompile Include="src\PrisonMap.cc" />
     <ClCompile Include="src\ecs\Registry.cc" />
     <ClCompile Include="src\ecs\PrisonerEcs.cc" />
+    <ClCompile Include="src\ecs\PrisonerFactory.cc" />
     <ClCompile Include="src\ecs\PrisonerMovementUtils.cc" />
     <ClCompile Include="src\ecs\system\PrisonerAISystem.cc" />
     <ClCompile Include="src\ecs\system\PrisonerPathFollowSystem.cc" />

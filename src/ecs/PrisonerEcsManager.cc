@@ -4,7 +4,6 @@
 //          prisoner entities.
 //------------------------------------------------------------------------------
 #include "../../include/ecs/PrisonerEcsManager.h"
-#include "../../include/Agents/Prisoner.h"
 #include "../../include/ecs/components/PrisonerComponents.h"
 
 namespace PrisonerECS {

@@ -1,0 +1,53 @@
+#include "../../include/ecs/PrisonerFactory.h"
+
+#include "../../include/ecs/PrisonerEcs.h"
+#include "../../include/ecs/components/PrisonerComponents.h"
+#include "../../include/GameStatus.h"
+#include "../../include/config.h"
+
+#include <MOMOS/sprite.h>
+
+#include <cstdlib>
+#include <string>
+
+namespace PrisonerECS {
+
+ECS::Entity SpawnPrisoner(short working_shift) {
+	auto entity = PrisonerECS::CreatePrisonerEntity();
+	auto& registry = PrisonerECS::GetRegistry();
+
+	auto& transform = registry.AddComponent<ECS::TransformComponent>(entity);
+	transform.position = { static_cast<float>(Screen::width) / 2.0f, static_cast<float>(Screen::height) / 2.0f };
+	transform.direction = { -1.0f, 0.0f };
+	transform.rotation = 0.0f;
+
+	auto& sprite = registry.AddComponent<ECS::SpriteComponent>(entity);
+	std::string path = "data/prisoner" + std::to_string(rand() % 3) + ".png";
+	sprite.sprite = MOMOS::SpriteFromFile(path.c_str());
+	sprite.width = sprite.sprite ? static_cast<float>(MOMOS::SpriteWidth(sprite.sprite)) : 0.0f;
+	sprite.height = sprite.sprite ? static_cast<float>(MOMOS::SpriteHeight(sprite.sprite)) : 0.0f;
+
+	auto& movement = registry.AddComponent<ECS::MovementComponent>(entity);
+	float base_speed = 0.1f * GameStatus::get()->simulation_speed_;
+	movement.speed = base_speed;
+	movement.last_movement_update = 0.0;
+	movement.movement_threshold = 3000.0;
+	movement.deterministic_steps.clear();
+	movement.deterministic_step_index = 0;
+	movement.path_set = false;
+	movement.path_command = nullptr;
+	movement.movement_path = nullptr;
+	movement.movement_finished = false;
+
+	auto& state = registry.AddComponent<ECS::PrisonerStateComponent>(entity);
+	state.status = kGoingToWork;
+	state.working_shift = working_shift;
+	state.time_end_status = 0.0;
+	state.carried_crate = nullptr;
+	state.original_speed = base_speed;
+
+	return entity;
+}
+
+} // namespace PrisonerECS
+

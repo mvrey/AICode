@@ -1,24 +1,30 @@
 //------------------------------------------------------------------------------
 // File: PrisonerMovementUtils.h
-// Purpose: Declares helper functions that bridge legacy Prisoner instances with
-//          ECS movement components, ensuring both worlds stay in sync.
+// Purpose: Declares helper routines for manipulating ECS movement state without
+//          touching legacy Prisoner objects.
 //------------------------------------------------------------------------------
 #ifndef PRISONER_ECS_MOVEMENT_UTILS_H
 #define PRISONER_ECS_MOVEMENT_UTILS_H
 
+#include <vector>
+#include "./Registry.h"
+#include "../PrisonMap.h"
+#include "../Pathfinding/cost_map.h"
 #include <MOMOS/math.h>
-
-class Prisoner;
+#include "components/MovementComponent.h"
+#include "components/TransformComponent.h"
 
 namespace PrisonerECS {
 namespace MovementUtils {
 
-// Requests a deterministic path toward the destination and mirrors it into ECS.
-bool SetPathTo(Prisoner& prisoner, const ::MOMOS::Vec2& destination);
-// Steps the entity along its current path, updating transforms and completion.
-bool MoveFollowingPath(Prisoner& prisoner);
-// Resets ECS/legacy movement bookkeeping when routes finish or fail.
-void ClearMovement(Prisoner& prisoner);
+void ClearMovement(ECS::Registry& registry, ECS::Entity entity);
+bool TryFinalizePath(ECS::Registry& registry, ECS::Entity entity);
+bool RequestPathTo(ECS::Registry& registry, ECS::Entity entity, const ::MOMOS::Vec2& destination);
+bool BuildRoomWaypointPath(ECS::Registry& registry, ECS::Entity entity, const Room& room, PrisonMap* prison, CostMap* map);
+void SetDoorRouteActive(ECS::Registry& registry, ECS::Entity entity, bool active);
+void SetEscapeRouteActive(ECS::Registry& registry, ECS::Entity entity, bool active);
+void CycleDoorTarget(ECS::Registry& registry, ECS::Entity entity, int totalDoors);
+void SetDoorTarget(ECS::Registry& registry, ECS::Entity entity, int target);
 
 } // namespace MovementUtils
 } // namespace PrisonerECS

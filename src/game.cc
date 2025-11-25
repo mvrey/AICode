@@ -12,12 +12,10 @@
 #include "../include/UI/FpsCounter.h"
 #include "../include/UI/VSyncToggle.h"
 #include "../include/ecs/PrisonerEcsSystems.h"
+#include "../include/ecs/PrisonerFactory.h"
 #include <MOMOS/momos.h>
 
-#include "../include/Agents/Prisoner.h"
 #include "../include/Agents/Pathfinder.h"
-
-#include "../include/Managers/AgentsManager.h"
 
 
 // Global vars
@@ -50,9 +48,6 @@ void UpdateAI(double accumTime) {
 
 	for (unsigned int i = j; i < Agent::agents_.size() && !timeout; i++) {
 		Agent* agent = Agent::agents_[i];
-		if (dynamic_cast<Prisoner*>(agent) != nullptr) {
-			continue;
-		}
 
 		start = GameStatus::get()->game_time;
 		agent->update(accumTime);
@@ -112,25 +107,23 @@ void Draw() {
 	It also creates the agents if the g_game_mode has been set.
  **/
 bool checkGameStarted() {
+	auto* status = GameStatus::get();
+	if (!status->prisoners_created) {
+		status->prisoners_created = true;
 
-	if (!GameStatus::get()->agents_manager->g_agents_created) {
-		GameStatus::get()->agents_manager->g_agents_created = true;
+		// Pathfinder manager should be the first one to update each frame
+		if (status->pathfinder_) {
+			Agent::agents_.push_back(status->pathfinder_);
+		}
 
-		//Pathfinder manager should be the 1st one to update each frame
-		Agent::agents_.push_back(GameStatus::get()->pathfinder_);
-
-		//Create prisoners
-		for (int i = 0; i < 100; i++) {
-			Prisoner* agent = new Prisoner();
-
-			if (i > 10 / 2)
-				agent->SetWorkingShift(1);
-
-			GameStatus::get()->agents_manager->GetPrisoners().push_back(agent);
+		const int total_prisoners = 100;
+		for (int i = 0; i < total_prisoners; ++i) {
+			short shift = (i > 10 / 2) ? 1 : 0;
+			PrisonerECS::SpawnPrisoner(shift);
 		}
 	}
 
-	return GameStatus::get()->agents_manager->g_agents_created;
+	return status->prisoners_created;
 }
 
 
