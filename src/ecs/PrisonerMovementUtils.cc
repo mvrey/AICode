@@ -105,17 +105,23 @@ bool RequestPathTo(ECS::Registry& registry, ECS::Entity entity, const ::MOMOS::V
 	auto& transform = registry.GetComponent<ECS::TransformComponent>(entity);
 	auto* map = status->map;
 
-	if (movement.path_command) {
-		delete movement.path_command;
-		movement.path_command = nullptr;
-	}
-
-	movement.movement_path = nullptr;
 	auto start = map->ScreenToMapCoords(transform.position);
 	auto target = map->ScreenToMapCoords(destination);
 	auto snapped = SnapToWalkable(map, start, target);
 
 	transform.position = map->MapToScreenCoords(snapped);
+
+	if (movement.path_command) {
+		if (movement.path_command->pending_) {
+			movement.path_command->start = snapped;
+			movement.path_command->end = target;
+			return true;
+		}
+		delete movement.path_command;
+		movement.path_command = nullptr;
+	}
+
+	movement.movement_path = nullptr;
 
 	auto* command = new PathCommand();
 	command->start = snapped;

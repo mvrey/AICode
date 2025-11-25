@@ -56,23 +56,6 @@ void PathfinderMind::reason() {
 	//Process A* queue
 	if (owner_->commands_.size() > 0) {
 
-		/// PRE-CALCULATED PATHS CURRENTLY DISABLED DUE TO THEM GIVING MORE TROUBLE THAN THEY'RE WORTH
-		//Search for this path being pre-calculated
-		/*
-		for (int i = 0; i < owner_->calc_paths_.size(); i++) {
-			if (owner_->commands_[0]->start.x == owner_->calc_paths_[i]->start.x && owner_->commands_[0]->start.y == owner_->calc_paths_[i]->start.y &&
-				owner_->commands_[0]->end.x == owner_->calc_paths_[i]->end.x && owner_->commands_[0]->end.y == owner_->calc_paths_[i]->end.y) {
-
-				owner_->commands_[0]->path_ = owner_->calc_paths_[i]->path_;
-				owner_->commands_[0]->calculated = true;
-				owner_->commands_[0]->pending_ = false;
-				owner_->commands_.erase(owner_->commands_.begin());
-				printf("RETURN PRECALC PATH");
-				return;
-			}
-		}
-		*/
-
 		CostMap* map = GameStatus::get()->map;
 
 		AStar* astar = new AStar();
