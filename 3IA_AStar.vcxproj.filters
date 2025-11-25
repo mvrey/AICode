@@ -399,6 +399,9 @@
     <ClInclude Include="tests\RegistryTests.h">
       <Filter>Tests</Filter>
     </ClInclude>
+    <ClInclude Include="tests\TestFramework.h">
+      <Filter>Tests</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\GameStatus.cc">

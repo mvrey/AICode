@@ -221,6 +221,7 @@
     <ClInclude Include="tests\AncientMythosTests.h" />
     <ClInclude Include="tests\PrisonerEcsTests.h" />
     <ClInclude Include="tests\RegistryTests.h" />
+    <ClInclude Include="tests\TestFramework.h" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\ecs\ComponentPool.h" />

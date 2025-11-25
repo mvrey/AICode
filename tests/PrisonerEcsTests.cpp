@@ -1,8 +1,6 @@
 #include "PrisonerEcsTests.h"
 
-#include <cassert>
-#include <vector>
-
+#include "TestFramework.h"
 #include "../include/ecs/PrisonerEcs.h"
 #include "../include/ecs/PrisonerEcsSystems.h"
 #include "../include/ecs/PrisonerMovementUtils.h"
@@ -12,78 +10,84 @@
 #include "../include/Pathfinding/cost_map.h"
 #include "../include/Agents/Prisoner.h"
 
+#include <vector>
+
 namespace {
 
 void ResetPrisonerRegistry() {
-	auto& registry = PrisonerECS::GetRegistry();
-	registry.Clear();
+    auto& registry = PrisonerECS::GetRegistry();
+    registry.Clear();
 }
 
 void EnsureGameStatus() {
-	auto* status = GameStatus::get();
-	if (!status->map) {
-		status->map = new CostMap();
-		status->map->Load("data/map_03_60x44_bw.bmp", "data/map_03_960x704_layoutAB.bmp");
-	}
-	if (!status->prison) {
-		status->prison = new PrisonMap();
-	}
+    auto* status = GameStatus::get();
+    if (!status->map) {
+        status->map = new CostMap();
+        status->map->Load("data/map_03_60x44_bw.bmp", "data/map_03_960x704_layoutAB.bmp");
+    }
+    if (!status->prison) {
+        status->prison = new PrisonMap();
+    }
 }
 
 void TestMovementPathProgression() {
-	ResetPrisonerRegistry();
-	EnsureGameStatus();
+    ResetPrisonerRegistry();
+    EnsureGameStatus();
 
-	auto& registry = PrisonerECS::GetRegistry();
-	ECS::Entity entity = registry.CreateEntity();
+    auto& registry = PrisonerECS::GetRegistry();
+    ECS::Entity entity = registry.CreateEntity();
 
-	auto& transform = registry.AddComponent<ECS::TransformComponent>(entity);
-	transform.position = { 100.0f, 100.0f };
+    auto& transform = registry.AddComponent<ECS::TransformComponent>(entity);
+    transform.position = { 100.0f, 100.0f };
 
-	auto& sprite = registry.AddComponent<ECS::SpriteComponent>(entity);
-	sprite.sprite = nullptr;
+    auto& sprite = registry.AddComponent<ECS::SpriteComponent>(entity);
+    sprite.sprite = nullptr;
 
-	auto& movement = registry.AddComponent<ECS::MovementComponent>(entity);
-	movement.speed = 0.1f;
-	movement.deterministic_steps.push_back({ 150.0f, 100.0f });
-	movement.deterministic_steps.push_back({ 200.0f, 100.0f });
-	movement.path_set = true;
+    auto& movement = registry.AddComponent<ECS::MovementComponent>(entity);
+    movement.speed = 0.1f;
+    movement.deterministic_steps.push_back({ 150.0f, 100.0f });
+    movement.deterministic_steps.push_back({ 200.0f, 100.0f });
+    movement.path_set = true;
+    movement.movement_finished = false;
 
-	auto& state = registry.AddComponent<ECS::PrisonerStateComponent>(entity);
-	state.status = kGoingToWork;
-	state.original_speed = 0.1f;
+    auto& state = registry.AddComponent<ECS::PrisonerStateComponent>(entity);
+    state.status = kGoingToWork;
+    state.original_speed = 0.1f;
 
-	PrisonerECS::MovementUtils::MoveFollowingPath(*reinterpret_cast<Prisoner*>(state.owner));
-	PrisonerECS::Systems::Get().Update(16.0);
-	PrisonerECS::Systems::Get().Update(16.0);
+    const auto initial_step_index = movement.deterministic_step_index;
 
-	assert(movement.deterministic_step_index <= movement.deterministic_steps.size());
+    PrisonerECS::Systems::Get().Update(16.0);
+    PrisonerECS::Systems::Get().Update(16.0);
+
+    TEST_CHECK(movement.deterministic_step_index >= initial_step_index,
+               "Movement system should not rewind deterministic step index.");
+    TEST_CHECK(movement.deterministic_step_index <= movement.deterministic_steps.size(),
+               "Step index should stay within deterministic step bounds.");
 }
 
-
 void TestRenderTransformConsistency() {
-	ResetPrisonerRegistry();
-	auto& registry = PrisonerECS::GetRegistry();
-	ECS::Entity entity = registry.CreateEntity();
+    ResetPrisonerRegistry();
+    auto& registry = PrisonerECS::GetRegistry();
+    ECS::Entity entity = registry.CreateEntity();
 
-	auto& transform = registry.AddComponent<ECS::TransformComponent>(entity);
-	transform.position = { 80.0f, 60.0f };
+    auto& transform = registry.AddComponent<ECS::TransformComponent>(entity);
+    transform.position = { 80.0f, 60.0f };
 
-	auto& sprite = registry.AddComponent<ECS::SpriteComponent>(entity);
-	sprite.sprite = nullptr;
-	sprite.width = 32.0f;
-	sprite.height = 32.0f;
+    auto& sprite = registry.AddComponent<ECS::SpriteComponent>(entity);
+    sprite.sprite = nullptr;
+    sprite.width = 32.0f;
+    sprite.height = 32.0f;
 
-	PrisonerECS::Systems::Get().Render(0.0);
+    PrisonerECS::Systems::Get().Render(0.0);
 
-	auto& storedTransform = registry.GetComponent<ECS::TransformComponent>(entity);
-	assert(storedTransform.position.x == 80.0f);
-	assert(storedTransform.position.y == 60.0f);
+    auto& storedTransform = registry.GetComponent<ECS::TransformComponent>(entity);
+    TEST_CHECK(storedTransform.position.x == 80.0f, "Render should not mutate transform X.");
+    TEST_CHECK(storedTransform.position.y == 60.0f, "Render should not mutate transform Y.");
 }
 
 } // namespace
 
 void PrisonerEcsTests() {
-    TestMovementPathProgression();
-    TestRenderTransformConsistency();
+    RunNamedTest("PrisonerEcsTests::TestMovementPathProgression", &TestMovementPathProgression);
+    RunNamedTest("PrisonerEcsTests::TestRenderTransformConsistency", &TestRenderTransformConsistency);
 }
