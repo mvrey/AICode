@@ -81,9 +81,10 @@ void TestRenderTransformConsistency() {
 
 } // namespace
 
-int main() {
+int PrisonerEcsTests() {
 	TestMovementPathProgression();
 	TestRenderTransformConsistency();
+
 	return 0;
 }
 

@@ -77,13 +77,10 @@ void TestDestroyRemovesComponents() {
 	assert(!registry.HasComponent<VelocityComponent>(e));
 }
 
-int main() {
+int RegistryTests() {
 	TestEntityReuse();
 	TestAddGetComponent();
 	TestIteration();
 	TestDestroyRemovesComponents();
-
-	std::puts("All ECS registry tests passed.");
-	return 0;
 }
 
