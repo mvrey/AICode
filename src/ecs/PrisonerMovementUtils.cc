@@ -77,7 +77,7 @@ void ClearMovement(ECS::Registry& registry, ECS::Entity entity) {
 
 bool TryFinalizePath(ECS::Registry& registry, ECS::Entity entity) {
 	auto& movement = registry.GetComponent<ECS::MovementComponent>(entity);
-	if (!movement.path_command || movement.path_command->pending_) {
+	if (!movement.path_command || movement.path_command->pending_ || movement.path_command->path_ == nullptr) {
 		return false;
 	}
 
@@ -143,7 +143,7 @@ bool BuildRoomWaypointPath(ECS::Registry& registry, ECS::Entity entity, const Ro
 			ClearMovement(registry, entity);
 			waypoint_path.push_back(prison->getRandomPointInRoom(room));
 		} else {
-			waypoint_path = prison->getPathToRoom(current_room, &room);
+			waypoint_path = prison->getPathToRoom(current_room, const_cast<Room*>(&room));
 		}
 	}
 

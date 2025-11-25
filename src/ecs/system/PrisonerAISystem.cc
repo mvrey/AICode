@@ -16,6 +16,8 @@
 
 namespace {
 
+namespace MovementUtils = PrisonerECS::MovementUtils;
+
 inline bool HasArrived(const ECS::MovementComponent& movement) {
 	return movement.movement_finished && !movement.path_set;
 }
@@ -140,7 +142,7 @@ void PrisonerAISystem::Update(Registry& registry, double /*delta_time*/) {
 				goToRoom(prison->resting_room_);
 			}
 			break;
-		case kEscaping:
+		case kEscaping: {
 			movement.speed = state.original_speed;
 			MovementUtils::SetEscapeRouteActive(registry, entity, true);
 
@@ -159,6 +161,7 @@ void PrisonerAISystem::Update(Registry& registry, double /*delta_time*/) {
 				}
 			}
 			break;
+		}
 		default:
 			break;
 		}
