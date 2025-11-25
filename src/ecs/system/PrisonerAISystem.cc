@@ -101,12 +101,6 @@ void PrisonerAISystem::Update(Registry& registry, double /*delta_time*/) {
 			}
 		};
 
-		if (status->alarm_mode_ && state.status != kEscaping) {
-			clearMovement();
-			setEscapeRouteActive(true);
-			state.status = kEscaping;
-		}
-
 		switch (state.status) {
 		case kIdle:
 			transform.direction = { 0.0f, 0.0f };
@@ -196,44 +190,14 @@ void PrisonerAISystem::Update(Registry& registry, double /*delta_time*/) {
 				return;
 			}
 
-			if (!status->alarm_mode_ && movement.movement_finished) {
-				setEscapeRouteActive(false);
-				setDoorRouteActive(false);
-				state.status = kGoingToRest;
-				break;
-			}
-
-			const int door_count = static_cast<int>(prison->doors_.size());
-
 			if (!movement.path_set) {
 				if (!movement.door_route_set) {
 					clearMovement();
 					setDoorRouteActive(true);
 				}
-				if (door_count > 0) {
-					if (movement.current_target_door >= door_count) {
-						setDoorTarget(movement.current_target_door % door_count);
-					}
-					MOMOS::Vec2 dest = map->MapToScreenCoords(
-						prison->doors_[movement.current_target_door]->getFrontalPoint(true));
-					setPathTo(dest);
-				}
 			} else {
 				if (moveFollowingPath()) {
-					if (movement.door_route_set) {
-						if (door_count == 0) {
-							break;
-						}
-						if (prison->doors_[movement.current_target_door]->is_open_) {
-							MOMOS::Vec2 dest = { static_cast<float>(Screen::width - 100), static_cast<float>(Screen::height - 50) };
-							clearMovement();
-							setPathTo(dest);
-						} else {
-							cycleDoorTarget(door_count);
-							clearMovement();
-							setDoorRouteActive(false);
-						}
-					}
+					
 				}
 			}
 			break;

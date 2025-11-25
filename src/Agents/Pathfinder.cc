@@ -81,13 +81,6 @@ void PathfinderMind::reason() {
 
 		GameStatus::get()->map->reset();
 
-		// Restore doors walkable surroundings
-		for (unsigned int i = 0; i < GameStatus::get()->prison->doors_.size(); i++) {
-			Door* d = GameStatus::get()->prison->doors_[i];
-			if (d->is_open_) d->open();
-			else d->close();
-		}
-
 		owner_->astar_->GeneratePath(owner_->commands_[0]->start, owner_->commands_[0]->end, owner_->commands_[0]->path_);
 		owner_->commands_[0]->calculated = true;
 		owner_->commands_[0]->pending_ = false;

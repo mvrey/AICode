@@ -84,12 +84,6 @@ PrisonMap::PrisonMap() {
 	rooms_.push_back(&up2_working_area_);
 
 
-	/// DOORS
-	Door* d = new Door(9, 14, false);
-	doors_.push_back(d);
-	d = new Door(51, 16, true);
-	doors_.push_back(d);
-
 	/// WAYPOINTS
 	//pre-resting left door
 	MOMOS::Vec2 w = { 29, 24 };

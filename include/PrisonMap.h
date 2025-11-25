@@ -11,7 +11,6 @@
 #define PRISONMAP_H
 
 #include "config.h"
-#include "Door.h"
 
 typedef struct {
 	unsigned int id_;
@@ -40,9 +39,6 @@ public:
 	std::vector<::MOMOS::Vec2> getPathToRoom(Room* start, Room* end);
 
 	::MOMOS::SpriteHandle area_map_handle_;
-
-	//Doors
-	std::vector<Door*> doors_;
 
 	//Room limits in map coordinates
 	Room resting_room_;

@@ -94,21 +94,7 @@ void Draw() {
 		}
 	}
 
-
-
-	//Draw doors
-	std::vector<Door*> doors = GameStatus::get()->prison->doors_;
-	for (unsigned int i = 0; i < doors.size(); i++) {
-		MOMOS::Vec2 door_map_coords = GameStatus::get()->map->MapToScreenCoords(doors[i]->pos_);
-		MOMOS::DrawSprite(doors[i]->getImg(), door_map_coords.x, door_map_coords.y);
-	}
-
-	//Draw ALARM icon
-	if (GameStatus::get()->alarm_mode_) {
-		MOMOS::DrawSprite(g_alarm_mode_img, 20.0f, 50.0f);
-	}
-	//Draw shift change icon
-	else if (g_shift_change_time_end > GameStatus::get()->game_time) {
+	if (g_shift_change_time_end > GameStatus::get()->game_time) {
 		MOMOS::DrawSprite(g_shift_change_img, 20.0f, 50.0f);
 	}
 
@@ -160,23 +146,12 @@ void Update(double m_iTimeStep) {
 		g_shift_change_time_end = GameStatus::get()->game_time + 3000.0;
 	}
 
-	//Check alarm mode
-	if (GameStatus::get()->alarm_mode_ && GameStatus::get()->alarm_mode_time_end_ <= GameStatus::get()->game_time) {
-		GameStatus::get()->alarm_mode_ = false;
-	}
-
 	bool started = checkGameStarted();
 	if (started && effective_step > 0.0) {
 		UpdateAI(effective_step);
 	}
 
 	PrisonerECS::Systems::Get().Update(effective_step);
-
-	//Alarm cheat
-	if (MOMOS::IsKeyPressed('L')) {
-		GameStatus::get()->alarm_mode_ = true;
-		GameStatus::get()->alarm_mode_time_end_ = GameStatus::get()->game_time + 10000.0;
-	}
 }
 
 
@@ -200,10 +175,6 @@ int main(int argc, char **argv) {
 	g_speed_controls.Initialize();
 
 	PrisonMap* prison = GameStatus::get()->prison;
-
-	//Close doors
-	GameStatus::get()->prison->doors_[0]->is_open_ = false;
-	GameStatus::get()->prison->doors_[1]->is_open_ = false;
 
 	MOMOS::DrawSetTextFont("data/medieval.ttf");    
 	MOMOS::WindowSetMouseVisibility(true);

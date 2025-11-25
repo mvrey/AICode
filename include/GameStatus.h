@@ -53,10 +53,6 @@ public:
 	double working_shift_time_end;
 	short working_shift_ = 0;
 
-	double alarm_mode_time_end_;
-	bool alarm_mode_ = false;
-
-
 protected:
 	GameStatus();
 	GameStatus(const GameStatus& orig);
