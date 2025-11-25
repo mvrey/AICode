@@ -13,13 +13,34 @@
 #include "../../../include/config.h"
 
 #include <MOMOS/math.h>
+#include <cstdlib>
 
 namespace {
 
 namespace MovementUtils = PrisonerECS::MovementUtils;
 
-inline bool HasArrived(const ECS::MovementComponent& movement) {
-	return movement.movement_finished && !movement.path_set;
+bool SampleWalkableDestination(CostMap* map, ::MOMOS::Vec2& out) {
+	if (!map) {
+		return false;
+	}
+
+	int width = map->getWidth();
+	int height = map->getHeight();
+	if (width <= 0 || height <= 0) {
+		return false;
+	}
+
+	for (int attempts = 0; attempts < 1024; ++attempts) {
+		int x = rand() % width;
+		int y = rand() % height;
+		Cell* cell = map->getCellAt(x, y);
+		if (cell && cell->is_walkable_) {
+			out = map->MapToScreenCoords({ static_cast<float>(x), static_cast<float>(y) });
+			return true;
+		}
+	}
+
+	return false;
 }
 
 } // namespace
@@ -28,11 +49,10 @@ namespace ECS {
 
 void PrisonerAISystem::Update(Registry& registry, double /*delta_time*/) {
 	auto* status = GameStatus::get();
-	if (!status || !status->prison || !status->map) {
+	if (!status || !status->map) {
 		return;
 	}
 
-	PrisonMap* prison = status->prison;
 	CostMap* map = status->map;
 
 	registry.ForEach<PrisonerStateComponent>([&](Entity entity, PrisonerStateComponent& state) {
@@ -44,126 +64,42 @@ void PrisonerAISystem::Update(Registry& registry, double /*delta_time*/) {
 		auto& movement = registry.GetComponent<MovementComponent>(entity);
 		auto& transform = registry.GetComponent<TransformComponent>(entity);
 
-		auto clearMovement = [&]() {
-			MovementUtils::ClearMovement(registry, entity);
-		};
-
-		auto goToRoom = [&](const Room& room) -> bool {
-			if (HasArrived(movement)) {
+		auto ensureTarget = [&]() -> bool {
+			if (state.has_wander_target) {
 				return true;
 			}
-
-			if (movement.path_set) {
+			::MOMOS::Vec2 candidate{};
+			if (!SampleWalkableDestination(map, candidate)) {
 				return false;
 			}
-
-			if (MovementUtils::TryFinalizePath(registry, entity)) {
-				return false;
-			}
-
-			if (MovementUtils::BuildRoomWaypointPath(registry, entity, room, prison, map)) {
-				return false;
-			}
-
-			MovementUtils::RequestPathTo(registry, entity, map->MapToScreenCoords(prison->getRandomPointInRoom(room)));
-			return false;
+			state.wander_target = candidate;
+			state.has_wander_target = true;
+			MovementUtils::ClearMovement(registry, entity);
+			return true;
 		};
 
-		switch (state.status) {
-		case kIdle:
-			transform.direction = { 0.0f, 0.0f };
-			movement.speed = state.original_speed;
-			state.status = kGoingToRest;
-			break;
-		case kGoingToWork:
-			if (status->working_shift_ != state.working_shift) {
-				state.status = kGoingToRest;
-				break;
-			}
-			if (goToRoom(prison->loading_area_)) {
-				clearMovement();
-				state.status = kWorkingLoaded;
-				state.time_end_status = status->game_time + 5000.0;
-			}
-			break;
-		case kWorkingLoaded:
-			if (status->working_shift_ != state.working_shift) {
-				movement.speed = state.original_speed;
-				state.status = kGoingToRest;
-				clearMovement();
-				break;
-			}
-
-			if (status->first_available_crate_index < 100) {
-				if (state.carried_crate == nullptr) {
-					status->first_available_crate_index++;
-					movement.speed = state.original_speed * 0.5f;
-				}
-
-				if (goToRoom(prison->unloading_area_)) {
-					clearMovement();
-					state.status = kWorkingUnloaded;
-					state.time_end_status = status->game_time + 5000.0;
-				}
-			} else {
-				state.status = kGoingToRest;
-			}
-			break;
-		case kWorkingUnloaded:
-			if (state.carried_crate != nullptr) {
-				state.carried_crate = nullptr;
-				movement.speed = state.original_speed;
-			}
-
-			if (status->working_shift_ != state.working_shift) {
-				clearMovement();
-				state.status = kGoingToRest;
-				movement.speed = state.original_speed;
-				break;
-			}
-
-			if (goToRoom(prison->loading_area_)) {
-				clearMovement();
-				state.status = kWorkingLoaded;
-				state.time_end_status = status->game_time + 5000.0;
-			}
-			break;
-		case kGoingToRest:
-			if (goToRoom(prison->resting_room_)) {
-				clearMovement();
-				state.status = kResting;
-			}
-			break;
-		case kResting:
-			if (status->working_shift_ == state.working_shift) {
-				clearMovement();
-				state.status = kGoingToWork;
-			} else {
-				goToRoom(prison->resting_room_);
-			}
-			break;
-		case kEscaping: {
-			movement.speed = state.original_speed;
-			MovementUtils::SetEscapeRouteActive(registry, entity, true);
-
-			PrisonAreaType area = prison->getAreaTypeAt(transform.position);
-			if (area == kBase) {
-				MovementUtils::SetEscapeRouteActive(registry, entity, false);
-				clearMovement();
-				state.status = kIdle;
-				break;
-			}
-
-			if (!movement.path_set) {
-				if (!movement.door_route_set) {
-					clearMovement();
-					MovementUtils::SetDoorRouteActive(registry, entity, true);
-				}
-			}
-			break;
+		if (movement.movement_finished) {
+			state.has_wander_target = false;
+			MovementUtils::ClearMovement(registry, entity);
 		}
-		default:
-			break;
+
+		if (!ensureTarget()) {
+			return;
+		}
+
+		MovementUtils::TryFinalizePath(registry, entity);
+
+		if (!movement.path_set) {
+			MovementUtils::RequestPathTo(registry, entity, state.wander_target);
+			return;
+		}
+
+		if (movement.movement_finished) {
+			state.has_wander_target = false;
+			MovementUtils::ClearMovement(registry, entity);
+			if (ensureTarget()) {
+				MovementUtils::RequestPathTo(registry, entity, state.wander_target);
+			}
 		}
 	});
 }

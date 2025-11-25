@@ -19,6 +19,9 @@ struct PrisonerStateComponent {
 
 	Crate* carried_crate = nullptr;
 	float original_speed = 0.0f;
+
+	::MOMOS::Vec2 wander_target{ 0.0f, 0.0f };
+	bool has_wander_target = false;
 };
 
 } // namespace ECS
