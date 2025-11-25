@@ -2,15 +2,12 @@
 
 #include "TestFramework.h"
 #include "../include/ecs/PrisonerEcs.h"
-#include "../include/ecs/PrisonerEcsSystems.h"
-#include "../include/ecs/PrisonerMovementUtils.h"
 #include "../include/ecs/components/PrisonerComponents.h"
+#include "../include/ecs/system/PrisonerPathFollowSystem.h"
+#include "../include/ecs/system/PrisonerMovementSystem.h"
+#include "../include/ecs/system/PrisonerRenderSystem.h"
 #include "../include/GameStatus.h"
-#include "../include/PrisonMap.h"
 #include "../include/Pathfinding/cost_map.h"
-#include "../include/Agents/Prisoner.h"
-
-#include <vector>
 
 namespace {
 
@@ -20,14 +17,11 @@ void ResetPrisonerRegistry() {
 }
 
 void EnsureGameStatus() {
-    auto* status = GameStatus::get();
-    if (!status->map) {
-        status->map = new CostMap();
-        status->map->Load("data/map_03_60x44_bw.bmp", "data/map_03_960x704_layoutAB.bmp");
-    }
-    if (!status->prison) {
-        status->prison = new PrisonMap();
-    }
+	auto* status = GameStatus::get();
+	if (!status->map) {
+		status->map = new CostMap();
+		status->map->InitializeSynthetic(64, 64, true);
+	}
 }
 
 // Validates that the movement system advances deterministic steps forward.
@@ -57,8 +51,12 @@ void TestMovementPathProgression() {
 
     const auto initial_step_index = movement.deterministic_step_index;
 
-    PrisonerECS::Systems::Get().Update(16.0);
-    PrisonerECS::Systems::Get().Update(16.0);
+    ECS::PrisonerPathFollowSystem pathSystem;
+    ECS::PrisonerMovementSystem movementSystem;
+    for (int i = 0; i < 2; ++i) {
+        pathSystem.Update(registry, 16.0);
+        movementSystem.Update(registry, 16.0);
+    }
 
     TEST_CHECK(movement.deterministic_step_index >= initial_step_index,
                "Movement system should not rewind deterministic step index.");
@@ -80,7 +78,8 @@ void TestRenderTransformConsistency() {
     sprite.width = 32.0f;
     sprite.height = 32.0f;
 
-    PrisonerECS::Systems::Get().Render(0.0);
+    ECS::PrisonerRenderSystem renderSystem;
+    renderSystem.Update(registry, 0.0);
 
     auto& storedTransform = registry.GetComponent<ECS::TransformComponent>(entity);
     TEST_CHECK(storedTransform.position.x == 80.0f, "Render should not mutate transform X.");

@@ -4,7 +4,7 @@
 /// Entry point
 int main(int argc, char **argv) {
 	
-	bool const TEST_MODE = true;
+	bool const TEST_MODE = false;
 
 	if (TEST_MODE) {
 		return AncientMythosTests();

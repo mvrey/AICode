@@ -1,3 +1,8 @@
+//------------------------------------------------------------------------------
+// File: Registry.cc
+// Purpose: Implements the non-templated portions of the ECS registry such as
+//          entity lifecycle management.
+//------------------------------------------------------------------------------
 #include "../../include/ecs/Registry.h"
 
 namespace ECS {
@@ -5,6 +10,7 @@ namespace ECS {
 Registry::Registry() = default;
 Registry::~Registry() = default;
 
+// Grabs an id from the free list or appends a new slot when necessary.
 Entity Registry::CreateEntity() {
 	std::uint32_t id;
 	if (!free_list_.empty()) {
@@ -18,6 +24,7 @@ Entity Registry::CreateEntity() {
 	return Entity(id);
 }
 
+// Marks the entity as dead and notifies every component pool.
 void Registry::DestroyEntity(Entity entity) {
 	if (!IsAlive(entity)) {
 		return;
@@ -31,10 +38,12 @@ void Registry::DestroyEntity(Entity entity) {
 	}
 }
 
+// Verifies the entity id is in range and currently marked alive.
 bool Registry::IsAlive(Entity entity) const {
 	return entity.id < entities_.size() && entities_[entity.id].alive;
 }
 
+// Resets every container so the registry returns to a pristine state.
 void Registry::Clear() {
 	entities_.clear();
 	free_list_.clear();

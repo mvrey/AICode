@@ -1,3 +1,9 @@
+//------------------------------------------------------------------------------
+// File: MovementComponent.h
+// Purpose: Declares the data that tracks per-entity locomotion intent and
+//          progress so systems can advance transforms without touching legacy
+//          Agent state.
+//------------------------------------------------------------------------------
 #ifndef ECS_MOVEMENT_COMPONENT_H
 #define ECS_MOVEMENT_COMPONENT_H
 
@@ -9,6 +15,8 @@ class PathCommand;
 
 namespace ECS {
 
+// Captures all path-following state for an entity, including the queued path,
+// current progress, and bookkeeping for special routes like doors or escapes.
 struct MovementComponent {
 	float speed = 0.0f;
 	double last_movement_update = 0.0;

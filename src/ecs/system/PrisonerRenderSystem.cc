@@ -1,3 +1,7 @@
+//------------------------------------------------------------------------------
+// File: PrisonerRenderSystem.cc
+// Purpose: Draws sprites for ECS-managed prisoners based on their transforms.
+//------------------------------------------------------------------------------
 #include "../../../include/ecs/system/PrisonerRenderSystem.h"
 #include "../../../include/ecs/Registry.h"
 #include "../../../include/ecs/components/TransformComponent.h"
@@ -8,6 +12,7 @@
 
 namespace ECS {
 
+// Iterates every SpriteComponent and issues MOMOS draw calls if visible.
 void PrisonerRenderSystem::Update(Registry& registry, double delta_time) {
 	registry.ForEach<SpriteComponent>([&](Entity entity, SpriteComponent& sprite) {
 		if (!sprite.visible || sprite.sprite == nullptr)

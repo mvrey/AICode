@@ -21,6 +21,31 @@ bool CostMap::Load(const char *cost_img, const char *terrain_img) {
 	return true;
 }
 
+void CostMap::InitializeSynthetic(int width, int height, bool walkable) {
+	for (auto& column : cost_map_) {
+		for (Cell* cell : column) {
+			delete cell;
+		}
+	}
+	cost_map_.clear();
+
+	width_ = (width > 0) ? width : 1;
+	height_ = (height > 0) ? height : 1;
+
+	cost_map_.resize(width_);
+	for (int x = 0; x < width_; ++x) {
+		cost_map_[x].reserve(height_);
+		for (int y = 0; y < height_; ++y) {
+			Cell* cell = new Cell();
+			cell->position_.x = static_cast<float>(x);
+			cell->position_.y = static_cast<float>(y);
+			cell->is_walkable_ = walkable;
+			cell->cost_ = walkable ? 0.0f : 1.0f;
+			cost_map_[x].push_back(cell);
+		}
+	}
+}
+
 
 void CostMap::reset() {
 	

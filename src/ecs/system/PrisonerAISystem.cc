@@ -1,3 +1,8 @@
+//------------------------------------------------------------------------------
+// File: PrisonerAISystem.cc
+// Purpose: Implements the prisoner AI state machine using ECS components,
+//          replacing the legacy AgentMind logic.
+//------------------------------------------------------------------------------
 #include "../../../include/ecs/system/PrisonerAISystem.h"
 #include "../../../include/ecs/Registry.h"
 #include "../../../include/ecs/components/PrisonerComponents.h"
@@ -20,6 +25,7 @@ inline float ClampPositive(float value) {
 
 namespace ECS {
 
+// Evaluates every prisoner's AI status and issues movement/path requests.
 void PrisonerAISystem::Update(Registry& registry, double /*delta_time*/) {
 	GameStatus* status = GameStatus::get();
 	if (!status || !status->prison || !status->map) {
@@ -67,37 +73,6 @@ void PrisonerAISystem::Update(Registry& registry, double /*delta_time*/) {
 		auto setPathTo = [&](const ::MOMOS::Vec2& dest) {
 			if (owner) {
 				PrisonerECS::MovementUtils::SetPathTo(*owner, dest);
-			}
-		};
-
-		auto setDoorRouteActive = [&](bool active) {
-			movement.door_route_set = active;
-			if (owner) {
-				PrisonerECS::MovementUtils::SetDoorRouteActive(*owner, active);
-			}
-		};
-
-		auto setEscapeRouteActive = [&](bool active) {
-			movement.escape_route_set = active;
-			if (owner) {
-				PrisonerECS::MovementUtils::SetEscapeRouteActive(*owner, active);
-			}
-		};
-
-		auto cycleDoorTarget = [&](int totalDoors) {
-			if (totalDoors <= 0) {
-				return;
-			}
-			movement.current_target_door = (movement.current_target_door + 1) % totalDoors;
-			if (owner) {
-				PrisonerECS::MovementUtils::CycleDoorTarget(*owner, totalDoors);
-			}
-		};
-
-		auto setDoorTarget = [&](int index) {
-			movement.current_target_door = index;
-			if (owner) {
-				PrisonerECS::MovementUtils::SetDoorTarget(*owner, index);
 			}
 		};
 

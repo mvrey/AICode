@@ -41,6 +41,9 @@ public:
 	/// Cost map can be a text file or an image file
 	bool Load(const char *cost_img, const char *terrain_img);
 
+	/// Initializes a simple grid for headless tests without loading textures.
+	void InitializeSynthetic(int width, int height, bool walkable = true);
+
 	void reset();
 
 	// Todo: Add setters / getters

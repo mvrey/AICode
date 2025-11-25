@@ -1,3 +1,8 @@
+//------------------------------------------------------------------------------
+// File: PrisonerMovementUtils.cc
+// Purpose: Implements bridges that keep legacy Prisoner instances synchronized
+//          with ECS movement data and pathfinding requests.
+//------------------------------------------------------------------------------
 #include "../../include/ecs/PrisonerMovementUtils.h"
 
 #include <algorithm>
@@ -11,6 +16,7 @@
 
 namespace {
 
+// Copies ECS movement data back to the legacy Prisoner for compatibility.
 void MirrorMovementToLegacy(Prisoner& prisoner, const ECS::MovementComponent& movement) {
 	prisoner.deterministic_steps_ = movement.deterministic_steps;
 	prisoner.deterministic_step_num_ = movement.deterministic_step_index;
@@ -23,12 +29,14 @@ void MirrorMovementToLegacy(Prisoner& prisoner, const ECS::MovementComponent& mo
 	}
 }
 
+// Writes the current direction into both ECS and legacy body data.
 void ApplyDirection(Prisoner& prisoner, const ::MOMOS::Vec2& direction) {
 	auto& transform = prisoner.GetTransformComponent();
 	transform.direction = direction;
 	prisoner.getBody()->direction_ = direction;
 }
 
+// Produces a normalized vector from the current position toward the target.
 ::MOMOS::Vec2 Normalize(const ::MOMOS::Vec2& from, const ::MOMOS::Vec2& to) {
 	float dx = to.x - from.x;
 	float dy = to.y - from.y;
@@ -44,6 +52,7 @@ void ApplyDirection(Prisoner& prisoner, const ::MOMOS::Vec2& direction) {
 namespace PrisonerECS {
 namespace MovementUtils {
 
+// Requests a path for the prisoner and mirrors the resulting steps into ECS.
 bool SetPathTo(Prisoner& prisoner, const ::MOMOS::Vec2& destination) {
 	auto& movement = prisoner.GetMovementComponent();
 	auto& transform = prisoner.GetTransformComponent();
@@ -116,6 +125,7 @@ bool SetPathTo(Prisoner& prisoner, const ::MOMOS::Vec2& destination) {
 	return movement.path_set;
 }
 
+// Advances the prisoner along its deterministic steps and tracks completion.
 bool MoveFollowingPath(Prisoner& prisoner) {
 	auto& movement = prisoner.GetMovementComponent();
 	auto& transform = prisoner.GetTransformComponent();
@@ -186,6 +196,7 @@ bool MoveFollowingPath(Prisoner& prisoner) {
 	return movement.movement_finished;
 }
 
+// Resets both ECS and legacy movement state, halting the prisoner immediately.
 void ClearMovement(Prisoner& prisoner) {
 	auto& movement = prisoner.GetMovementComponent();
 	auto& transform = prisoner.GetTransformComponent();
@@ -212,29 +223,6 @@ void ClearMovement(Prisoner& prisoner) {
 	prisoner.deterministic_step_num_ = 0;
 
 	MirrorMovementToLegacy(prisoner, movement);
-}
-
-void SetDoorRouteActive(Prisoner& prisoner, bool active) {
-	auto& movement = prisoner.GetMovementComponent();
-	movement.door_route_set = active;
-}
-
-void CycleDoorTarget(Prisoner& prisoner, int totalDoors) {
-	auto& movement = prisoner.GetMovementComponent();
-	if (totalDoors <= 0) {
-		return;
-	}
-	movement.current_target_door = (movement.current_target_door + 1) % totalDoors;
-}
-
-void SetDoorTarget(Prisoner& prisoner, int doorIndex) {
-	auto& movement = prisoner.GetMovementComponent();
-	movement.current_target_door = doorIndex;
-}
-
-void SetEscapeRouteActive(Prisoner& prisoner, bool active) {
-	auto& movement = prisoner.GetMovementComponent();
-	movement.escape_route_set = active;
 }
 
 } // namespace MovementUtils

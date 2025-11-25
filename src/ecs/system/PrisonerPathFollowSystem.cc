@@ -1,3 +1,8 @@
+//------------------------------------------------------------------------------
+// File: PrisonerPathFollowSystem.cc
+// Purpose: Validates queued path steps for each prisoner and steers transforms
+//          toward their next waypoint.
+//------------------------------------------------------------------------------
 #include "../../../include/ecs/system/PrisonerPathFollowSystem.h"
 
 #include "../../../include/ecs/Registry.h"
@@ -13,6 +18,7 @@ namespace {
 
 constexpr float kArrivalThresholdSq = 25.0f; // 5px
 
+// Resets path-following state when a route becomes invalid.
 void ClearMovement(ECS::MovementComponent& movement, ECS::TransformComponent& transform) {
 	movement.deterministic_steps.clear();
 	movement.deterministic_step_index = 0;
@@ -25,6 +31,8 @@ void ClearMovement(ECS::MovementComponent& movement, ECS::TransformComponent& tr
 
 namespace ECS {
 
+// Steps entities toward their current deterministic waypoint and reacts when
+// cells become invalid or when the path is completed.
 void PrisonerPathFollowSystem::Update(Registry& registry, double /*delta_time*/) {
 	CostMap* map = GameStatus::get()->map;
 	if (!map) {
