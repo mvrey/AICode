@@ -1,10 +1,14 @@
-#include "src/RegistryTests.cpp"
-#include "src/PrisonerEcsTests.cpp"
+#include "AncientMythosTests.h"
 
-int main() {
-	RegistryTests();
-	PrisonerEcsTests();
+#include <cstdio>
 
-	std::puts("All ECS registry tests passed.");
-	return 0;
+#include "RegistryTests.h"
+#include "PrisonerEcsTests.h"
+
+int AncientMythosTests() {
+    RegistryTests();
+    PrisonerEcsTests();
+
+    std::puts("All ECS registry tests passed.");
+    return 0;
 }

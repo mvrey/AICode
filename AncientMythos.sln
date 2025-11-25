@@ -3,9 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.14.36221.1
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "3IA_AStar", "3IA_AStar.vcxproj", "{1C86E506-AA45-486B-ADB4-7ADE925F6327}"
-EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Tests", "tests\Tests.vcxproj", "{06FCDFDF-604C-4F97-9FFB-EA92D1AAFFA4}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "AncientMythosGame", "3IA_AStar.vcxproj", "{1C86E506-AA45-486B-ADB4-7ADE925F6327}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -23,14 +21,6 @@ Global
 		{1C86E506-AA45-486B-ADB4-7ADE925F6327}.Release|x64.Build.0 = Release|x64
 		{1C86E506-AA45-486B-ADB4-7ADE925F6327}.Release|x86.ActiveCfg = Release|Win32
 		{1C86E506-AA45-486B-ADB4-7ADE925F6327}.Release|x86.Build.0 = Release|Win32
-		{06FCDFDF-604C-4F97-9FFB-EA92D1AAFFA4}.Debug|x64.ActiveCfg = Debug|x64
-		{06FCDFDF-604C-4F97-9FFB-EA92D1AAFFA4}.Debug|x64.Build.0 = Debug|x64
-		{06FCDFDF-604C-4F97-9FFB-EA92D1AAFFA4}.Debug|x86.ActiveCfg = Debug|Win32
-		{06FCDFDF-604C-4F97-9FFB-EA92D1AAFFA4}.Debug|x86.Build.0 = Debug|Win32
-		{06FCDFDF-604C-4F97-9FFB-EA92D1AAFFA4}.Release|x64.ActiveCfg = Release|x64
-		{06FCDFDF-604C-4F97-9FFB-EA92D1AAFFA4}.Release|x64.Build.0 = Release|x64
-		{06FCDFDF-604C-4F97-9FFB-EA92D1AAFFA4}.Release|x86.ActiveCfg = Release|Win32
-		{06FCDFDF-604C-4F97-9FFB-EA92D1AAFFA4}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

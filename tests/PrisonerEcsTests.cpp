@@ -1,14 +1,16 @@
+#include "PrisonerEcsTests.h"
+
 #include <cassert>
 #include <vector>
 
-#include "../../include/ecs/PrisonerEcs.h"
-#include "../../include/ecs/PrisonerEcsSystems.h"
-#include "../../include/ecs/PrisonerMovementUtils.h"
-#include "../../include/ecs/components/PrisonerComponents.h"
-#include "../../include/GameStatus.h"
-#include "../../include/PrisonMap.h"
-#include "../../include/Pathfinding/cost_map.h"
-#include "../../include/Agents/Prisoner.h"
+#include "../include/ecs/PrisonerEcs.h"
+#include "../include/ecs/PrisonerEcsSystems.h"
+#include "../include/ecs/PrisonerMovementUtils.h"
+#include "../include/ecs/components/PrisonerComponents.h"
+#include "../include/GameStatus.h"
+#include "../include/PrisonMap.h"
+#include "../include/Pathfinding/cost_map.h"
+#include "../include/Agents/Prisoner.h"
 
 namespace {
 
@@ -81,10 +83,7 @@ void TestRenderTransformConsistency() {
 
 } // namespace
 
-int PrisonerEcsTests() {
-	TestMovementPathProgression();
-	TestRenderTransformConsistency();
-
-	return 0;
+void PrisonerEcsTests() {
+    TestMovementPathProgression();
+    TestRenderTransformConsistency();
 }
-

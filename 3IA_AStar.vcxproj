@@ -39,7 +39,7 @@
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v143</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
@@ -218,6 +218,9 @@
     <ClInclude Include="include\UI\FpsCounter.h" />
     <ClInclude Include="include\UI\SimulationSpeedControls.h" />
     <ClInclude Include="include\UI\VSyncToggle.h" />
+    <ClInclude Include="tests\AncientMythosTests.h" />
+    <ClInclude Include="tests\PrisonerEcsTests.h" />
+    <ClInclude Include="tests\RegistryTests.h" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\ecs\ComponentPool.h" />
@@ -273,6 +276,9 @@
     <ClCompile Include="src\ecs\system\PrisonerRenderSystem.cc" />
     <ClCompile Include="src\ecs\PrisonerInput.cc" />
     <ClCompile Include="src\ecs\PrisonerEcsSystems.cc" />
+    <ClCompile Include="tests\AncientMythosTests.cpp" />
+    <ClCompile Include="tests\PrisonerEcsTests.cpp" />
+    <ClCompile Include="tests\RegistryTests.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

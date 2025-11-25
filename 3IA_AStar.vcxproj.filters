@@ -55,6 +55,9 @@
     <Filter Include="Source Files\Managers">
       <UniqueIdentifier>{454b9a6d-8bec-47de-9605-76e55af987f7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Tests">
+      <UniqueIdentifier>{f7f9d769-bb36-4ef7-9297-072cc1e18cfe}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\config.h">
@@ -387,6 +390,15 @@
     <ClInclude Include="include\Managers\AgentsManager.h">
       <Filter>Header Files\Managers</Filter>
     </ClInclude>
+    <ClInclude Include="tests\AncientMythosTests.h">
+      <Filter>Tests</Filter>
+    </ClInclude>
+    <ClInclude Include="tests\PrisonerEcsTests.h">
+      <Filter>Tests</Filter>
+    </ClInclude>
+    <ClInclude Include="tests\RegistryTests.h">
+      <Filter>Tests</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\GameStatus.cc">
@@ -460,6 +472,15 @@
     </ClCompile>
     <ClCompile Include="src\Managers\AgentsManager.cc">
       <Filter>Source Files\Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="tests\AncientMythosTests.cpp">
+      <Filter>Tests</Filter>
+    </ClCompile>
+    <ClCompile Include="tests\PrisonerEcsTests.cpp">
+      <Filter>Tests</Filter>
+    </ClCompile>
+    <ClCompile Include="tests\RegistryTests.cpp">
+      <Filter>Tests</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
