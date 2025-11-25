@@ -19,11 +19,11 @@
 class Manager;
 class Agent;
 
-typedef const struct {
-  static const int width = 1600;
-  static const int height = 900;
-  static const int padding = 20;
-} Screen;
+struct Screen {
+	static constexpr int width = 1600;
+	static constexpr int height = 900;
+	static constexpr int padding = 20;
+};
 
 typedef enum {
   kAlive,
