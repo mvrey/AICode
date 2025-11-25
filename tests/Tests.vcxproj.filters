@@ -18,8 +18,11 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="AncientMythosTests.cpp">
-      <Filter>Archivos de origen\src</Filter>
+    <ClCompile Include="src\PrisonerEcsTests.cpp">
+      <Filter>Archivos de origen</Filter>
+    </ClCompile>
+    <ClCompile Include="src\RegistryTests.cpp">
+      <Filter>Archivos de origen</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

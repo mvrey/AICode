@@ -14,7 +14,7 @@ namespace {
 
 void ResetPrisonerRegistry() {
 	auto& registry = PrisonerECS::GetRegistry();
-	registry = ECS::Registry{};
+	registry.Clear();
 }
 
 void EnsureGameStatus() {
