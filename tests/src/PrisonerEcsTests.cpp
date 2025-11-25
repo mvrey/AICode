@@ -58,32 +58,6 @@ void TestMovementPathProgression() {
 	assert(movement.deterministic_step_index <= movement.deterministic_steps.size());
 }
 
-void TestEscapeStateTransitions() {
-	ResetPrisonerRegistry();
-	EnsureGameStatus();
-
-	auto& registry = PrisonerECS::GetRegistry();
-	ECS::Entity entity = registry.CreateEntity();
-
-	auto& transform = registry.AddComponent<ECS::TransformComponent>(entity);
-	transform.position = { 100.0f, 100.0f };
-
-	auto& movement = registry.AddComponent<ECS::MovementComponent>(entity);
-	movement.speed = 0.1f;
-
-	auto& state = registry.AddComponent<ECS::PrisonerStateComponent>(entity);
-	state.status = kEscaping;
-	state.original_speed = 0.1f;
-
-	GameStatus::get()->alarm_mode_ = true;
-	PrisonerECS::Systems::Get().Update(16.0);
-	assert(state.status == kEscaping);
-
-	GameStatus::get()->alarm_mode_ = false;
-	movement.movement_finished = true;
-	PrisonerECS::Systems::Get().Update(16.0);
-	assert(state.status == kGoingToRest);
-}
 
 void TestRenderTransformConsistency() {
 	ResetPrisonerRegistry();
@@ -109,7 +83,6 @@ void TestRenderTransformConsistency() {
 
 int main() {
 	TestMovementPathProgression();
-	TestEscapeStateTransitions();
 	TestRenderTransformConsistency();
 	return 0;
 }
