@@ -5,7 +5,17 @@ CostMap::CostMap() {
 }
 
 CostMap::CostMap(const CostMap& orig) {}
-CostMap::~CostMap() {}
+CostMap::~CostMap() {
+	reset();
+	if (cost_img_handle_) {
+		MOMOS::SpriteRelease(cost_img_handle_);
+		cost_img_handle_ = nullptr;
+	}
+	if (terrain_img_handle_) {
+		MOMOS::SpriteRelease(terrain_img_handle_);
+		terrain_img_handle_ = nullptr;
+	}
+}
 
 
 bool CostMap::Load(const char *cost_img, const char *terrain_img) {
@@ -48,11 +58,20 @@ void CostMap::InitializeSynthetic(int width, int height, bool walkable) {
 
 
 void CostMap::reset() {
-	
+	for (auto& column : cost_map_) {
+		for (Cell* cell : column) {
+			delete cell;
+		}
+		column.clear();
+	}
 	cost_map_.clear();
-	
+
+	if (width_ <= 0 || height_ <= 0 || !cost_img_handle_) {
+		return;
+	}
+
 	for (int w = 0; w < width_; w++) {
-		cost_map_.push_back(std::vector<Cell*>());
+		cost_map_.emplace_back();
 
 		for (int h = 0; h < height_; h++) {
 			unsigned char outRGBA[4];
@@ -128,10 +147,10 @@ void CostMap::Print() {
 
 
 void CostMap::Draw() {
-	MOMOS::SpriteTransform *trans = new MOMOS::SpriteTransform();
+	MOMOS::SpriteTransform trans{};
 
-	trans->scale_x = (float)Screen::width / (float)MOMOS::SpriteWidth(terrain_img_handle_);
-	trans->scale_y = (float)Screen::height / (float)MOMOS::SpriteHeight(terrain_img_handle_);
+	trans.scale_x = (float)Screen::width / (float)MOMOS::SpriteWidth(terrain_img_handle_);
+	trans.scale_y = (float)Screen::height / (float)MOMOS::SpriteHeight(terrain_img_handle_);
 
-	MOMOS::DrawSprite(terrain_img_handle_, *trans);
+	MOMOS::DrawSprite(terrain_img_handle_, trans);
 }

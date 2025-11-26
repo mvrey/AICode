@@ -52,28 +52,51 @@ void PathfinderMind::sense() {
 
 
 /// Switches over status and commands actions to the body
+using PathKey = std::size_t;
+
+static PathKey MakePathKey(const ::MOMOS::Vec2& start, const ::MOMOS::Vec2& end) {
+	int sx = static_cast<int>(start.x);
+	int sy = static_cast<int>(start.y);
+	int dx = static_cast<int>(end.x);
+	int dy = static_cast<int>(end.y);
+	return (static_cast<PathKey>(sx & 0xffff) << 48) |
+		   (static_cast<PathKey>(sy & 0xffff) << 32) |
+		   (static_cast<PathKey>(dx & 0xffff) << 16) |
+		   static_cast<PathKey>(dy & 0xffff);
+}
+
 void PathfinderMind::reason() {
 	//Process A* queue
-	if (owner_->commands_.size() > 0) {
-
-		CostMap* map = GameStatus::get()->map;
-
-		AStar* astar = new AStar();
-
-		astar->PreProcess(map);
-
-		GameStatus::get()->map->reset();
-
-		owner_->astar_->GeneratePath(owner_->commands_[0]->start, owner_->commands_[0]->end, owner_->commands_[0]->path_);
-		owner_->commands_[0]->calculated = true;
-		owner_->commands_[0]->pending_ = false;
-
-		//Add to pre-calculated paths
-		owner_->calc_paths_.push_back(owner_->commands_[0]);
-
-		//Remove from queue
-		owner_->commands_.erase(owner_->commands_.begin());
+	if (owner_->commands_.empty()) {
+		return;
 	}
+
+	CostMap* map = GameStatus::get()->map;
+	if (!map) {
+		return;
+	}
+
+	PathCommand* command = owner_->commands_.front();
+	PathKey key = MakePathKey(command->start, command->end);
+
+	auto cached = owner_->cached_paths_.find(key);
+	if (cached != owner_->cached_paths_.end()) {
+		command->path_->path_ = cached->second;
+		command->calculated = true;
+		command->pending_ = false;
+		owner_->calc_paths_.push_back(command);
+		owner_->commands_.erase(owner_->commands_.begin());
+		return;
+	}
+
+	GameStatus::get()->map->reset();
+	owner_->astar_->GeneratePath(command->start, command->end, command->path_);
+	command->calculated = true;
+	command->pending_ = false;
+
+	owner_->calc_paths_.push_back(command);
+	owner_->cached_paths_[key] = command->path_->path_;
+	owner_->commands_.erase(owner_->commands_.begin());
 }
 
 

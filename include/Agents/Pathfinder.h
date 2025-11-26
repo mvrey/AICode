@@ -8,6 +8,7 @@
 #include <cstdlib>
 #include "Agent.h"
 #include "../Pathfinding/astar.h"
+#include <unordered_map>
 
 class Pathfinder;
 
@@ -63,6 +64,8 @@ public:
 
 	//Cached paths
 	std::vector<PathCommand*> calc_paths_;
+	// Cached vectors keyed by (start,end) packed coordinates
+	std::unordered_map<std::size_t, std::vector<::MOMOS::Vec2>> cached_paths_;
 
 private:
 	
