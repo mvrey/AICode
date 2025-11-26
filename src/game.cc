@@ -241,6 +241,12 @@ int game(int argc, char** argv) {
 
 	MOMOS::WindowInit(Screen::width, Screen::height);
 	Camera::Initialize();
+
+	::MOMOS::Vec2 initial_zoom_focus = {
+		static_cast<float>(Screen::width) * 0.5f,
+		static_cast<float>(Screen::height) * 0.5f
+	};
+	Camera::ZoomBy(kZoomStep * 2.0f, initial_zoom_focus);
 	g_vsync_toggle.Initialize(false);
 
 	//Init variables and locations for this specific map
