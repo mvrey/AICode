@@ -8,7 +8,39 @@
 #include <MOMOS/sprite.h>
 
 #include <cstdlib>
+#include <fstream>
+#include <mutex>
 #include <string>
+#include <vector>
+
+namespace {
+
+std::vector<std::string> g_pawn_names;
+std::once_flag g_pawn_names_once;
+
+void LoadPawnNames() {
+	std::ifstream file("data/pawn_names.txt");
+	if (!file.is_open()) {
+		return;
+	}
+
+	std::string token;
+	while (std::getline(file, token, ';')) {
+		if (!token.empty()) {
+			g_pawn_names.push_back(token);
+		}
+	}
+}
+
+std::string PickRandomPawnName() {
+	std::call_once(g_pawn_names_once, LoadPawnNames);
+	if (g_pawn_names.empty()) {
+		return "Pawn Unknown";
+	}
+	return g_pawn_names[rand() % g_pawn_names.size()];
+}
+
+} // namespace
 
 namespace PawnECS {
 
@@ -44,6 +76,7 @@ ECS::Entity SpawnPawn() {
 	state.status = kGoingToWork;
 	state.time_end_status = 0.0;
 	state.original_speed = base_speed;
+	state.name = PickRandomPawnName();
 
 	return entity;
 }
