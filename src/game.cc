@@ -20,6 +20,7 @@
 #include "../include/ecs/PawnEcsSystems.h"
 #include "../include/ecs/PawnFactory.h"
 #include <MOMOS/momos.h>
+#include <MOMOS/draw.h>
 
 #include "../include/Agents/Pathfinder.h"
 
@@ -29,6 +30,9 @@ FpsCounter g_fps_counter;
 VSyncToggle g_vsync_toggle;
 
 namespace {
+
+	ECS::Entity g_selected_pawn;
+
 
 constexpr float kCameraPanSpeed = 0.5f;
 constexpr float kEdgePanPadding = 20.0f;
@@ -115,26 +119,60 @@ void HandlePawnClick() {
 
 	try {
 		registry.ForEach<ECS::PawnStateComponent>([&](ECS::Entity entity, ECS::PawnStateComponent& state) {
-		if (!registry.HasComponent<ECS::TransformComponent>(entity)) {
-			return;
-		}
-		auto& transform = registry.GetComponent<ECS::TransformComponent>(entity);
-		float dx = transform.position.x - world_click.x;
-		float dy = transform.position.y - world_click.y;
-		float distance_sq = dx * dx + dy * dy;
-		if (distance_sq <= best_distance_sq) {
-			best_distance_sq = distance_sq;
-			found = true;
-			closest_name = state.name.empty() ? "Unnamed Pawn" : state.name;
+			if (!registry.HasComponent<ECS::TransformComponent>(entity)) {
+				return;
+			}
+			auto& transform = registry.GetComponent<ECS::TransformComponent>(entity);
+			float dx = transform.position.x - world_click.x;
+			float dy = transform.position.y - world_click.y;
+			float distance_sq = dx * dx + dy * dy;
+			if (distance_sq <= best_distance_sq) {
+				best_distance_sq = distance_sq;
+				found = true;
+				closest_name = state.name.empty() ? "Unnamed Pawn" : state.name;
+				g_selected_pawn = entity;
 				throw PawnClickBreak();
-		}
-	});
+			}
+		});
 	} catch (const PawnClickBreak&) {
 	}
 
 	if (found) {
 		InfoPanel::Get().SetMessage(closest_name);
 	}
+}
+
+void DrawPawnSelection() {
+	if (!g_selected_pawn.IsValid()) {
+		return;
+	}
+
+	auto& registry = PawnECS::GetRegistry();
+	if (!registry.HasComponent<ECS::TransformComponent>(g_selected_pawn)) {
+		return;
+	}
+
+	auto& transform = registry.GetComponent<ECS::TransformComponent>(g_selected_pawn);
+	const float half_screen = 16.0f;
+	const float half_world = half_screen / Camera::Zoom();
+
+	::MOMOS::Vec2 top_left = {
+		transform.position.x - half_world,
+		transform.position.y - half_world
+	};
+	::MOMOS::Vec2 bottom_right = {
+		transform.position.x + half_world,
+		transform.position.y + half_world
+	};
+
+	auto top_left_screen = Camera::WorldToScreen(top_left);
+	auto bottom_right_screen = Camera::WorldToScreen(bottom_right);
+
+	MOMOS::DrawSetStrokeColor(100, 255, 100, 255);
+	MOMOS::DrawLine(top_left_screen.x, top_left_screen.y, bottom_right_screen.x, top_left_screen.y);
+	MOMOS::DrawLine(bottom_right_screen.x, top_left_screen.y, bottom_right_screen.x, bottom_right_screen.y);
+	MOMOS::DrawLine(bottom_right_screen.x, bottom_right_screen.y, top_left_screen.x, bottom_right_screen.y);
+	MOMOS::DrawLine(top_left_screen.x, bottom_right_screen.y, top_left_screen.x, top_left_screen.y);
 }
 
 } // namespace
@@ -218,6 +256,7 @@ void Draw() {
 	}
 
 	PawnECS::Systems::Get().Render(0.0);
+	DrawPawnSelection();
 	g_fps_counter.Draw();
 	g_vsync_toggle.Draw(g_fps_counter.GetTextRight(), g_fps_counter.GetTextBaselineY());
 	g_speed_controls.Draw();
