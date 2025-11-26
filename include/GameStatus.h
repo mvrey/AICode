@@ -42,15 +42,6 @@ public:
 	Pathfinder* pathfinder_;
 	//----------------///
 
-
-	/*********************
-	 * PRISON STATUS INFO *
-	 *********************/
-	unsigned int first_available_crate_index = 0;
-
-	double working_shift_time_end;
-	short working_shift_ = 0;
-
 protected:
 	GameStatus();
 	GameStatus(const GameStatus& orig);

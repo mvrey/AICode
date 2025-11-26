@@ -12,7 +12,7 @@
 
 namespace PawnECS {
 
-ECS::Entity SpawnPawn(short working_shift) {
+ECS::Entity SpawnPawn() {
 	auto entity = PawnECS::CreatePawnEntity();
 	auto& registry = PawnECS::GetRegistry();
 
@@ -42,9 +42,7 @@ ECS::Entity SpawnPawn(short working_shift) {
 
 	auto& state = registry.AddComponent<ECS::PAWNStateComponent>(entity);
 	state.status = kGoingToWork;
-	state.working_shift = working_shift;
 	state.time_end_status = 0.0;
-	state.carried_crate = nullptr;
 	state.original_speed = base_speed;
 
 	return entity;

@@ -20,11 +20,6 @@
 #include "../include/Agents/Pathfinder.h"
 
 
-// Global vars
-double g_shift_change_time_end = 0;
-MOMOS::SpriteHandle g_shift_change_img;
-MOMOS::SpriteHandle g_alarm_mode_img;
-
 SimulationSpeedControls g_speed_controls;
 FpsCounter g_fps_counter;
 VSyncToggle g_vsync_toggle;
@@ -175,10 +170,6 @@ void Draw() {
 		}
 	}
 
-	if (g_shift_change_time_end > GameStatus::get()->game_time) {
-		MOMOS::DrawSprite(g_shift_change_img, 20.0f, 50.0f);
-	}
-
 	PawnECS::Systems::Get().Render(0.0);
 	g_fps_counter.Draw();
 	g_vsync_toggle.Draw(g_fps_counter.GetTextRight(), g_fps_counter.GetTextBaselineY());
@@ -204,8 +195,7 @@ bool checkGameStarted() {
 
 		const int total_pawns = 100;
 		for (int i = 0; i < total_pawns; ++i) {
-			short shift = (i > 10 / 2) ? 1 : 0;
-			PawnECS::SpawnPawn(shift);
+			PawnECS::SpawnPawn();
 		}
 	}
 
@@ -217,13 +207,6 @@ bool checkGameStarted() {
 void Update(double m_iTimeStep) {
 	double effective_step = m_iTimeStep * GameStatus::get()->simulation_speed_;
 	GameStatus::get()->game_time += effective_step;
-
-	//Check working shift
-	if (GameStatus::get()->working_shift_time_end < GameStatus::get()->game_time) {
-		GameStatus::get()->working_shift_time_end += 20000.0;
-		GameStatus::get()->working_shift_ = (GameStatus::get()->working_shift_ == 0) ? 1 : 0;
-		g_shift_change_time_end = GameStatus::get()->game_time + 3000.0;
-	}
 
 	bool started = checkGameStarted();
 	if (started && effective_step > 0.0) {
@@ -252,9 +235,6 @@ int game(int argc, char** argv) {
 	//Init variables and locations for this specific map
 	GameStatus::get()->prison = new PrisonMap();
 
-	g_shift_change_img = MOMOS::SpriteFromFile("data/shift.png");
-	g_alarm_mode_img = MOMOS::SpriteFromFile("data/alarm.png");
-
 	GameStatus::get()->map = new CostMap();
 	GameStatus::get()->map->Load("data/map_03_60x44_bw.bmp", "data/map_03_960x704_layoutAB.bmp");
 	GameStatus::get()->pathfinder_ = new Pathfinder();
@@ -271,9 +251,6 @@ int game(int argc, char** argv) {
 	double CurrentTime = MOMOS::Time();
 
 	checkGameStarted();
-
-	GameStatus::get()->working_shift_ = 0;
-	GameStatus::get()->working_shift_time_end = GameStatus::get()->game_time + 5000.0;
 
 	// Game loop with fixed update
 	while (MOMOS::WindowIsOpened()) {

@@ -6,7 +6,7 @@
 namespace PawnECS {
 
 /// Spawns a new pawn entity with default movement, rendering, and state data.
-ECS::Entity SpawnPawn(short working_shift = 0);
+ECS::Entity SpawnPawn();
 
 } // namespace PawnECS
 
