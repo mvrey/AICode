@@ -1,5 +1,5 @@
 //------------------------------------------------------------------------------
-// File: PAWNStateComponent.h
+// File: PawnStateComponent.h
 // Purpose: Declares the data that captures a pawn's AI status so ECS logic can track behavior.
 //------------------------------------------------------------------------------
 #ifndef ECS_PAWN_STATE_COMPONENT_H
@@ -10,8 +10,8 @@
 
 namespace ECS {
 
-struct PAWNStateComponent {
-	PAWNStatus status = kIdle;
+struct PawnStateComponent {
+	PawnStatus status = kIdle;
 	double time_end_status = 0.0;
 
 	float original_speed = 0.0f;

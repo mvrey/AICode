@@ -45,7 +45,7 @@ void TestMovementPathProgression() {
     movement.path_set = true;
     movement.movement_finished = false;
 
-    auto& state = registry.AddComponent<ECS::PAWNStateComponent>(entity);
+    auto& state = registry.AddComponent<ECS::PawnStateComponent>(entity);
     state.status = kGoingToWork;
     state.original_speed = 0.1f;
 

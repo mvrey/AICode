@@ -55,7 +55,7 @@ void PawnAISystem::Update(Registry& registry, double /*delta_time*/) {
 
 	CostMap* map = status->map;
 
-	registry.ForEach<PAWNStateComponent>([&](Entity entity, PAWNStateComponent& state) {
+	registry.ForEach<PawnStateComponent>([&](Entity entity, PawnStateComponent& state) {
 		if (!registry.HasComponent<MovementComponent>(entity) ||
 			!registry.HasComponent<TransformComponent>(entity)) {
 			return;

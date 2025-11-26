@@ -13,7 +13,7 @@ namespace ECS {
 // Runs the pawn AI state machine entirely via ECS components.
 class PawnAISystem : public IEcsSystem {
 public:
-	// Evaluates AI logic for every entity owning a PAWNStateComponent.
+// Evaluates AI logic for every entity owning a PawnStateComponent.
 	void Update(Registry& registry, double delta_time) override;
 };
 

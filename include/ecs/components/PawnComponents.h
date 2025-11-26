@@ -9,7 +9,7 @@
 #include "TransformComponent.h"
 #include "SpriteComponent.h"
 #include "MovementComponent.h"
-#include "PAWNStateComponent.h"
+#include "PawnStateComponent.h"
 
 #endif // ECS_PAWN_COMPONENTS_H
 
