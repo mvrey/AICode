@@ -23,15 +23,15 @@ typedef struct cell_s {
 	cell_s *parent = nullptr;
 } Cell;
 
-
 class CostMap
 {
 	int width_;
 	int height_;
 	std::vector<std::vector<Cell*>> cost_map_;
 
-	::MOMOS::SpriteHandle cost_img_handle_;
-	::MOMOS::SpriteHandle terrain_img_handle_;
+	::MOMOS::SpriteHandle tile_sprite_;
+	::MOMOS::SpriteHandle blocked_tile_sprite_;
+	std::vector<std::vector<bool>> tile_walkable_;
 
 public:
 	CostMap();
@@ -40,6 +40,7 @@ public:
 
 	/// Cost map can be a text file or an image file
 	bool Load(const char *cost_img, const char *terrain_img);
+	bool GenerateTileMap(int cols, int rows, float blocked_ratio = 0.3f);
 
 	/// Initializes a simple grid for headless tests without loading textures.
 	void InitializeSynthetic(int width, int height, bool walkable = true);
@@ -66,7 +67,7 @@ public:
 	/// Prints the cells of cost_map
 	void Print();
 
-	/// Draws the cost map's image if available
+	/// Draws the cost map's tiles if available
 	void Draw();
 
 };

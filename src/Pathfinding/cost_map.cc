@@ -1,60 +1,85 @@
 #include "../../include/Pathfinding/cost_map.h"
 #include "../../include/Camera.h"
 
+#include <cstdlib>
+
+namespace {
+
+::MOMOS::SpriteHandle CreatePixelSprite(unsigned char r, unsigned char g, unsigned char b, unsigned char a) {
+	unsigned char pixel[4] = { r, g, b, a };
+	return MOMOS::SpriteFromMemory(1, 1, pixel);
+}
+
+} // namespace
+
 CostMap::CostMap() {
-	//handle_ = new MOMOS::SpriteHandle();
+	width_ = 0;
+	height_ = 0;
+	tile_sprite_ = CreatePixelSprite(255, 255, 255, 255);
+	blocked_tile_sprite_ = CreatePixelSprite(0, 0, 0, 255);
 }
 
 CostMap::CostMap(const CostMap& orig) {}
 CostMap::~CostMap() {
 	reset();
-	if (cost_img_handle_) {
-		MOMOS::SpriteRelease(cost_img_handle_);
-		cost_img_handle_ = nullptr;
+	if (tile_sprite_) {
+		MOMOS::SpriteRelease(tile_sprite_);
+		tile_sprite_ = nullptr;
 	}
-	if (terrain_img_handle_) {
-		MOMOS::SpriteRelease(terrain_img_handle_);
-		terrain_img_handle_ = nullptr;
+	if (blocked_tile_sprite_) {
+		MOMOS::SpriteRelease(blocked_tile_sprite_);
+		blocked_tile_sprite_ = nullptr;
 	}
 }
 
 
 bool CostMap::Load(const char *cost_img, const char *terrain_img) {
-	cost_img_handle_ = MOMOS::SpriteFromFile(cost_img);
-	terrain_img_handle_ = MOMOS::SpriteFromFile(terrain_img);
+	static constexpr int kDefaultCols = 80;
+	static constexpr int kDefaultRows = 45;
+	static constexpr float kDefaultBlockedRatio = 0.3f;
 
-	height_ = MOMOS::SpriteHeight(cost_img_handle_);
-	width_ = MOMOS::SpriteWidth(cost_img_handle_);
+	return GenerateTileMap(kDefaultCols, kDefaultRows, kDefaultBlockedRatio);
+}
+
+bool CostMap::GenerateTileMap(int cols, int rows, float blocked_ratio) {
+	const int safe_cols = cols > 0 ? cols : 1;
+	const int safe_rows = rows > 0 ? rows : 1;
+	width_ = safe_cols;
+	height_ = safe_rows;
+	tile_walkable_.assign(width_, std::vector<bool>(height_, true));
+
+	float clamped_ratio = blocked_ratio;
+	if (clamped_ratio < 0.0f) {
+		clamped_ratio = 0.0f;
+	} else if (clamped_ratio > 1.0f) {
+		clamped_ratio = 1.0f;
+	}
+	int threshold = static_cast<int>(clamped_ratio * 10000.0f);
+
+	for (int x = 0; x < width_; ++x) {
+		for (int y = 0; y < height_; ++y) {
+			bool blocked = (rand() % 10000) < threshold;
+			tile_walkable_[x][y] = !blocked;
+		}
+	}
+
+	tile_walkable_[0][0] = true;
+	if (width_ > 1) {
+		tile_walkable_[1][0] = true;
+	}
+	if (height_ > 1) {
+		tile_walkable_[0][1] = true;
+	}
 
 	reset();
-	
-
 	return true;
 }
 
 void CostMap::InitializeSynthetic(int width, int height, bool walkable) {
-	for (auto& column : cost_map_) {
-		for (Cell* cell : column) {
-			delete cell;
-		}
-	}
-	cost_map_.clear();
-
 	width_ = (width > 0) ? width : 1;
 	height_ = (height > 0) ? height : 1;
-
-	cost_map_.resize(width_);
-	for (int x = 0; x < width_; ++x) {
-		cost_map_[x].reserve(height_);
-		for (int y = 0; y < height_; ++y) {
-			Cell* cell = new Cell();
-			cell->position_.x = static_cast<float>(x);
-			cell->position_.y = static_cast<float>(y);
-			cell->is_walkable_ = walkable;
-			cell->cost_ = walkable ? 0.0f : 1.0f;
-			cost_map_[x].push_back(cell);
-		}
-	}
+	tile_walkable_.assign(width_, std::vector<bool>(height_, walkable));
+	reset();
 }
 
 
@@ -67,7 +92,7 @@ void CostMap::reset() {
 	}
 	cost_map_.clear();
 
-	if (width_ <= 0 || height_ <= 0 || !cost_img_handle_) {
+	if (width_ <= 0 || height_ <= 0) {
 		return;
 	}
 
@@ -75,15 +100,16 @@ void CostMap::reset() {
 		cost_map_.emplace_back();
 
 		for (int h = 0; h < height_; h++) {
-			unsigned char outRGBA[4];
-			MOMOS::SpriteGetPixel(cost_img_handle_, w, h, outRGBA);
-
-			//Just check the red color channel, since G&B will be the same
 			Cell* cell = new Cell();
-			cell->position_.x = (float)w;
-			cell->position_.y = (float)h;
-			cell->cost_ = (outRGBA[0] == 0) ? 1.0f : 0.0f;
-			cell->is_walkable_ = (outRGBA[0] == 0) ? false : true;
+			cell->position_.x = static_cast<float>(w);
+			cell->position_.y = static_cast<float>(h);
+
+			bool walkable = true;
+			if (w < static_cast<int>(tile_walkable_.size()) && h < static_cast<int>(tile_walkable_[w].size())) {
+				walkable = tile_walkable_[w][h];
+			}
+			cell->cost_ = walkable ? 0.0f : 1.0f;
+			cell->is_walkable_ = walkable;
 
 			cost_map_[w].push_back(cell);
 		}
@@ -110,7 +136,7 @@ Cell* CostMap::getCellAt(int x, int y) {
 
 
 bool CostMap::isWalkable(MOMOS::Vec2 position) {
-	return getCellAt((int)position.x, (int)position.y)->is_walkable_;
+	return getCellAt(static_cast<int>(position.x), static_cast<int>(position.y))->is_walkable_;
 }
 
 
@@ -148,15 +174,50 @@ void CostMap::Print() {
 
 
 void CostMap::Draw() {
-	MOMOS::SpriteTransform trans{};
+	if (width_ <= 0 || height_ <= 0 || tile_sprite_ == nullptr || blocked_tile_sprite_ == nullptr) {
+		return;
+	}
 
-	float const base_scale_x = static_cast<float>(Screen::width) / static_cast<float>(MOMOS::SpriteWidth(terrain_img_handle_));
-	float const base_scale_y = static_cast<float>(Screen::height) / static_cast<float>(MOMOS::SpriteHeight(terrain_img_handle_));
-	float const zoom = Camera::Zoom();
-	trans.scale_x = base_scale_x * zoom;
-	trans.scale_y = base_scale_y * zoom;
-	::MOMOS::Vec2 origin_screen = Camera::WorldToScreen(::MOMOS::Vec2{ 0.0f, 0.0f });
-	trans.x = origin_screen.x;
-	trans.y = origin_screen.y;
-	MOMOS::DrawSprite(terrain_img_handle_, trans);
+	float tile_world_width = static_cast<float>(Screen::width) / static_cast<float>(width_);
+	float tile_world_height = static_cast<float>(Screen::height) / static_cast<float>(height_);
+
+	for (int x = 0; x < width_; ++x) {
+		for (int y = 0; y < height_; ++y) {
+			::MOMOS::Vec2 world_top_left = { x * tile_world_width, y * tile_world_height };
+			::MOMOS::Vec2 world_bottom_right = { (x + 1) * tile_world_width, (y + 1) * tile_world_height };
+			::MOMOS::Vec2 screen_top_left = Camera::WorldToScreen(world_top_left);
+			::MOMOS::Vec2 screen_bottom_right = Camera::WorldToScreen(world_bottom_right);
+
+			::MOMOS::SpriteTransform sprite_transform{};
+			sprite_transform.x = screen_top_left.x;
+			sprite_transform.y = screen_top_left.y;
+			sprite_transform.scale_x = screen_bottom_right.x - screen_top_left.x;
+			sprite_transform.scale_y = screen_bottom_right.y - screen_top_left.y;
+
+			bool walkable = true;
+			if (x < static_cast<int>(tile_walkable_.size()) && y < static_cast<int>(tile_walkable_[x].size())) {
+				walkable = tile_walkable_[x][y];
+			}
+
+			MOMOS::DrawSprite(walkable ? tile_sprite_ : blocked_tile_sprite_, sprite_transform);
+		}
+	}
+
+	MOMOS::DrawSetStrokeColor(180, 180, 180);
+	float total_world_width = static_cast<float>(Screen::width);
+	float total_world_height = static_cast<float>(Screen::height);
+
+	for (int col = 0; col <= width_; ++col) {
+		float world_x = col * tile_world_width;
+		::MOMOS::Vec2 top = Camera::WorldToScreen({ world_x, 0.0f });
+		::MOMOS::Vec2 bottom = Camera::WorldToScreen({ world_x, total_world_height });
+		MOMOS::DrawLine(top.x, top.y, bottom.x, bottom.y);
+	}
+
+	for (int row = 0; row <= height_; ++row) {
+		float world_y = row * tile_world_height;
+		::MOMOS::Vec2 left = Camera::WorldToScreen({ 0.0f, world_y });
+		::MOMOS::Vec2 right = Camera::WorldToScreen({ total_world_width, world_y });
+		MOMOS::DrawLine(left.x, left.y, right.x, right.y);
+	}
 }
