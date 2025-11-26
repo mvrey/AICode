@@ -46,7 +46,7 @@ public:
 	Room loading_area_;
 	Room unloading_area_;
 	
-	//The following rooms are not used by prisoners on their duties
+	//The following rooms are not used by pawns on their duties
 	Room pre_resting_room_;
 	Room up1_working_area_;
 	Room up2_working_area_;

@@ -1,4 +1,4 @@
-#include "../../include/ecs/PrisonerMovementUtils.h"
+#include "../../include/ecs/PawnMovementUtils.h"
 
 #include "../../include/Agents/Pathfinder.h"
 #include "../../include/GameStatus.h"
@@ -53,7 +53,7 @@ void PopulateDeterministicSteps(ECS::MovementComponent& movement, CostMap* map, 
 
 } // namespace
 
-namespace PrisonerECS {
+namespace PawnECS {
 namespace MovementUtils {
 
 void ClearMovement(ECS::Registry& registry, ECS::Entity entity) {
@@ -209,5 +209,5 @@ void SetDoorTarget(ECS::Registry& registry, ECS::Entity entity, int target) {
 }
 
 } // namespace MovementUtils
-} // namespace PrisonerECS
+} // namespace PawnECS
 

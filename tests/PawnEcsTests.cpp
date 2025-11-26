@@ -1,18 +1,18 @@
-#include "PrisonerEcsTests.h"
+#include "PawnEcsTests.h"
 
 #include "TestFramework.h"
-#include "../include/ecs/PrisonerEcs.h"
-#include "../include/ecs/components/PrisonerComponents.h"
-#include "../include/ecs/system/PrisonerPathFollowSystem.h"
-#include "../include/ecs/system/PrisonerMovementSystem.h"
-#include "../include/ecs/system/PrisonerRenderSystem.h"
+#include "../include/ecs/PawnEcs.h"
+#include "../include/ecs/components/PawnComponents.h"
+#include "../include/ecs/system/PawnPathFollowSystem.h"
+#include "../include/ecs/system/PawnMovementSystem.h"
+#include "../include/ecs/system/PawnRenderSystem.h"
 #include "../include/GameStatus.h"
 #include "../include/Pathfinding/cost_map.h"
 
 namespace {
 
-void ResetPrisonerRegistry() {
-    auto& registry = PrisonerECS::GetRegistry();
+void ResetPawnRegistry() {
+    auto& registry = PawnECS::GetRegistry();
     registry.Clear();
 }
 
@@ -26,10 +26,10 @@ void EnsureGameStatus() {
 
 // Validates that the movement system advances deterministic steps forward.
 void TestMovementPathProgression() {
-    ResetPrisonerRegistry();
+    ResetPawnRegistry();
     EnsureGameStatus();
 
-    auto& registry = PrisonerECS::GetRegistry();
+    auto& registry = PawnECS::GetRegistry();
     ECS::Entity entity = registry.CreateEntity();
 
     auto& transform = registry.AddComponent<ECS::TransformComponent>(entity);
@@ -45,14 +45,14 @@ void TestMovementPathProgression() {
     movement.path_set = true;
     movement.movement_finished = false;
 
-    auto& state = registry.AddComponent<ECS::PrisonerStateComponent>(entity);
+    auto& state = registry.AddComponent<ECS::PAWNStateComponent>(entity);
     state.status = kGoingToWork;
     state.original_speed = 0.1f;
 
     const auto initial_step_index = movement.deterministic_step_index;
 
-    ECS::PrisonerPathFollowSystem pathSystem;
-    ECS::PrisonerMovementSystem movementSystem;
+    ECS::PawnPathFollowSystem pathSystem;
+    ECS::PawnMovementSystem movementSystem;
     for (int i = 0; i < 2; ++i) {
         pathSystem.Update(registry, 16.0);
         movementSystem.Update(registry, 16.0);
@@ -66,8 +66,8 @@ void TestMovementPathProgression() {
 
 // Checks render pass leaves transform data untouched for static sprites.
 void TestRenderTransformConsistency() {
-    ResetPrisonerRegistry();
-    auto& registry = PrisonerECS::GetRegistry();
+    ResetPawnRegistry();
+    auto& registry = PawnECS::GetRegistry();
     ECS::Entity entity = registry.CreateEntity();
 
     auto& transform = registry.AddComponent<ECS::TransformComponent>(entity);
@@ -78,7 +78,7 @@ void TestRenderTransformConsistency() {
     sprite.width = 32.0f;
     sprite.height = 32.0f;
 
-    ECS::PrisonerRenderSystem renderSystem;
+    ECS::PawnRenderSystem renderSystem;
     renderSystem.Update(registry, 0.0);
 
     auto& storedTransform = registry.GetComponent<ECS::TransformComponent>(entity);
@@ -88,7 +88,7 @@ void TestRenderTransformConsistency() {
 
 } // namespace
 
-void PrisonerEcsTests() {
-    RunNamedTest("PrisonerEcsTests::TestMovementPathProgression", &TestMovementPathProgression);
-    RunNamedTest("PrisonerEcsTests::TestRenderTransformConsistency", &TestRenderTransformConsistency);
+void PawnEcsTests() {
+    RunNamedTest("PawnEcsTests::TestMovementPathProgression", &TestMovementPathProgression);
+    RunNamedTest("PawnEcsTests::TestRenderTransformConsistency", &TestRenderTransformConsistency);
 }

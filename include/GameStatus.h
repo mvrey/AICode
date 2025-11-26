@@ -17,7 +17,7 @@ class Pathfinder;
 
 //forward declarations for agent cache
 class Guard;
-class Prisoner;
+class Pawn;
 class Soldier;
 
 class GameStatus {
@@ -32,7 +32,7 @@ public:
 	float simulation_speed_;
 	//----------------///
 
-	bool prisoners_created = false;
+	bool pawns_created = false;
 
 	//----------------///
 

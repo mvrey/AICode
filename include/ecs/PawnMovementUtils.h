@@ -1,10 +1,10 @@
 //------------------------------------------------------------------------------
-// File: PrisonerMovementUtils.h
+// File: PawnMovementUtils.h
 // Purpose: Declares helper routines for manipulating ECS movement state without
-//          touching legacy Prisoner objects.
+//          touching legacy Pawn objects.
 //------------------------------------------------------------------------------
-#ifndef PRISONER_ECS_MOVEMENT_UTILS_H
-#define PRISONER_ECS_MOVEMENT_UTILS_H
+#ifndef PAWN_ECS_MOVEMENT_UTILS_H
+#define PAWN_ECS_MOVEMENT_UTILS_H
 
 #include <vector>
 #include "./Registry.h"
@@ -14,7 +14,7 @@
 #include "components/MovementComponent.h"
 #include "components/TransformComponent.h"
 
-namespace PrisonerECS {
+namespace PawnECS {
 namespace MovementUtils {
 
 enum class PathFinalizationResult {
@@ -33,7 +33,7 @@ void CycleDoorTarget(ECS::Registry& registry, ECS::Entity entity, int totalDoors
 void SetDoorTarget(ECS::Registry& registry, ECS::Entity entity, int target);
 
 } // namespace MovementUtils
-} // namespace PrisonerECS
+} // namespace PawnECS
 
-#endif // PRISONER_ECS_MOVEMENT_UTILS_H
+#endif // PAWN_ECS_MOVEMENT_UTILS_H
 

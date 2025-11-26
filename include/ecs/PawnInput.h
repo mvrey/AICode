@@ -1,21 +1,21 @@
 //------------------------------------------------------------------------------
-// File: PrisonerInput.h
+// File: PawnInput.h
 // Purpose: Declares helper functions that expose MOMOS input state to ECS code
 //          without pulling UI headers everywhere.
 //------------------------------------------------------------------------------
-#ifndef PRISONER_ECS_INPUT_H
-#define PRISONER_ECS_INPUT_H
+#ifndef PAWN_ECS_INPUT_H
+#define PAWN_ECS_INPUT_H
 
 #include <MOMOS/math.h>
 
-namespace PrisonerECS {
+namespace PawnECS {
 
 // Returns the current mouse cursor position in screen space.
 MOMOS::Vec2 GetMouseScreenPosition();
 // True while the primary mouse button is pressed.
 bool IsPrimaryMouseDown();
 
-} // namespace PrisonerECS
+} // namespace PawnECS
 
-#endif // PRISONER_ECS_INPUT_H
+#endif // PAWN_ECS_INPUT_H
 

@@ -1,17 +1,17 @@
 //------------------------------------------------------------------------------
-// File: PrisonerPathFollowSystem.h
+// File: PawnPathFollowSystem.h
 // Purpose: Declares the ECS system that advances entities along their queued
 //          deterministic path steps.
 //------------------------------------------------------------------------------
-#ifndef ECS_PRISONER_PATH_FOLLOW_SYSTEM_H
-#define ECS_PRISONER_PATH_FOLLOW_SYSTEM_H
+#ifndef ECS_PAWN_PATH_FOLLOW_SYSTEM_H
+#define ECS_PAWN_PATH_FOLLOW_SYSTEM_H
 
 #include "../System.h"
 
 namespace ECS {
 
 // Validates path cells and updates facing/step indices for active routes.
-class PrisonerPathFollowSystem : public IEcsSystem {
+class PawnPathFollowSystem : public IEcsSystem {
 public:
 	// Processes all MovementComponents that currently have active paths.
 	void Update(Registry& registry, double delta_time) override;
@@ -19,5 +19,5 @@ public:
 
 } // namespace ECS
 
-#endif // ECS_PRISONER_PATH_FOLLOW_SYSTEM_H
+#endif // ECS_PAWN_PATH_FOLLOW_SYSTEM_H
 

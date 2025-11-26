@@ -1,9 +1,9 @@
 //------------------------------------------------------------------------------
-// File: PrisonerPathFollowSystem.cc
-// Purpose: Validates queued path steps for each prisoner and steers transforms
+// File: PawnPathFollowSystem.cc
+// Purpose: Validates queued path steps for each pawn and steers transforms
 //          toward their next waypoint.
 //------------------------------------------------------------------------------
-#include "../../../include/ecs/system/PrisonerPathFollowSystem.h"
+#include "../../../include/ecs/system/PawnPathFollowSystem.h"
 
 #include "../../../include/ecs/Registry.h"
 #include "../../../include/ecs/components/MovementComponent.h"
@@ -33,7 +33,7 @@ namespace ECS {
 
 // Steps entities toward their current deterministic waypoint and reacts when
 // cells become invalid or when the path is completed.
-void PrisonerPathFollowSystem::Update(Registry& registry, double /*delta_time*/) {
+void PawnPathFollowSystem::Update(Registry& registry, double /*delta_time*/) {
 	CostMap* map = GameStatus::get()->map;
 	if (!map) {
 		return;

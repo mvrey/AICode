@@ -336,13 +336,13 @@
     <ClInclude Include="include\ecs\Entity.h">
       <Filter>Header Files\ecs</Filter>
     </ClInclude>
-    <ClInclude Include="include\ecs\PrisonerEcs.h">
+    <ClInclude Include="include\ecs\PawnEcs.h">
       <Filter>Header Files\ecs</Filter>
     </ClInclude>
-    <ClInclude Include="include\ecs\PrisonerInput.h">
+    <ClInclude Include="include\ecs\PawnInput.h">
       <Filter>Header Files\ecs</Filter>
     </ClInclude>
-    <ClInclude Include="include\ecs\PrisonerMovementUtils.h">
+    <ClInclude Include="include\ecs\PawnMovementUtils.h">
       <Filter>Header Files\ecs</Filter>
     </ClInclude>
     <ClInclude Include="include\ecs\System.h">
@@ -354,10 +354,10 @@
     <ClInclude Include="include\ecs\components\MovementComponent.h">
       <Filter>Header Files\ecs\components</Filter>
     </ClInclude>
-    <ClInclude Include="include\ecs\components\PrisonerComponents.h">
+    <ClInclude Include="include\ecs\components\PawnComponents.h">
       <Filter>Header Files\ecs\components</Filter>
     </ClInclude>
-    <ClInclude Include="include\ecs\components\PrisonerStateComponent.h">
+    <ClInclude Include="include\ecs\components\PawnStateComponent.h">
       <Filter>Header Files\ecs\components</Filter>
     </ClInclude>
     <ClInclude Include="include\ecs\components\SpriteComponent.h">
@@ -366,31 +366,31 @@
     <ClInclude Include="include\ecs\components\TransformComponent.h">
       <Filter>Header Files\ecs\components</Filter>
     </ClInclude>
-    <ClInclude Include="include\ecs\system\PrisonerRenderSystem.h">
+    <ClInclude Include="include\ecs\system\PawnRenderSystem.h">
       <Filter>Header Files\ecs\system</Filter>
     </ClInclude>
-    <ClInclude Include="include\ecs\system\PrisonerPathFollowSystem.h">
+    <ClInclude Include="include\ecs\system\PawnPathFollowSystem.h">
       <Filter>Header Files\ecs\system</Filter>
     </ClInclude>
-    <ClInclude Include="include\ecs\system\PrisonerMovementSystem.h">
+    <ClInclude Include="include\ecs\system\PawnMovementSystem.h">
       <Filter>Header Files\ecs\system</Filter>
     </ClInclude>
-    <ClInclude Include="include\ecs\system\PrisonerAISystem.h">
+    <ClInclude Include="include\ecs\system\PawnAISystem.h">
       <Filter>Header Files\ecs\system</Filter>
     </ClInclude>
-    <ClInclude Include="include\ecs\PrisonerEcsSystems.h">
+    <ClInclude Include="include\ecs\PawnEcsSystems.h">
       <Filter>Header Files\ecs</Filter>
     </ClInclude>
-    <ClInclude Include="include\ecs\PrisonerFactory.h">
+    <ClInclude Include="include\ecs\PawnFactory.h">
       <Filter>Header Files\ecs</Filter>
     </ClInclude>
-    <ClInclude Include="include\ecs\PrisonerEcsManager.h">
+    <ClInclude Include="include\ecs\PawnEcsManager.h">
       <Filter>Header Files\ecs</Filter>
     </ClInclude>
     <ClInclude Include="tests\AncientMythosTests.h">
       <Filter>Tests</Filter>
     </ClInclude>
-    <ClInclude Include="tests\PrisonerEcsTests.h">
+    <ClInclude Include="tests\PawnEcsTests.h">
       <Filter>Tests</Filter>
     </ClInclude>
     <ClInclude Include="tests\RegistryTests.h">
@@ -428,37 +428,37 @@
     <ClCompile Include="src\Camera.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\ecs\PrisonerEcs.cc">
+    <ClCompile Include="src\ecs\PawnEcs.cc">
       <Filter>Source Files\ecs</Filter>
     </ClCompile>
-    <ClCompile Include="src\ecs\PrisonerFactory.cc">
+    <ClCompile Include="src\ecs\PawnFactory.cc">
       <Filter>Source Files\ecs</Filter>
     </ClCompile>
-    <ClCompile Include="src\ecs\PrisonerEcsSystems.cc">
+    <ClCompile Include="src\ecs\PawnEcsSystems.cc">
       <Filter>Source Files\ecs</Filter>
     </ClCompile>
-    <ClCompile Include="src\ecs\PrisonerInput.cc">
+    <ClCompile Include="src\ecs\PawnInput.cc">
       <Filter>Source Files\ecs</Filter>
     </ClCompile>
-    <ClCompile Include="src\ecs\PrisonerMovementUtils.cc">
+    <ClCompile Include="src\ecs\PawnMovementUtils.cc">
       <Filter>Source Files\ecs</Filter>
     </ClCompile>
     <ClCompile Include="src\ecs\Registry.cc">
       <Filter>Source Files\ecs</Filter>
     </ClCompile>
-    <ClCompile Include="src\ecs\PrisonerEcsManager.cc">
+    <ClCompile Include="src\ecs\PawnEcsManager.cc">
       <Filter>Source Files\ecs</Filter>
     </ClCompile>
-    <ClCompile Include="src\ecs\system\PrisonerAISystem.cc">
+    <ClCompile Include="src\ecs\system\PawnAISystem.cc">
       <Filter>Source Files\ecs\system</Filter>
     </ClCompile>
-    <ClCompile Include="src\ecs\system\PrisonerMovementSystem.cc">
+    <ClCompile Include="src\ecs\system\PawnMovementSystem.cc">
       <Filter>Source Files\ecs\system</Filter>
     </ClCompile>
-    <ClCompile Include="src\ecs\system\PrisonerPathFollowSystem.cc">
+    <ClCompile Include="src\ecs\system\PawnPathFollowSystem.cc">
       <Filter>Source Files\ecs\system</Filter>
     </ClCompile>
-    <ClCompile Include="src\ecs\system\PrisonerRenderSystem.cc">
+    <ClCompile Include="src\ecs\system\PawnRenderSystem.cc">
       <Filter>Source Files\ecs\system</Filter>
     </ClCompile>
     <ClCompile Include="src\UI\VSyncToggle.cc">
@@ -473,7 +473,7 @@
     <ClCompile Include="tests\AncientMythosTests.cpp">
       <Filter>Tests</Filter>
     </ClCompile>
-    <ClCompile Include="tests\PrisonerEcsTests.cpp">
+    <ClCompile Include="tests\PawnEcsTests.cpp">
       <Filter>Tests</Filter>
     </ClCompile>
     <ClCompile Include="tests\RegistryTests.cpp">

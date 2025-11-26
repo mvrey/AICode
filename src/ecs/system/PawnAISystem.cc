@@ -1,12 +1,12 @@
 //------------------------------------------------------------------------------
-// File: PrisonerAISystem.cc
-// Purpose: Implements the prisoner AI state machine using ECS components,
+// File: PawnAISystem.cc
+// Purpose: Implements the pawn AI state machine using ECS components,
 //          replacing the legacy AgentMind logic.
 //------------------------------------------------------------------------------
-#include "../../../include/ecs/system/PrisonerAISystem.h"
+#include "../../../include/ecs/system/PawnAISystem.h"
 #include "../../../include/ecs/Registry.h"
-#include "../../../include/ecs/components/PrisonerComponents.h"
-#include "../../../include/ecs/PrisonerMovementUtils.h"
+#include "../../../include/ecs/components/PawnComponents.h"
+#include "../../../include/ecs/PawnMovementUtils.h"
 #include "../../../include/GameStatus.h"
 #include "../../../include/PrisonMap.h"
 #include "../../../include/Pathfinding/cost_map.h"
@@ -17,7 +17,7 @@
 
 namespace {
 
-namespace MovementUtils = PrisonerECS::MovementUtils;
+namespace MovementUtils = PawnECS::MovementUtils;
 
 bool SampleWalkableDestination(CostMap* map, ::MOMOS::Vec2& out) {
 	if (!map) {
@@ -47,7 +47,7 @@ bool SampleWalkableDestination(CostMap* map, ::MOMOS::Vec2& out) {
 
 namespace ECS {
 
-void PrisonerAISystem::Update(Registry& registry, double /*delta_time*/) {
+void PawnAISystem::Update(Registry& registry, double /*delta_time*/) {
 	auto* status = GameStatus::get();
 	if (!status || !status->map) {
 		return;
@@ -55,7 +55,7 @@ void PrisonerAISystem::Update(Registry& registry, double /*delta_time*/) {
 
 	CostMap* map = status->map;
 
-	registry.ForEach<PrisonerStateComponent>([&](Entity entity, PrisonerStateComponent& state) {
+	registry.ForEach<PAWNStateComponent>([&](Entity entity, PAWNStateComponent& state) {
 		if (!registry.HasComponent<MovementComponent>(entity) ||
 			!registry.HasComponent<TransformComponent>(entity)) {
 			return;

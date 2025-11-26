@@ -13,8 +13,8 @@
 #include "../include/UI/SimulationSpeedControls.h"
 #include "../include/UI/FpsCounter.h"
 #include "../include/UI/VSyncToggle.h"
-#include "../include/ecs/PrisonerEcsSystems.h"
-#include "../include/ecs/PrisonerFactory.h"
+#include "../include/ecs/PawnEcsSystems.h"
+#include "../include/ecs/PawnFactory.h"
 #include <MOMOS/momos.h>
 
 #include "../include/Agents/Pathfinder.h"
@@ -179,7 +179,7 @@ void Draw() {
 		MOMOS::DrawSprite(g_shift_change_img, 20.0f, 50.0f);
 	}
 
-	PrisonerECS::Systems::Get().Render(0.0);
+	PawnECS::Systems::Get().Render(0.0);
 	g_fps_counter.Draw();
 	g_vsync_toggle.Draw(g_fps_counter.GetTextRight(), g_fps_counter.GetTextBaselineY());
 	g_speed_controls.Draw();
@@ -194,22 +194,22 @@ void Draw() {
  **/
 bool checkGameStarted() {
 	auto* status = GameStatus::get();
-	if (!status->prisoners_created) {
-		status->prisoners_created = true;
+	if (!status->pawns_created) {
+		status->pawns_created = true;
 
 		// Pathfinder manager should be the first one to update each frame
 		if (status->pathfinder_) {
 			Agent::agents_.push_back(status->pathfinder_);
 		}
 
-		const int total_prisoners = 100;
-		for (int i = 0; i < total_prisoners; ++i) {
+		const int total_pawns = 100;
+		for (int i = 0; i < total_pawns; ++i) {
 			short shift = (i > 10 / 2) ? 1 : 0;
-			PrisonerECS::SpawnPrisoner(shift);
+			PawnECS::SpawnPawn(shift);
 		}
 	}
 
-	return status->prisoners_created;
+	return status->pawns_created;
 }
 
 
@@ -230,7 +230,7 @@ void Update(double m_iTimeStep) {
 		UpdateAI(effective_step);
 	}
 
-	PrisonerECS::Systems::Get().Update(effective_step);
+	PawnECS::Systems::Get().Update(effective_step);
 }
 
 

@@ -1,9 +1,9 @@
 //------------------------------------------------------------------------------
-// File: PrisonerMovementSystem.cc
-// Purpose: Integrates prisoner transforms using their direction vectors and
+// File: PawnMovementSystem.cc
+// Purpose: Integrates pawn transforms using their direction vectors and
 //          configured movement speeds.
 //------------------------------------------------------------------------------
-#include "../../../include/ecs/system/PrisonerMovementSystem.h"
+#include "../../../include/ecs/system/PawnMovementSystem.h"
 #include "../../../include/ecs/Registry.h"
 #include "../../../include/ecs/components/MovementComponent.h"
 #include "../../../include/ecs/components/TransformComponent.h"
@@ -13,7 +13,7 @@
 namespace ECS {
 
 // Moves every entity that has both Movement and Transform components.
-void PrisonerMovementSystem::Update(Registry& registry, double delta_time) {
+void PawnMovementSystem::Update(Registry& registry, double delta_time) {
 	registry.ForEach<MovementComponent>([&](Entity entity, MovementComponent& movement) {
 		if (!registry.HasComponent<TransformComponent>(entity))
 			return;

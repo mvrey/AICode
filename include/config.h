@@ -68,7 +68,7 @@ typedef enum {
 	kGoingToRest,
 	kResting,
 	kEscaping
-} PrisonerStatus;
+} PAWNStatus;
 
 typedef enum {
 	kNONE,

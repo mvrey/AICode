@@ -1,13 +1,13 @@
 //------------------------------------------------------------------------------
-// File: PrisonerInput.cc
+// File: PawnInput.cc
 // Purpose: Implements lightweight wrappers that expose MOMOS input state to ECS
 //          systems without leaking engine headers everywhere.
 //------------------------------------------------------------------------------
-#include "../../include/ecs/PrisonerInput.h"
+#include "../../include/ecs/PawnInput.h"
 #include "../../include/GameStatus.h"
 #include <MOMOS/input.h>
 
-namespace PrisonerECS {
+namespace PawnECS {
 
 // Converts MOMOS' integer cursor position into a float vector.
 MOMOS::Vec2 GetMouseScreenPosition() {
@@ -22,5 +22,5 @@ bool IsPrimaryMouseDown() {
 	return MOMOS::MouseButtonDown(1);
 }
 
-} // namespace PrisonerECS
+} // namespace PawnECS
 

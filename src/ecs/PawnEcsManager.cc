@@ -1,24 +1,24 @@
 //------------------------------------------------------------------------------
-// File: PrisonerEcsManager.cc
+// File: PawnEcsManager.cc
 // Purpose: Provides legacy-friendly wrappers for creating and destroying ECS
-//          prisoner entities.
+//          pawn entities.
 //------------------------------------------------------------------------------
-#include "../../include/ecs/PrisonerEcsManager.h"
-#include "../../include/ecs/components/PrisonerComponents.h"
+#include "../../include/ecs/PawnEcsManager.h"
+#include "../../include/ecs/components/PawnComponents.h"
 
-namespace PrisonerECS {
+namespace PawnECS {
 
 // Delegates to the global registry helper so callers avoid header dependencies.
-ECS::Entity Manager::CreatePrisonerEntity() {
-	return PrisonerECS::CreatePrisonerEntity();
+ECS::Entity Manager::CreatePawnEntity() {
+	return PawnECS::CreatePawnEntity();
 }
 
 // Validates the entity and removes it from the registry if it exists.
-void Manager::DestroyPrisonerEntity(ECS::Entity entity) {
+void Manager::DestroyPawnEntity(ECS::Entity entity) {
 	if (entity.IsValid()) {
-		PrisonerECS::DestroyPrisonerEntity(entity);
+		PawnECS::DestroyPawnEntity(entity);
 	}
 }
 
-} // namespace PrisonerECS
+} // namespace PawnECS
 

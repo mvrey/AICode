@@ -4,13 +4,13 @@
 #include <exception>
 
 #include "RegistryTests.h"
-#include "PrisonerEcsTests.h"
+#include "PawnEcsTests.h"
 
 // Runs every discrete test suite so CI can invoke a single entry point.
 int AncientMythosTests() {
     try {
         RegistryTests();
-        PrisonerEcsTests();
+        PawnEcsTests();
     } catch (const std::exception& ex) {
         std::printf("[FATAL] Test harness exception: %s\n", ex.what());
         return 1;
