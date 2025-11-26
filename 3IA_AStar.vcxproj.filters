@@ -330,6 +330,9 @@
     <ClInclude Include="include\UI\FpsCounter.h">
       <Filter>Header Files\UI</Filter>
     </ClInclude>
+    <ClInclude Include="include\UI\InfoPanel.h">
+      <Filter>Header Files\UI</Filter>
+    </ClInclude>
     <ClInclude Include="include\ecs\ComponentPool.h">
       <Filter>Header Files\ecs</Filter>
     </ClInclude>
@@ -468,6 +471,9 @@
       <Filter>Source Files\UI</Filter>
     </ClCompile>
     <ClCompile Include="src\UI\FpsCounter.cc">
+      <Filter>Source Files\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="src\UI\InfoPanel.cc">
       <Filter>Source Files\UI</Filter>
     </ClCompile>
     <ClCompile Include="tests\AncientMythosTests.cpp">

@@ -217,6 +217,7 @@
     <ClInclude Include="include\UI\FpsCounter.h" />
     <ClInclude Include="include\UI\SimulationSpeedControls.h" />
     <ClInclude Include="include\UI\VSyncToggle.h" />
+    <ClInclude Include="include\UI\InfoPanel.h" />
     <ClInclude Include="tests\AncientMythosTests.h" />
     <ClInclude Include="tests\PawnEcsTests.h" />
     <ClInclude Include="tests\RegistryTests.h" />
@@ -257,6 +258,7 @@
     <ClCompile Include="src\UI\FpsCounter.cc" />
     <ClCompile Include="src\UI\VSyncToggle.cc" />
     <ClCompile Include="src\UI\SimulationSpeedControls.cc" />
+    <ClCompile Include="src\UI\InfoPanel.cc" />
     <ClCompile Include="src\Agents\Agent.cc" />
     <ClCompile Include="src\Agents\Pathfinder.cc" />
     <ClCompile Include="src\GameStatus.cc" />

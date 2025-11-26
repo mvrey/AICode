@@ -13,6 +13,7 @@
 #include "../include/UI/SimulationSpeedControls.h"
 #include "../include/UI/FpsCounter.h"
 #include "../include/UI/VSyncToggle.h"
+#include "../include/UI/InfoPanel.h"
 #include "../include/ecs/PawnEcsSystems.h"
 #include "../include/ecs/PawnFactory.h"
 #include <MOMOS/momos.h>
@@ -174,6 +175,7 @@ void Draw() {
 	g_fps_counter.Draw();
 	g_vsync_toggle.Draw(g_fps_counter.GetTextRight(), g_fps_counter.GetTextBaselineY());
 	g_speed_controls.Draw();
+	InfoPanel::Get().Draw();
 
 	MOMOS::DrawEnd();
 	MOMOS::WindowFrame();
