@@ -14,20 +14,56 @@ namespace {
 		return coords;
 	}
 
-	while (true) {
-		Cell* cell = map->getCellAt(static_cast<int>(coords.x), static_cast<int>(coords.y));
-		if (cell == nullptr || cell->is_walkable_) {
-			break;
-		}
-		if (dest.x > coords.x) {
-			coords.x += 1.0f;
-		}
-		if (dest.y > coords.y) {
-			coords.y += 1.0f;
-		}
+	int width = map->getWidth();
+	int height = map->getHeight();
+	if (width <= 0 || height <= 0) {
+		return coords;
 	}
 
-	return coords;
+	const int max_steps = width * height;
+	int step_count = 0;
+	::MOMOS::Vec2 current = coords;
+
+	while (step_count < max_steps) {
+		Cell* cell = map->getCellAt(static_cast<int>(current.x), static_cast<int>(current.y));
+		if (cell == nullptr || cell->is_walkable_) {
+			coords = current;
+			return coords;
+		}
+
+		float prev_x = current.x;
+		float prev_y = current.y;
+
+		int delta_x = (dest.x > current.x) ? 1 : (dest.x < current.x) ? -1 : 0;
+		int delta_y = (dest.y > current.y) ? 1 : (dest.y < current.y) ? -1 : 0;
+
+		if (delta_x == 0 && delta_y == 0) {
+			break;
+		}
+
+		current.x += delta_x;
+		current.y += delta_y;
+
+		if (current.x < 0.0f) {
+			current.x = 0.0f;
+		} else if (current.x > static_cast<float>(width - 1)) {
+			current.x = static_cast<float>(width - 1);
+		}
+
+		if (current.y < 0.0f) {
+			current.y = 0.0f;
+		} else if (current.y > static_cast<float>(height - 1)) {
+			current.y = static_cast<float>(height - 1);
+		}
+
+		if (current.x == prev_x && current.y == prev_y) {
+			break;
+		}
+
+		++step_count;
+	}
+
+	return current;
 }
 
 void PopulateDeterministicSteps(ECS::MovementComponent& movement, CostMap* map, const std::vector<::MOMOS::Vec2>& path) {
