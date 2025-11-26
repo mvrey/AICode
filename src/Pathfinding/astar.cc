@@ -89,17 +89,24 @@ bool AStar::GeneratePath(MOMOS::Vec2 origin, MOMOS::Vec2 destination, Path *path
 		//Generate each state node_successor that can come after node_current
 		successors.clear();
 
-		for (int i = -1; i < 2; i++) {
-			for (int j = -1; j < 2; j++) {
-				//Exclude the current node and negative indexes
-				x = (int)node_current.position_.x + j;
-				y = (int)node_current.position_.y + i;
-				if (x >= 0 && y >= 0 &&
-					x < map_->getWidth()-1 && y < map_->getHeight()-1 && !(i == 0 && j == 0) &&
-					map_->getCellAt(x, y)->is_walkable_ == true) {
+		for (int i = -1; i <= 1; ++i) {
+			for (int j = -1; j <= 1; ++j) {
+				if (i == 0 && j == 0)
+					continue;
+				if (i != 0 && j != 0)
+					continue;
 
-					successors.push_back(*map_->getCellAt(x, y));
-				}
+				x = static_cast<int>(node_current.position_.x) + j;
+				y = static_cast<int>(node_current.position_.y) + i;
+
+				if (x < 0 || y < 0 || x >= map_->getWidth() || y >= map_->getHeight())
+					continue;
+
+				Cell* cell = map_->getCellAt(x, y);
+				if (cell == nullptr || !cell->is_walkable_)
+					continue;
+
+				successors.push_back(*cell);
 			}
 		}
 
@@ -111,8 +118,7 @@ bool AStar::GeneratePath(MOMOS::Vec2 origin, MOMOS::Vec2 destination, Path *path
 
 			// G = cost from current node
 			//Diagonal adjacent cells cost an extra
-			int dist = (int)(abs(node_current.position_.x - node_successor.position_.x) + abs(node_current.position_.y - node_successor.position_.y));
-			node_successor.g = (dist < 2) ? 10 : 15;
+			node_successor.g = 10;
 
 
 			// Set the cost of node_successor to be the cost of node_current plus the cost to get to node_successor from node_current 

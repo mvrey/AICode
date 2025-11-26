@@ -36,7 +36,7 @@ void FpsCounter::Draw() const {
 	float text_x = (Screen::width - text_width_estimate) * 0.5f;
 	float text_y = 18.0f;
 
-	MOMOS::DrawSetFillColor(240, 240, 240, 255);
+	MOMOS::DrawSetFillColor(255, 50, 50, 255);
 	MOMOS::DrawSetTextSize(18.0f);
 	MOMOS::DrawText(text_x, text_y, buffer);
 
