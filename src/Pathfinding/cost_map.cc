@@ -4,6 +4,8 @@
 #include <algorithm>
 #include <cmath>
 #include <cstdlib>
+#include <utility>
+#include <vector>
 
 namespace {
 
@@ -56,12 +58,115 @@ bool CostMap::GenerateTileMap(int cols, int rows, float blocked_ratio) {
 	} else if (clamped_ratio > 1.0f) {
 		clamped_ratio = 1.0f;
 	}
-	int threshold = static_cast<int>(clamped_ratio * 10000.0f);
 
-	for (int x = 0; x < width_; ++x) {
-		for (int y = 0; y < height_; ++y) {
-			bool blocked = (rand() % 10000) < threshold;
-			tile_walkable_[x][y] = !blocked;
+	const int total_cells = width_ * height_;
+	const int desired_blocked = static_cast<int>(clamped_ratio * total_cells);
+
+	auto is_reserved_tile = [width = width_, height = height_](int x, int y) {
+		if (x == 0 && y == 0) {
+			return true;
+		}
+		if (width > 1 && x == 1 && y == 0) {
+			return true;
+		}
+		if (height > 1 && x == 0 && y == 1) {
+			return true;
+		}
+		return false;
+	};
+
+	int blocked_cells = 0;
+	constexpr int kMinLumpSize = 2;
+	constexpr int kMaxLumpSize = 8;
+	const int kMaxPlacementAttempts = 500;
+	const int kFailureThresholdForSingleCell = std::max(1, (width_ * height_) / 4);
+	const int kMaxTotalFailures = (width_ * height_) * 2;
+	int total_failure_count = 0;
+
+	while (blocked_cells < desired_blocked && total_failure_count < kMaxTotalFailures) {
+		int remaining = desired_blocked - blocked_cells;
+		if (remaining <= 0) {
+			break;
+		}
+
+		bool allow_single_cell = total_failure_count >= kFailureThresholdForSingleCell;
+		int lump_min = (remaining >= kMinLumpSize && !allow_single_cell) ? kMinLumpSize : 1;
+		if (lump_min > remaining) {
+			lump_min = remaining;
+		}
+
+		int lump_max = std::min(kMaxLumpSize, remaining);
+		if (lump_max < lump_min) {
+			lump_max = lump_min;
+		}
+
+		int target_size = lump_min;
+		if (lump_max > lump_min) {
+			target_size += rand() % (lump_max - lump_min + 1);
+		}
+
+		bool placed = false;
+		for (int placement_attempt = 0; placement_attempt < kMaxPlacementAttempts && !placed; ++placement_attempt) {
+			int start_x = rand() % width_;
+			int start_y = rand() % height_;
+			if (!tile_walkable_[start_x][start_y] || is_reserved_tile(start_x, start_y)) {
+				continue;
+			}
+
+			std::vector<std::vector<bool>> visited(width_, std::vector<bool>(height_, false));
+			std::vector<std::pair<int, int>> lump_cells;
+			lump_cells.emplace_back(start_x, start_y);
+			visited[start_x][start_y] = true;
+			std::vector<std::pair<int, int>> frontier = lump_cells;
+
+			while (static_cast<int>(lump_cells.size()) < target_size) {
+				std::vector<std::pair<int, int>> candidates;
+				const int kDx[4] = { 1, -1, 0, 0 };
+				const int kDy[4] = { 0, 0, 1, -1 };
+				for (const auto& cell : frontier) {
+					for (int dir = 0; dir < 4; ++dir) {
+						int nx = cell.first + kDx[dir];
+						int ny = cell.second + kDy[dir];
+						if (nx < 0 || nx >= width_ || ny < 0 || ny >= height_) {
+							continue;
+						}
+						if (is_reserved_tile(nx, ny) || !tile_walkable_[nx][ny] || visited[nx][ny]) {
+							continue;
+						}
+						candidates.emplace_back(nx, ny);
+					}
+				}
+
+				if (candidates.empty()) {
+					break;
+				}
+
+				auto next_cell = candidates[rand() % candidates.size()];
+				lump_cells.push_back(next_cell);
+				visited[next_cell.first][next_cell.second] = true;
+				frontier.push_back(next_cell);
+			}
+
+			if (static_cast<int>(lump_cells.size()) >= lump_min) {
+				for (const auto& cell : lump_cells) {
+					int x = cell.first;
+					int y = cell.second;
+					if (tile_walkable_[x][y]) {
+						tile_walkable_[x][y] = false;
+						++blocked_cells;
+						if (blocked_cells >= desired_blocked) {
+							break;
+						}
+					}
+				}
+				placed = true;
+			}
+		}
+
+		if (placed) {
+			total_failure_count = 0;
+		} else {
+			++total_failure_count;
 		}
 	}
 
