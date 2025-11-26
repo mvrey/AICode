@@ -1,6 +1,8 @@
 #include "../../include/Pathfinding/cost_map.h"
 #include "../../include/Camera.h"
 
+#include <algorithm>
+#include <cmath>
 #include <cstdlib>
 
 namespace {
@@ -181,25 +183,45 @@ void CostMap::Draw() {
 	float tile_world_width = static_cast<float>(Screen::width) / static_cast<float>(width_);
 	float tile_world_height = static_cast<float>(Screen::height) / static_cast<float>(height_);
 
-	for (int x = 0; x < width_; ++x) {
-		for (int y = 0; y < height_; ++y) {
-			::MOMOS::Vec2 world_top_left = { x * tile_world_width, y * tile_world_height };
-			::MOMOS::Vec2 world_bottom_right = { (x + 1) * tile_world_width, (y + 1) * tile_world_height };
-			::MOMOS::Vec2 screen_top_left = Camera::WorldToScreen(world_top_left);
-			::MOMOS::Vec2 screen_bottom_right = Camera::WorldToScreen(world_bottom_right);
+	::MOMOS::Vec2 view_world_top_left = Camera::ScreenToWorld({ 0.0f, 0.0f });
+	::MOMOS::Vec2 view_world_bottom_right = Camera::ScreenToWorld({ static_cast<float>(Screen::width), static_cast<float>(Screen::height) });
 
-			::MOMOS::SpriteTransform sprite_transform{};
-			sprite_transform.x = screen_top_left.x;
-			sprite_transform.y = screen_top_left.y;
-			sprite_transform.scale_x = screen_bottom_right.x - screen_top_left.x;
-			sprite_transform.scale_y = screen_bottom_right.y - screen_top_left.y;
+	const float view_min_x = std::min(view_world_top_left.x, view_world_bottom_right.x);
+	const float view_max_x = std::max(view_world_top_left.x, view_world_bottom_right.x);
+	const float view_min_y = std::min(view_world_top_left.y, view_world_bottom_right.y);
+	const float view_max_y = std::max(view_world_top_left.y, view_world_bottom_right.y);
 
-			bool walkable = true;
-			if (x < static_cast<int>(tile_walkable_.size()) && y < static_cast<int>(tile_walkable_[x].size())) {
-				walkable = tile_walkable_[x][y];
+	int start_x = static_cast<int>(std::floor(view_min_x / tile_world_width));
+	int end_x = static_cast<int>(std::ceil(view_max_x / tile_world_width)) - 1;
+	int start_y = static_cast<int>(std::floor(view_min_y / tile_world_height));
+	int end_y = static_cast<int>(std::ceil(view_max_y / tile_world_height)) - 1;
+
+	start_x = std::max(0, start_x);
+	start_y = std::max(0, start_y);
+	end_x = std::min(width_ - 1, end_x);
+	end_y = std::min(height_ - 1, end_y);
+
+	if (start_x <= end_x && start_y <= end_y) {
+		for (int x = start_x; x <= end_x; ++x) {
+			for (int y = start_y; y <= end_y; ++y) {
+				::MOMOS::Vec2 world_top_left = { x * tile_world_width, y * tile_world_height };
+				::MOMOS::Vec2 world_bottom_right = { (x + 1) * tile_world_width, (y + 1) * tile_world_height };
+				::MOMOS::Vec2 screen_top_left = Camera::WorldToScreen(world_top_left);
+				::MOMOS::Vec2 screen_bottom_right = Camera::WorldToScreen(world_bottom_right);
+
+				::MOMOS::SpriteTransform sprite_transform{};
+				sprite_transform.x = screen_top_left.x;
+				sprite_transform.y = screen_top_left.y;
+				sprite_transform.scale_x = screen_bottom_right.x - screen_top_left.x;
+				sprite_transform.scale_y = screen_bottom_right.y - screen_top_left.y;
+
+				bool walkable = true;
+				if (x < static_cast<int>(tile_walkable_.size()) && y < static_cast<int>(tile_walkable_[x].size())) {
+					walkable = tile_walkable_[x][y];
+				}
+
+				MOMOS::DrawSprite(walkable ? tile_sprite_ : blocked_tile_sprite_, sprite_transform);
 			}
-
-			MOMOS::DrawSprite(walkable ? tile_sprite_ : blocked_tile_sprite_, sprite_transform);
 		}
 	}
 
