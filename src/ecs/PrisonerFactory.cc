@@ -28,7 +28,8 @@ ECS::Entity SpawnPrisoner(short working_shift) {
 	sprite.height = sprite.sprite ? static_cast<float>(MOMOS::SpriteHeight(sprite.sprite)) : 0.0f;
 
 	auto& movement = registry.AddComponent<ECS::MovementComponent>(entity);
-	float base_speed = 0.1f * GameStatus::get()->simulation_speed_;
+	constexpr float kBasePrisonerSpeed = 0.05f;
+	float base_speed = kBasePrisonerSpeed * GameStatus::get()->simulation_speed_;
 	movement.speed = base_speed;
 	movement.last_movement_update = 0.0;
 	movement.movement_threshold = 3000.0;
