@@ -6,6 +6,7 @@
  */
 
 #include "../../include/Agents/Agent.h"
+#include "../../include/Camera.h"
 #include "../../include/Agents/Pathfinder.h"
 
 std::vector<Agent*> Agent::agents_ = {};
@@ -69,10 +70,20 @@ void AgentBody::stop() {
 }
 
 void Agent::render() {
-	//Draw sprite
-	::MOMOS::Vec2 drawing_pos = { getBody()->pos_.x - ::MOMOS::SpriteWidth(getImg()) / 2.0f, getBody()->pos_.y - ::MOMOS::SpriteHeight(getImg()) / 2.0f, };
-	::MOMOS::DrawSprite(getImg(), drawing_pos.x, drawing_pos.y);
-};
+	float zoom = Camera::Zoom();
+	::MOMOS::Vec2 screen_position = Camera::WorldToScreen(getBody()->pos_);
+
+	float half_width = ::MOMOS::SpriteWidth(getImg()) * 0.5f * zoom;
+	float half_height = ::MOMOS::SpriteHeight(getImg()) * 0.5f * zoom;
+
+	::MOMOS::SpriteTransform transform{};
+	transform.x = screen_position.x - half_width;
+	transform.y = screen_position.y - half_height;
+	transform.scale_x = zoom;
+	transform.scale_y = zoom;
+
+	::MOMOS::DrawSprite(getImg(), transform);
+}
 
 void AgentMind::sendMessage(Message m) {
   m.receiver->mind_->receiveMessage(m);

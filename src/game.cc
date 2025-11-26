@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <vector>
+#include <cmath>
 #include <ctime>
 #include <thread>
 #include <cstring>
@@ -7,6 +8,7 @@
 #include "../include/GameStatus.h"
 #include "../include/PrisonMap.h"
 #include "../include/config.h"
+#include "../include/Camera.h"
 #include "../include/Pathfinding/astar.h"
 #include "../include/UI/SimulationSpeedControls.h"
 #include "../include/UI/FpsCounter.h"
@@ -27,15 +29,99 @@ SimulationSpeedControls g_speed_controls;
 FpsCounter g_fps_counter;
 VSyncToggle g_vsync_toggle;
 
+namespace {
+
+constexpr float kCameraPanSpeed = 0.5f;
+constexpr float kEdgePanPadding = 20.0f;
+constexpr float kZoomStep = 0.25f;
+
+void HandleCameraZoom() {
+	float wheel_delta = static_cast<float>(MOMOS::MouseWheelY());
+	if (wheel_delta == 0.0f) {
+		return;
+	}
+
+	::MOMOS::Vec2 mouse_screen_position = {
+		static_cast<float>(MOMOS::MousePositionX()),
+		static_cast<float>(MOMOS::MousePositionY())
+	};
+
+	Camera::ZoomBy(wheel_delta * kZoomStep, mouse_screen_position);
+}
+
+void HandleCameraPan(float delta_seconds) {
+	if (delta_seconds <= 0.0f || !Camera::CanPan()) {
+		return;
+	}
+
+	::MOMOS::Vec2 direction = { 0.0f, 0.0f };
+
+	if (MOMOS::IsKeyPressed('A') || MOMOS::IsSpecialKeyPressed(MOMOS::kSpecialKey_Left)) {
+		direction.x -= 1.0f;
+	}
+	if (MOMOS::IsKeyPressed('D') || MOMOS::IsSpecialKeyPressed(MOMOS::kSpecialKey_Right)) {
+		direction.x += 1.0f;
+	}
+	if (MOMOS::IsKeyPressed('W') || MOMOS::IsSpecialKeyPressed(MOMOS::kSpecialKey_Up)) {
+		direction.y -= 1.0f;
+	}
+	if (MOMOS::IsKeyPressed('S') || MOMOS::IsSpecialKeyPressed(MOMOS::kSpecialKey_Down)) {
+		direction.y += 1.0f;
+	}
+
+	float mouse_x = static_cast<float>(MOMOS::MousePositionX());
+	float mouse_y = static_cast<float>(MOMOS::MousePositionY());
+
+	if (mouse_x < kEdgePanPadding) {
+		direction.x -= 1.0f;
+	} else if (mouse_x > Screen::width - kEdgePanPadding) {
+		direction.x += 1.0f;
+	}
+
+	if (mouse_y < kEdgePanPadding) {
+		direction.y -= 1.0f;
+	} else if (mouse_y > Screen::height - kEdgePanPadding) {
+		direction.y += 1.0f;
+	}
+
+	float magnitude = std::sqrt(direction.x * direction.x + direction.y * direction.y);
+	if (magnitude <= 0.0f) {
+		return;
+	}
+
+	direction.x /= magnitude;
+	direction.y /= magnitude;
+
+	float distance = kCameraPanSpeed * delta_seconds;
+	Camera::Pan(::MOMOS::Vec2{ direction.x * distance, direction.y * distance });
+}
+
+} // namespace
+
 
 /// Process user input
 void Input() {
 	g_speed_controls.HandleInput();
+
+	static double last_input_time = 0.0;
+	double current_time = MOMOS::Time();
+	if (last_input_time == 0.0) {
+		last_input_time = current_time;
+	}
+	float delta_seconds = static_cast<float>(current_time - last_input_time);
+	if (delta_seconds < 0.0f) {
+		delta_seconds = 0.0f;
+	}
+	last_input_time = current_time;
+
 	if (MOMOS::MouseButtonDown(1)) {
 		float mx = static_cast<float>(MOMOS::MousePositionX());
 		float my = static_cast<float>(MOMOS::MousePositionY());
 		g_vsync_toggle.HandleClick(mx, my);
 	}
+
+	HandleCameraZoom();
+	HandleCameraPan(delta_seconds);
 }
 
 
@@ -154,6 +240,7 @@ int game(int argc, char** argv) {
 	srand(static_cast<unsigned int>(time(NULL)));
 
 	MOMOS::WindowInit(Screen::width, Screen::height);
+	Camera::Initialize();
 	g_vsync_toggle.Initialize(false);
 
 	//Init variables and locations for this specific map

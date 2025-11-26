@@ -1,4 +1,5 @@
 #include "../../include/Pathfinding/cost_map.h"
+#include "../../include/Camera.h"
 
 CostMap::CostMap() {
 	//handle_ = new MOMOS::SpriteHandle();
@@ -149,8 +150,13 @@ void CostMap::Print() {
 void CostMap::Draw() {
 	MOMOS::SpriteTransform trans{};
 
-	trans.scale_x = (float)Screen::width / (float)MOMOS::SpriteWidth(terrain_img_handle_);
-	trans.scale_y = (float)Screen::height / (float)MOMOS::SpriteHeight(terrain_img_handle_);
-
+	float const base_scale_x = static_cast<float>(Screen::width) / static_cast<float>(MOMOS::SpriteWidth(terrain_img_handle_));
+	float const base_scale_y = static_cast<float>(Screen::height) / static_cast<float>(MOMOS::SpriteHeight(terrain_img_handle_));
+	float const zoom = Camera::Zoom();
+	trans.scale_x = base_scale_x * zoom;
+	trans.scale_y = base_scale_y * zoom;
+	::MOMOS::Vec2 origin_screen = Camera::WorldToScreen(::MOMOS::Vec2{ 0.0f, 0.0f });
+	trans.x = origin_screen.x;
+	trans.y = origin_screen.y;
 	MOMOS::DrawSprite(terrain_img_handle_, trans);
 }

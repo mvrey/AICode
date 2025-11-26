@@ -244,6 +244,7 @@
     <ClInclude Include="include\Agents\Agent.h" />
     <ClInclude Include="include\Agents\Pathfinder.h" />
     <ClInclude Include="include\config.h" />
+    <ClInclude Include="include\Camera.h" />
     <ClInclude Include="include\GameStatus.h" />
     <ClInclude Include="include\Pathfinding\astar.h" />
     <ClInclude Include="include\Pathfinding\cost_map.h" />
@@ -263,6 +264,7 @@
     <ClCompile Include="src\Pathfinding\astar.cc" />
     <ClCompile Include="src\Pathfinding\cost_map.cc" />
     <ClCompile Include="src\Pathfinding\path.cc" />
+    <ClCompile Include="src\Camera.cc" />
     <ClCompile Include="src\PrisonMap.cc" />
     <ClCompile Include="src\ecs\Registry.cc" />
     <ClCompile Include="src\ecs\PrisonerEcs.cc" />
