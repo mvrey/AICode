@@ -87,7 +87,17 @@ void PrisonerAISystem::Update(Registry& registry, double /*delta_time*/) {
 			return;
 		}
 
-		MovementUtils::TryFinalizePath(registry, entity);
+		auto finalize_result = MovementUtils::TryFinalizePath(registry, entity);
+
+		if (finalize_result == MovementUtils::PathFinalizationResult::kFailure) {
+			state.has_wander_target = false;
+			MovementUtils::ClearMovement(registry, entity);
+			if (!ensureTarget()) {
+				return;
+			}
+			MovementUtils::RequestPathTo(registry, entity, state.wander_target);
+			return;
+		}
 
 		if (!movement.path_set) {
 			MovementUtils::RequestPathTo(registry, entity, state.wander_target);

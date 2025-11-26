@@ -17,8 +17,14 @@
 namespace PrisonerECS {
 namespace MovementUtils {
 
+enum class PathFinalizationResult {
+	kNotReady,
+	kSuccess,
+	kFailure,
+};
+
 void ClearMovement(ECS::Registry& registry, ECS::Entity entity);
-bool TryFinalizePath(ECS::Registry& registry, ECS::Entity entity);
+PathFinalizationResult TryFinalizePath(ECS::Registry& registry, ECS::Entity entity);
 bool RequestPathTo(ECS::Registry& registry, ECS::Entity entity, const ::MOMOS::Vec2& destination);
 bool BuildRoomWaypointPath(ECS::Registry& registry, ECS::Entity entity, const Room& room, PrisonMap* prison, CostMap* map);
 void SetDoorRouteActive(ECS::Registry& registry, ECS::Entity entity, bool active);

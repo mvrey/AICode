@@ -75,24 +75,48 @@ void ClearMovement(ECS::Registry& registry, ECS::Entity entity) {
 	movement.escape_route_set = false;
 }
 
-bool TryFinalizePath(ECS::Registry& registry, ECS::Entity entity) {
+PathFinalizationResult TryFinalizePath(ECS::Registry& registry, ECS::Entity entity) {
 	auto& movement = registry.GetComponent<ECS::MovementComponent>(entity);
 	if (!movement.path_command || movement.path_command->pending_ || movement.path_command->path_ == nullptr) {
-		return false;
+		return PathFinalizationResult::kNotReady;
+	}
+
+	auto* path_command = movement.path_command;
+	auto* path = path_command->path_;
+	if (path == nullptr || path->path_.empty()) {
+		delete path;
+		delete path_command;
+		movement.path_command = nullptr;
+		movement.movement_path = nullptr;
+		return PathFinalizationResult::kFailure;
+	}
+
+	const auto& points = path->path_;
+	const auto& start = path_command->start;
+	if (points.front().x != start.x || points.front().y != start.y) {
+		delete path;
+		delete path_command;
+		movement.path_command = nullptr;
+		movement.movement_path = nullptr;
+		return PathFinalizationResult::kFailure;
 	}
 
 	auto* status = GameStatus::get();
 	if (!status || !status->map) {
-		return false;
+		delete path;
+		delete path_command;
+		movement.path_command = nullptr;
+		movement.movement_path = nullptr;
+		return PathFinalizationResult::kNotReady;
 	}
 
-	PopulateDeterministicSteps(movement, status->map, movement.path_command->path_->path_);
+	PopulateDeterministicSteps(movement, status->map, points);
 	movement.path_set = true;
 	movement.movement_finished = false;
-	movement.movement_path = movement.path_command->path_;
+	movement.movement_path = path;
 	delete movement.path_command;
 	movement.path_command = nullptr;
-	return true;
+	return PathFinalizationResult::kSuccess;
 }
 
 bool RequestPathTo(ECS::Registry& registry, ECS::Entity entity, const ::MOMOS::Vec2& destination) {
