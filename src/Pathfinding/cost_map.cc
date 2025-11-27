@@ -1,5 +1,6 @@
 #include "../../include/Pathfinding/cost_map.h"
 #include "../../include/Camera.h"
+#include <MOMOS/draw.h>
 
 #include <algorithm>
 #include <cmath>
@@ -19,8 +20,8 @@ namespace {
 CostMap::CostMap() {
 	width_ = 0;
 	height_ = 0;
-	tile_sprite_ = CreatePixelSprite(255, 255, 255, 255);
-	blocked_tile_sprite_ = CreatePixelSprite(0, 0, 0, 255);
+	tile_sprite_ = CreatePixelSprite(255, 255, 255, 255); // White sprite (kept for compatibility)
+	blocked_tile_sprite_ = CreatePixelSprite(0, 0, 0, 255); // Black sprite (kept for compatibility)
 }
 
 CostMap::CostMap(const CostMap& orig) {}
@@ -215,7 +216,25 @@ void CostMap::reset() {
 			if (w < static_cast<int>(tile_walkable_.size()) && h < static_cast<int>(tile_walkable_[w].size())) {
 				walkable = tile_walkable_[w][h];
 			}
-			cell->cost_ = walkable ? 0.0f : 1.0f;
+			
+			if (walkable) {
+				cell->cost_ = 0.0f;
+			} else {
+				// Randomly assign cost from {0.5f, 0.75f, 1.0f} for unwalkable cells
+				int random_choice = rand() % 3;
+				switch (random_choice) {
+					case 0:
+						cell->cost_ = 0.5f;
+						break;
+					case 1:
+						cell->cost_ = 0.75f;
+						break;
+					case 2:
+					default:
+						cell->cost_ = 1.0f;
+						break;
+				}
+			}
 
 			cost_map_[w].push_back(cell);
 		}
@@ -280,7 +299,7 @@ void CostMap::Print() {
 
 
 void CostMap::Draw() {
-	if (width_ <= 0 || height_ <= 0 || tile_sprite_ == nullptr || blocked_tile_sprite_ == nullptr) {
+	if (width_ <= 0 || height_ <= 0) {
 		return;
 	}
 
@@ -313,18 +332,28 @@ void CostMap::Draw() {
 				::MOMOS::Vec2 screen_top_left = Camera::WorldToScreen(world_top_left);
 				::MOMOS::Vec2 screen_bottom_right = Camera::WorldToScreen(world_bottom_right);
 
-				::MOMOS::SpriteTransform sprite_transform{};
-				sprite_transform.x = screen_top_left.x;
-				sprite_transform.y = screen_top_left.y;
-				sprite_transform.scale_x = screen_bottom_right.x - screen_top_left.x;
-				sprite_transform.scale_y = screen_bottom_right.y - screen_top_left.y;
-
-				bool walkable = true;
-				if (x < static_cast<int>(tile_walkable_.size()) && y < static_cast<int>(tile_walkable_[x].size())) {
-					walkable = tile_walkable_[x][y];
+				// Get the cell and its cost to determine the color
+				Cell* cell = cost_map_[x][y];
+				float cost = 0.0f;
+				if (cell != nullptr) {
+					cost = cell->cost_;
 				}
-
-				MOMOS::DrawSprite(walkable ? tile_sprite_ : blocked_tile_sprite_, sprite_transform);
+				
+				// Calculate color based on cost: cost_ = 0.0 is white (255), cost_ = 1.0 is black (0)
+				// Formula: color = 255 * (1.0 - cost)
+				unsigned char grey_value = static_cast<unsigned char>(255.0f * (1.0f - cost));
+				
+				// Draw colored rectangle based on cost
+				float points[10] = {
+					screen_top_left.x, screen_top_left.y,
+					screen_bottom_right.x, screen_top_left.y,
+					screen_bottom_right.x, screen_bottom_right.y,
+					screen_top_left.x, screen_bottom_right.y,
+					screen_top_left.x, screen_top_left.y
+				};
+				
+				MOMOS::DrawSetFillColor(grey_value, grey_value, grey_value, 255);
+				MOMOS::DrawSolidPath(points, 5, false);
 			}
 		}
 	}
