@@ -1,4 +1,5 @@
 #include "../../include/Pathfinding/astar.h"
+#include <limits>
 
 AStar::AStar() {}
 AStar::AStar(const AStar& orig) {}
@@ -34,6 +35,14 @@ bool AStar::GeneratePath(MOMOS::Vec2 origin, MOMOS::Vec2 destination, Path *path
 
 	// The set of nodes already evaluated.
 	list_closed_.clear();
+
+	// Initialize start node values
+	if (node_start != nullptr) {
+		node_start->f = 0;
+		node_start->g = 0;
+		node_start->h = 0;
+		node_start->parent = nullptr;
+	}
 
 	//Put node_start on the OPEN list
 	list_open_.push_back(node_start);
@@ -116,10 +125,15 @@ bool AStar::GeneratePath(MOMOS::Vec2 origin, MOMOS::Vec2 destination, Path *path
 
 			node_successor = successors[i];
 
-			// G = cost from current node
-			//Diagonal adjacent cells cost an extra
-			node_successor.g = 10;
+			// Get the actual cell to access its cost
+			Cell* successor_cell = map_->getCellAt((int)node_successor.position_.x, (int)node_successor.position_.y);
+			if (successor_cell == nullptr || successor_cell->isWalkable() == false) {
+				// Skip cells with infinite cost (non-walkable)
+				continue;
+			}
 
+			// G = cost to move to this cell (using the cell's cost_)
+			node_successor.g = static_cast<int>(successor_cell->cost_ * 10.0f); // Scale cost to match integer g values
 
 			// Set the cost of node_successor to be the cost of node_current plus the cost to get to node_successor from node_current 
 			node_successor.f = node_current.f + node_successor.g;
@@ -201,6 +215,7 @@ bool AStar::GeneratePath(MOMOS::Vec2 origin, MOMOS::Vec2 destination, Path *path
 			Cell *true_successor = map_->getCellAt((int)node_successor.position_.x, (int)node_successor.position_.y);
 			true_successor->parent = node_successor.parent;
 			true_successor->f = node_successor.f;
+			true_successor->g = node_successor.g;
 			true_successor->h = node_successor.h;
 			list_open_.push_back(true_successor);
 			//Update index
