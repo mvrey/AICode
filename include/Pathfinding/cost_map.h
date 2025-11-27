@@ -17,10 +17,11 @@ typedef float Cost;
 // Use one of the next declarations
 typedef struct cell_s {
 	::MOMOS::Vec2 position_ = {0,0};
-	bool is_walkable_ = true;
 	Cost cost_ = 0.0f;
 	int f, g, h = 0;
 	cell_s *parent = nullptr;
+
+	bool isWalkable() { return cost_ < 1.0f; }
 } Cell;
 
 class CostMap

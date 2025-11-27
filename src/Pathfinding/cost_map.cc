@@ -216,7 +216,6 @@ void CostMap::reset() {
 				walkable = tile_walkable_[w][h];
 			}
 			cell->cost_ = walkable ? 0.0f : 1.0f;
-			cell->is_walkable_ = walkable;
 
 			cost_map_[w].push_back(cell);
 		}
@@ -243,7 +242,7 @@ Cell* CostMap::getCellAt(int x, int y) {
 
 
 bool CostMap::isWalkable(MOMOS::Vec2 position) {
-	return getCellAt(static_cast<int>(position.x), static_cast<int>(position.y))->is_walkable_;
+	return getCellAt(static_cast<int>(position.x), static_cast<int>(position.y))->isWalkable();
 }
 
 

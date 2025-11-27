@@ -34,7 +34,7 @@ bool SampleWalkableDestination(CostMap* map, ::MOMOS::Vec2& out) {
 		int x = rand() % width;
 		int y = rand() % height;
 		Cell* cell = map->getCellAt(x, y);
-		if (cell && cell->is_walkable_) {
+		if (cell && cell->isWalkable()) {
 			out = map->MapToScreenCoords({ static_cast<float>(x), static_cast<float>(y) });
 			return true;
 		}

@@ -235,7 +235,7 @@ void Agent::setPathTo(MOMOS::Vec2 dest) {
 	bool displaced = false;
 
 	//Check if current cell is walkable
-	while (!GameStatus::get()->map->getCellAt(current_map_pos.x, current_map_pos.y)->is_walkable_) {
+	while (!GameStatus::get()->map->getCellAt(current_map_pos.x, current_map_pos.y)->isWalkable()) {
 		//If that's the case, reposition the agent
 		if (dest.x > current_map_pos.x) current_map_pos.x++;
 		if (dest.y > current_map_pos.y) current_map_pos.y++;
@@ -347,7 +347,7 @@ bool Agent::moveFollowingPath() {
 	if (!mind_->movement_finished_ && getBody()->path_set_) {
 		::MOMOS::Vec2 cell_coords = GameStatus::get()->map->ScreenToMapCoords(deterministic_steps_[deterministic_step_num_]);
 		Cell* cell = GameStatus::get()->map->getCellAt((int)cell_coords.x, (int)cell_coords.y);
-		if (cell->is_walkable_) {
+		if (cell->isWalkable()) {
 			moveDeterministic();
 			return false;
 		} else {

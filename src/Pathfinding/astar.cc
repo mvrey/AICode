@@ -103,7 +103,7 @@ bool AStar::GeneratePath(MOMOS::Vec2 origin, MOMOS::Vec2 destination, Path *path
 					continue;
 
 				Cell* cell = map_->getCellAt(x, y);
-				if (cell == nullptr || !cell->is_walkable_)
+				if (cell == nullptr || !cell->isWalkable())
 					continue;
 
 				successors.push_back(*cell);
