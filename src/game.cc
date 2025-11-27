@@ -4,6 +4,7 @@
 #include <ctime>
 #include <thread>
 #include <cstring>
+#include <algorithm>
 
 #include "../include/GameStatus.h"
 #include "../include/PrisonMap.h"
@@ -32,6 +33,7 @@ VSyncToggle g_vsync_toggle;
 namespace {
 
 	ECS::Entity g_selected_pawn;
+	::MOMOS::Vec2 g_selected_cell = { -1.0f, -1.0f }; // Invalid cell position
 
 
 constexpr float kCameraPanSpeed = 0.5f;
@@ -99,9 +101,9 @@ void HandleCameraPan(float delta_seconds) {
 	Camera::Pan(::MOMOS::Vec2{ direction.x * distance, direction.y * distance });
 }
 
-void HandlePawnClick() {
+bool HandlePawnClick() {
 	if (!MOMOS::MouseButtonDown(1)) {
-		return;
+		return false;
 	}
 
 	::MOMOS::Vec2 mouse_screen = {
@@ -139,7 +141,58 @@ void HandlePawnClick() {
 
 	if (found) {
 		InfoPanel::Get().SetMessage(closest_name);
+		g_selected_cell = { -1.0f, -1.0f }; // Clear cell selection when pawn is clicked
+		return true;
 	}
+	
+	// Clear selection if no pawn was found
+	g_selected_pawn = ECS::Entity();
+	return false;
+}
+
+void HandleCellClick() {
+	if (!MOMOS::MouseButtonDown(1)) {
+		return;
+	}
+
+	::MOMOS::Vec2 mouse_screen = {
+		static_cast<float>(MOMOS::MousePositionX()),
+		static_cast<float>(MOMOS::MousePositionY())
+	};
+
+	CostMap* map = GameStatus::get()->map;
+	if (map == nullptr) {
+		return;
+	}
+
+	// Convert screen coordinates to world coordinates (accounting for camera)
+	::MOMOS::Vec2 world_click = Camera::ScreenToWorld(mouse_screen);
+
+	// Calculate tile world dimensions (same as in CostMap::Draw)
+	float tile_world_width = static_cast<float>(Screen::width) / static_cast<float>(map->getWidth());
+	float tile_world_height = static_cast<float>(Screen::height) / static_cast<float>(map->getHeight());
+
+	// Convert world coordinates to map coordinates
+	int map_x = static_cast<int>(world_click.x / tile_world_width);
+	int map_y = static_cast<int>(world_click.y / tile_world_height);
+
+	// Clamp to valid map bounds
+	map_x = std::max(0, std::min(map_x, map->getWidth() - 1));
+	map_y = std::max(0, std::min(map_y, map->getHeight() - 1));
+
+	// Get the cell at the clicked position
+	Cell* cell = map->getCellAt(map_x, map_y);
+	if (cell == nullptr) {
+		return;
+	}
+
+	// Store selected cell position
+	g_selected_cell = { static_cast<float>(map_x), static_cast<float>(map_y) };
+
+	// Format and display the cell cost
+	char cost_text[64];
+	snprintf(cost_text, sizeof(cost_text), "Cell Cost: %.2f", cell->cost_);
+	InfoPanel::Get().SetMessage(cost_text);
 }
 
 void DrawPawnSelection() {
@@ -175,6 +228,47 @@ void DrawPawnSelection() {
 	MOMOS::DrawLine(top_left_screen.x, bottom_right_screen.y, top_left_screen.x, top_left_screen.y);
 }
 
+void DrawCellSelection() {
+	// Check if a cell is selected (valid position)
+	if (g_selected_cell.x < 0.0f || g_selected_cell.y < 0.0f) {
+		return;
+	}
+
+	CostMap* map = GameStatus::get()->map;
+	if (map == nullptr) {
+		return;
+	}
+
+	// Calculate tile world dimensions
+	float tile_world_width = static_cast<float>(Screen::width) / static_cast<float>(map->getWidth());
+	float tile_world_height = static_cast<float>(Screen::height) / static_cast<float>(map->getHeight());
+
+	// Get cell position in world coordinates
+	int cell_x = static_cast<int>(g_selected_cell.x);
+	int cell_y = static_cast<int>(g_selected_cell.y);
+
+	// Calculate world bounds of the cell
+	::MOMOS::Vec2 world_top_left = {
+		cell_x * tile_world_width,
+		cell_y * tile_world_height
+	};
+	::MOMOS::Vec2 world_bottom_right = {
+		(cell_x + 1) * tile_world_width,
+		(cell_y + 1) * tile_world_height
+	};
+
+	// Convert to screen coordinates
+	::MOMOS::Vec2 top_left_screen = Camera::WorldToScreen(world_top_left);
+	::MOMOS::Vec2 bottom_right_screen = Camera::WorldToScreen(world_bottom_right);
+
+	// Draw green square around the cell
+	MOMOS::DrawSetStrokeColor(100, 255, 100, 255);
+	MOMOS::DrawLine(top_left_screen.x, top_left_screen.y, bottom_right_screen.x, top_left_screen.y);
+	MOMOS::DrawLine(bottom_right_screen.x, top_left_screen.y, bottom_right_screen.x, bottom_right_screen.y);
+	MOMOS::DrawLine(bottom_right_screen.x, bottom_right_screen.y, top_left_screen.x, bottom_right_screen.y);
+	MOMOS::DrawLine(top_left_screen.x, bottom_right_screen.y, top_left_screen.x, top_left_screen.y);
+}
+
 } // namespace
 
 
@@ -198,7 +292,10 @@ void Input() {
 		float my = static_cast<float>(MOMOS::MousePositionY());
 		g_vsync_toggle.HandleClick(mx, my);
 	}
-	HandlePawnClick();
+	bool pawn_clicked = HandlePawnClick();
+	if (!pawn_clicked) {
+		HandleCellClick();
+	}
 
 	HandleCameraZoom();
 	HandleCameraPan(delta_seconds);
@@ -257,6 +354,7 @@ void Draw() {
 
 	PawnECS::Systems::Get().Render(0.0);
 	DrawPawnSelection();
+	DrawCellSelection();
 	g_fps_counter.Draw();
 	g_vsync_toggle.Draw(g_fps_counter.GetTextRight(), g_fps_counter.GetTextBaselineY());
 	g_speed_controls.Draw();
