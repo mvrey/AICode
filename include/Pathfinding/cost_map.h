@@ -33,6 +33,7 @@ class CostMap
 	::MOMOS::SpriteHandle tile_sprite_;
 	::MOMOS::SpriteHandle blocked_tile_sprite_;
 	std::vector<std::vector<bool>> tile_walkable_;
+	std::vector<std::vector<float>> tile_costs_; // Store cost values to preserve them across resets
 
 public:
 	CostMap();

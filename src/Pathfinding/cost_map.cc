@@ -52,6 +52,7 @@ bool CostMap::GenerateTileMap(int cols, int rows, float blocked_ratio) {
 	width_ = safe_cols;
 	height_ = safe_rows;
 	tile_walkable_.assign(width_, std::vector<bool>(height_, true));
+	tile_costs_.assign(width_, std::vector<float>(height_, 0.0f)); // Initialize all costs to 0.0f
 
 	float clamped_ratio = blocked_ratio;
 	if (clamped_ratio < 0.0f) {
@@ -154,6 +155,20 @@ bool CostMap::GenerateTileMap(int cols, int rows, float blocked_ratio) {
 					int y = cell.second;
 					if (tile_walkable_[x][y]) {
 						tile_walkable_[x][y] = false;
+						// Assign random cost from {0.5f, 0.75f, 1.0f} for unwalkable cells
+						int random_choice = rand() % 3;
+						switch (random_choice) {
+							case 0:
+								tile_costs_[x][y] = 0.5f;
+								break;
+							case 1:
+								tile_costs_[x][y] = 0.75f;
+								break;
+							case 2:
+							default:
+								tile_costs_[x][y] = 1.0f;
+								break;
+						}
 						++blocked_cells;
 						if (blocked_cells >= desired_blocked) {
 							break;
@@ -172,11 +187,14 @@ bool CostMap::GenerateTileMap(int cols, int rows, float blocked_ratio) {
 	}
 
 	tile_walkable_[0][0] = true;
+	tile_costs_[0][0] = 0.0f;
 	if (width_ > 1) {
 		tile_walkable_[1][0] = true;
+		tile_costs_[1][0] = 0.0f;
 	}
 	if (height_ > 1) {
 		tile_walkable_[0][1] = true;
+		tile_costs_[0][1] = 0.0f;
 	}
 
 	reset();
@@ -213,28 +231,18 @@ void CostMap::reset() {
 			cell->position_.y = static_cast<float>(h);
 
 			bool walkable = true;
+			float cost = 0.0f;
 			if (w < static_cast<int>(tile_walkable_.size()) && h < static_cast<int>(tile_walkable_[w].size())) {
 				walkable = tile_walkable_[w][h];
-			}
-			
-			if (walkable) {
-				cell->cost_ = 0.0f;
-			} else {
-				// Randomly assign cost from {0.5f, 0.75f, 1.0f} for unwalkable cells
-				int random_choice = rand() % 3;
-				switch (random_choice) {
-					case 0:
-						cell->cost_ = 0.5f;
-						break;
-					case 1:
-						cell->cost_ = 0.75f;
-						break;
-					case 2:
-					default:
-						cell->cost_ = 1.0f;
-						break;
+				// Use stored cost if available, otherwise default to 0.0f for walkable, 1.0f for unwalkable
+				if (w < static_cast<int>(tile_costs_.size()) && h < static_cast<int>(tile_costs_[w].size())) {
+					cost = tile_costs_[w][h];
+				} else if (!walkable) {
+					cost = 1.0f; // Default cost for unwalkable cells if not stored
 				}
 			}
+			
+			cell->cost_ = cost;
 
 			cost_map_[w].push_back(cell);
 		}
