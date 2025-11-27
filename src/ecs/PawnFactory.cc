@@ -4,6 +4,7 @@
 #include "../../include/ecs/components/PawnComponents.h"
 #include "../../include/GameStatus.h"
 #include "../../include/config.h"
+#include "../../include/Pathfinding/cost_map.h"
 
 #include <MOMOS/sprite.h>
 
@@ -49,7 +50,28 @@ ECS::Entity SpawnPawn() {
 	auto& registry = PawnECS::GetRegistry();
 
 	auto& transform = registry.AddComponent<ECS::TransformComponent>(entity);
-	transform.position = { static_cast<float>(Screen::width) / 2.0f, static_cast<float>(Screen::height) / 2.0f };
+	
+	// Find a random walkable position
+	::MOMOS::Vec2 spawn_position = { static_cast<float>(Screen::width) / 2.0f, static_cast<float>(Screen::height) / 2.0f };
+	auto* status = GameStatus::get();
+	if (status && status->map) {
+		CostMap* map = status->map;
+		int width = map->getWidth();
+		int height = map->getHeight();
+		
+		// Try to find a walkable cell
+		for (int attempts = 0; attempts < 1024; ++attempts) {
+			int x = rand() % width;
+			int y = rand() % height;
+			Cell* cell = map->getCellAt(x, y);
+			if (cell && cell->isWalkable()) {
+				spawn_position = map->MapToScreenCoords({ static_cast<float>(x), static_cast<float>(y) });
+				break;
+			}
+		}
+	}
+	
+	transform.position = spawn_position;
 	transform.direction = { -1.0f, 0.0f };
 	transform.rotation = 0.0f;
 

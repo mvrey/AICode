@@ -41,7 +41,7 @@ CostMap::~CostMap() {
 bool CostMap::Load(const char *cost_img, const char *terrain_img) {
 	static constexpr int kDefaultCols = 80;
 	static constexpr int kDefaultRows = 45;
-	static constexpr float kDefaultBlockedRatio = 0.6f;
+	static constexpr float kDefaultBlockedRatio = 0.3f;
 
 	return GenerateTileMap(kDefaultCols, kDefaultRows, kDefaultBlockedRatio);
 }
