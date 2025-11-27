@@ -10,6 +10,7 @@
 #include "../../../include/GameStatus.h"
 #include "../../../include/Camera.h"
 #include "../../../include/Pathfinding/cost_map.h"
+#include "../../../include/Pathfinding/path.h"
 #include "../../../include/config.h"
 
 #include <MOMOS/math.h>
@@ -30,24 +31,26 @@ void PawnMovementSystem::Update(Registry& registry, double delta_time) {
 
 		auto& transform = registry.GetComponent<TransformComponent>(entity);
 
-		// Get the cell at the pawn's current position to determine speed multiplier
+		// Get the cost of the current path step (if following a path)
 		float speed_multiplier = 1.0f;
-		// Calculate tile world dimensions
-		float tile_world_width = static_cast<float>(Screen::width) / static_cast<float>(map->getWidth());
-		float tile_world_height = static_cast<float>(Screen::height) / static_cast<float>(map->getHeight());
+		if (movement.path_set && movement.movement_path != nullptr && 
+		    !movement.movement_path->path_.empty() && 
+		    movement.deterministic_step_index < movement.movement_path->path_.size()) {
+			
+			// Get the current path step in map coordinates
+			::MOMOS::Vec2 path_step_map = movement.movement_path->path_[movement.deterministic_step_index];
+			
+			// Get the cell at the current path step
+			Cell* cell = map->getCellAt(static_cast<int>(path_step_map.x), static_cast<int>(path_step_map.y));
+			if (cell != nullptr) {
+				// Use the cell's cost to modify speed: cost_ = 0.0f means full speed, higher cost = slower
+				// Formula: speed_multiplier = 1.0f - cost_
+				speed_multiplier = 1.0f - cell->cost_;
+			}
+		}
 
-		// Convert world coordinates to map coordinates
-		int map_x = static_cast<int>(transform.position.x / tile_world_width);
-		int map_y = static_cast<int>(transform.position.y / tile_world_height);
-
-		// Clamp to valid map bounds
-		map_x = std::max(0, std::min(map_x, map->getWidth() - 1));
-		map_y = std::max(0, std::min(map_y, map->getHeight() - 1));
-
-		// Get the cell and its cost
-		Cell* cell = map->getCellAt(map_x, map_y);
-		// Apply speed multiplier based on cell cost
-		float effective_speed = movement.speed * (1.0f - cell->cost_);
+		// Apply speed multiplier based on path step cost
+		float effective_speed = movement.speed * speed_multiplier;
 
 		transform.position.x += transform.direction.x * effective_speed * static_cast<float>(delta_time);
 		transform.position.y += transform.direction.y * effective_speed * static_cast<float>(delta_time);
