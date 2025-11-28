@@ -23,6 +23,9 @@
 		Aspecto
 		Rasgos de personalidad
 		Necesidades
+			Hunger
+			Energy
+			Joy
 		Inventario
 		Ropa
 		Skills
