@@ -39,6 +39,9 @@ class CostMap
 	
 	SpritesheetLoader spritesheet_loader_;  ///< Loader for grass sprites
 	std::vector<MOMOS::SpriteHandle> grass_sprites_;  ///< Available grass sprites
+	std::vector<MOMOS::SpriteHandle> medium_stone_sprites_;  ///< MediumStone1, MediumStone2 (for cost_ = 1.0)
+	std::vector<MOMOS::SpriteHandle> small_stone_sprites_;  ///< SmallStone1-5 (for cost_ = 0.75)
+	std::vector<MOMOS::SpriteHandle> dirt_sprites_;  ///< Dirt1, Dirt2 (for cost_ = 0.5)
 
 public:
 	CostMap();

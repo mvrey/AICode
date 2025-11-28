@@ -25,7 +25,7 @@ CostMap::CostMap() {
 	tile_sprite_ = CreatePixelSprite(255, 255, 255, 255); // White sprite (kept for compatibility)
 	blocked_tile_sprite_ = CreatePixelSprite(0, 0, 0, 255); // Black sprite (kept for compatibility)
 	
-	// Load spritesheet and collect grass sprites
+	// Load spritesheet and collect sprites
 	if (spritesheet_loader_.Load("data/textures.json", "data/textures.png")) {
 		// Collect all grass sprites (Grass1.png through Grass9.png)
 		for (int i = 1; i <= 9; ++i) {
@@ -33,6 +33,33 @@ CostMap::CostMap() {
 			MOMOS::SpriteHandle grass_sprite = spritesheet_loader_.GetSprite(grass_name);
 			if (grass_sprite) {
 				grass_sprites_.push_back(grass_sprite);
+			}
+		}
+		
+		// Collect medium stone sprites (for cost_ = 1.0)
+		for (int i = 1; i <= 2; ++i) {
+			std::string stone_name = "MediumStone" + std::to_string(i) + ".png";
+			MOMOS::SpriteHandle stone_sprite = spritesheet_loader_.GetSprite(stone_name);
+			if (stone_sprite) {
+				medium_stone_sprites_.push_back(stone_sprite);
+			}
+		}
+		
+		// Collect small stone sprites (for cost_ = 0.75)
+		for (int i = 1; i <= 5; ++i) {
+			std::string stone_name = "SmallStone" + std::to_string(i) + ".png";
+			MOMOS::SpriteHandle stone_sprite = spritesheet_loader_.GetSprite(stone_name);
+			if (stone_sprite) {
+				small_stone_sprites_.push_back(stone_sprite);
+			}
+		}
+		
+		// Collect dirt sprites (for cost_ = 0.5)
+		for (int i = 1; i <= 2; ++i) {
+			std::string dirt_name = "Dirt" + std::to_string(i) + ".png";
+			MOMOS::SpriteHandle dirt_sprite = spritesheet_loader_.GetSprite(dirt_name);
+			if (dirt_sprite) {
+				dirt_sprites_.push_back(dirt_sprite);
 			}
 		}
 	}
@@ -57,6 +84,30 @@ CostMap::~CostMap() {
 		}
 	}
 	grass_sprites_.clear();
+	
+	// Release medium stone sprites
+	for (MOMOS::SpriteHandle sprite : medium_stone_sprites_) {
+		if (sprite) {
+			MOMOS::SpriteRelease(sprite);
+		}
+	}
+	medium_stone_sprites_.clear();
+	
+	// Release small stone sprites
+	for (MOMOS::SpriteHandle sprite : small_stone_sprites_) {
+		if (sprite) {
+			MOMOS::SpriteRelease(sprite);
+		}
+	}
+	small_stone_sprites_.clear();
+	
+	// Release dirt sprites
+	for (MOMOS::SpriteHandle sprite : dirt_sprites_) {
+		if (sprite) {
+			MOMOS::SpriteRelease(sprite);
+		}
+	}
+	dirt_sprites_.clear();
 	
 	// Clear the loader's sprite map to prevent it from trying to release sprites we've already released
 	spritesheet_loader_.ClearSpriteMap();
@@ -425,6 +476,55 @@ void CostMap::Draw() {
 							MOMOS::DrawSprite(grass_sprite, sprite_transform);
 						}
 					}
+				}
+				
+				// Draw sprites based on cost value
+				// Use deterministic hash based on cell position for consistent randomness
+				MOMOS::SpriteHandle cost_sprite = nullptr;
+				const float epsilon = 0.01f; // Small epsilon for float comparison
+				
+				// cost_ = 1.0: MediumStone1 or MediumStone2
+				if (std::abs(cost - 1.0f) < epsilon && !medium_stone_sprites_.empty()) {
+					unsigned int sprite_hash = static_cast<unsigned int>(x * 19349669u) ^ static_cast<unsigned int>(y * 83492791u);
+					unsigned int sprite_index = sprite_hash % static_cast<unsigned int>(medium_stone_sprites_.size());
+					cost_sprite = medium_stone_sprites_[sprite_index];
+				}
+				// cost_ = 0.75: SmallStone1-5
+				else if (std::abs(cost - 0.75f) < epsilon && !small_stone_sprites_.empty()) {
+					unsigned int sprite_hash = static_cast<unsigned int>(x * 19349669u) ^ static_cast<unsigned int>(y * 83492791u);
+					unsigned int sprite_index = sprite_hash % static_cast<unsigned int>(small_stone_sprites_.size());
+					cost_sprite = small_stone_sprites_[sprite_index];
+				}
+				// cost_ = 0.5: Dirt1 or Dirt2
+				else if (std::abs(cost - 0.5f) < epsilon && !dirt_sprites_.empty()) {
+					unsigned int sprite_hash = static_cast<unsigned int>(x * 19349669u) ^ static_cast<unsigned int>(y * 83492791u);
+					unsigned int sprite_index = sprite_hash % static_cast<unsigned int>(dirt_sprites_.size());
+					cost_sprite = dirt_sprites_[sprite_index];
+				}
+				
+				// Draw the cost sprite if one was selected
+				if (cost_sprite) {
+					// Calculate center of the cell in screen coordinates
+					::MOMOS::Vec2 world_center = {
+						(x + 0.5f) * tile_world_width,
+						(y + 0.5f) * tile_world_height
+					};
+					::MOMOS::Vec2 screen_center = Camera::WorldToScreen(world_center);
+					
+					// Get sprite dimensions and apply camera zoom (same as grass and pawns)
+					float zoom = Camera::Zoom();
+					int sprite_width = MOMOS::SpriteWidth(cost_sprite);
+					int sprite_height = MOMOS::SpriteHeight(cost_sprite);
+					float half_width = sprite_width * 0.5f * zoom;
+					float half_height = sprite_height * 0.5f * zoom;
+					
+					// Draw sprite with zoom scaling
+					::MOMOS::SpriteTransform sprite_transform{};
+					sprite_transform.x = screen_center.x - half_width;
+					sprite_transform.y = screen_center.y - half_height;
+					sprite_transform.scale_x = zoom;
+					sprite_transform.scale_y = zoom;
+					MOMOS::DrawSprite(cost_sprite, sprite_transform);
 				}
 			}
 		}
