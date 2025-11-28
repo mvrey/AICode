@@ -426,6 +426,7 @@ void CostMap::Draw() {
 				// Calculate color based on cost: cost_ = 0.0 is white (255), cost_ = 1.0 is black (0)
 				// Formula: color = 255 * (1.0 - cost)
 				unsigned char grey_value = static_cast<unsigned char>(255.0f * (1.0f - cost));
+				grey_value = 255.0f;
 				
 				// Draw colored rectangle based on cost
 				float points[10] = {
@@ -436,8 +437,8 @@ void CostMap::Draw() {
 					screen_top_left.x, screen_top_left.y
 				};
 				
-				MOMOS::DrawSetFillColor(grey_value, grey_value, grey_value, 255);
-				MOMOS::DrawSolidPath(points, 5, false);
+				//MOMOS::DrawSetFillColor(grey_value, grey_value, grey_value, 255);
+				//MOMOS::DrawSolidPath(points, 5, false);
 				
 				// Draw grass sprite on 70% of cells with cost_ == 0
 				if (cost == 0.0f && !grass_sprites_.empty()) {
@@ -538,13 +539,13 @@ void CostMap::Draw() {
 		float world_x = col * tile_world_width;
 		::MOMOS::Vec2 top = Camera::WorldToScreen({ world_x, 0.0f });
 		::MOMOS::Vec2 bottom = Camera::WorldToScreen({ world_x, total_world_height });
-		MOMOS::DrawLine(top.x, top.y, bottom.x, bottom.y);
+		//MOMOS::DrawLine(top.x, top.y, bottom.x, bottom.y);
 	}
 
 	for (int row = 0; row <= height_; ++row) {
 		float world_y = row * tile_world_height;
 		::MOMOS::Vec2 left = Camera::WorldToScreen({ 0.0f, world_y });
 		::MOMOS::Vec2 right = Camera::WorldToScreen({ total_world_width, world_y });
-		MOMOS::DrawLine(left.x, left.y, right.x, right.y);
+		//MOMOS::DrawLine(left.x, left.y, right.x, right.y);
 	}
 }
