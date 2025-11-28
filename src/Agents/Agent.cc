@@ -346,7 +346,7 @@ bool Agent::moveFollowingPath() {
 	//check if the next step is a currently walkable point
 	if (!mind_->movement_finished_ && getBody()->path_set_) {
 		::MOMOS::Vec2 cell_coords = GameStatus::get()->map->ScreenToMapCoords(deterministic_steps_[deterministic_step_num_]);
-		Cell* cell = GameStatus::get()->map->getCellAt((int)cell_coords.x, (int)cell_coords.y);
+		MapCell* cell = GameStatus::get()->map->getCellAt((int)cell_coords.x, (int)cell_coords.y);
 		if (cell->isWalkable()) {
 			moveDeterministic();
 			return false;

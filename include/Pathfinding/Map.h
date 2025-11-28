@@ -2,30 +2,15 @@
 #define __MAP__
 
 #include "../../include/config.h"
-#include "../../include/MapResource.h"
+#include "MapCell.h"
 #include <vector>
-
-typedef float Cost;
-
-// Use one of the next declarations
-typedef struct cell_s {
-	::MOMOS::Vec2 position_ = {0,0};
-	Cost cost_ = 0.0f;
-	int f, g, h = 0;
-	cell_s *parent = nullptr;
-
-	/// List of resources present on this cell
-	std::vector<MapResource> resources;
-
-	bool isWalkable() const { return cost_ < 1.0f; }
-} Cell;
 
 /// Map class holds the core map data and provides access methods.
 /// It manages the cell grid and provides coordinate transformations.
 class Map {
 	int width_;
 	int height_;
-	std::vector<std::vector<Cell*>> cost_map_;
+	std::vector<std::vector<MapCell*>> cost_map_;
 	
 	// Tile data (set by MapGenerator, used by reset())
 	std::vector<std::vector<bool>> tile_walkable_;
@@ -47,8 +32,8 @@ public:
 	// Getters
 	int getHeight() const;
 	int getWidth() const;
-	Cell* getCellAt(int x, int y);
-	const Cell* getCellAt(int x, int y) const;
+	MapCell* getCellAt(int x, int y);
+	const MapCell* getCellAt(int x, int y) const;
 	
 	/// Returns if the given coordinate is walkable in Map coordinates
 	bool isWalkable(::MOMOS::Vec2 position) const;

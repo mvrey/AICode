@@ -10,12 +10,12 @@ bool AStar::PreProcess(CostMap *map) {
 
 	// Initialize static memory to cache pointers to cells
 	// Dimensions of the matrix are map_width X map_height
-	list_open_indexes_ = (Cell***)malloc(sizeof(Cell***) * map_->getWidth());
-	list_closed_indexes_ = (Cell***)malloc(sizeof(Cell***) * map_->getWidth());
+	list_open_indexes_ = (MapCell***)malloc(sizeof(MapCell***) * map_->getWidth());
+	list_closed_indexes_ = (MapCell***)malloc(sizeof(MapCell***) * map_->getWidth());
 
 	for (int i = 0; i < map_->getWidth(); i++) {
-		list_open_indexes_[i] = (Cell**)malloc(sizeof(Cell**) * map->getHeight());
-		list_closed_indexes_[i] = (Cell**)malloc(sizeof(Cell**) * map->getHeight());
+		list_open_indexes_[i] = (MapCell**)malloc(sizeof(MapCell**) * map->getHeight());
+		list_closed_indexes_[i] = (MapCell**)malloc(sizeof(MapCell**) * map->getHeight());
 		for (int j = 0; j < map->getHeight(); j++) {
 			list_open_indexes_[i][j] = nullptr;
 			list_closed_indexes_[i][j] = nullptr;
@@ -27,8 +27,8 @@ bool AStar::PreProcess(CostMap *map) {
 
 bool AStar::GeneratePath(MOMOS::Vec2 origin, MOMOS::Vec2 destination, Path *path) {
 
-	Cell* node_start = map_->getCellAt((int)origin.x, (int)origin.y);
-	Cell* node_goal = map_->getCellAt((int)destination.x, (int)destination.y);
+	MapCell* node_start = map_->getCellAt((int)origin.x, (int)origin.y);
+	MapCell* node_goal = map_->getCellAt((int)destination.x, (int)destination.y);
 
 	// The set of currently discovered nodes that are not evaluated yet.
 	list_open_.clear();
@@ -57,10 +57,10 @@ bool AStar::GeneratePath(MOMOS::Vec2 origin, MOMOS::Vec2 destination, Path *path
 	}
 
 	//OTHER LOCAL VARS
-	Cell node_current;
-	std::vector<Cell> successors;
-	Cell node_successor;
-	Cell* existing_cell;
+	MapCell node_current;
+	std::vector<MapCell> successors;
+	MapCell node_successor;
+	MapCell* existing_cell;
 
 
 
@@ -111,7 +111,7 @@ bool AStar::GeneratePath(MOMOS::Vec2 origin, MOMOS::Vec2 destination, Path *path
 				if (x < 0 || y < 0 || x >= map_->getWidth() || y >= map_->getHeight())
 					continue;
 
-				Cell* cell = map_->getCellAt(x, y);
+				MapCell* cell = map_->getCellAt(x, y);
 				if (cell == nullptr || !cell->isWalkable())
 					continue;
 
@@ -123,11 +123,11 @@ bool AStar::GeneratePath(MOMOS::Vec2 origin, MOMOS::Vec2 destination, Path *path
 		// For each node_successor of node_current
 		for (unsigned int i = 0; i < successors.size(); i++) {
 
-			node_successor = successors[i];
+		node_successor = successors[i];
 
-			// Get the actual cell to access its cost
-			Cell* successor_cell = map_->getCellAt((int)node_successor.position_.x, (int)node_successor.position_.y);
-			if (successor_cell == nullptr || successor_cell->isWalkable() == false) {
+		// Get the actual cell to access its cost
+		MapCell* successor_cell = map_->getCellAt((int)node_successor.position_.x, (int)node_successor.position_.y);
+		if (successor_cell == nullptr || successor_cell->isWalkable() == false) {
 				// Skip cells with infinite cost (non-walkable)
 				continue;
 			}
@@ -211,8 +211,8 @@ bool AStar::GeneratePath(MOMOS::Vec2 origin, MOMOS::Vec2 destination, Path *path
 			node_successor.h = abs((int)node_goal->position_.x - x) + abs((int)node_goal->position_.y - y);
 
 
-			// Add node_successor to the OPEN list
-			Cell *true_successor = map_->getCellAt((int)node_successor.position_.x, (int)node_successor.position_.y);
+		// Add node_successor to the OPEN list
+		MapCell *true_successor = map_->getCellAt((int)node_successor.position_.x, (int)node_successor.position_.y);
 			true_successor->parent = node_successor.parent;
 			true_successor->f = node_successor.f;
 			true_successor->g = node_successor.g;
@@ -245,14 +245,14 @@ bool AStar::GeneratePath(MOMOS::Vec2 origin, MOMOS::Vec2 destination, Path *path
 	path->current_point_ = 0;
 
 	//Find destination node
-	Cell* destination_node = nullptr;
+	MapCell* destination_node = nullptr;
 	bool found = false;
 	if (list_closed_indexes_[(int)destination.x][(int)destination.y] != nullptr) {		
 		destination_node = list_closed_indexes_[(int)destination.x][(int)destination.y];
 	}
 
 	//Go back from destination_node through its parents to find the origin_node
-	Cell* origin_node = destination_node;
+	MapCell* origin_node = destination_node;
 	path->Add(destination);
 	while (origin_node->parent != nullptr) {
 		origin_node = origin_node->parent;

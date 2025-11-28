@@ -58,7 +58,7 @@ void PawnPathFollowSystem::Update(Registry& registry, double /*delta_time*/) {
 
 		::MOMOS::Vec2 target = movement.deterministic_steps[movement.deterministic_step_index];
 		::MOMOS::Vec2 cell_coords = map->ScreenToMapCoords(target);
-		Cell* cell = map->getCellAt(static_cast<int>(cell_coords.x), static_cast<int>(cell_coords.y));
+		MapCell* cell = map->getCellAt(static_cast<int>(cell_coords.x), static_cast<int>(cell_coords.y));
 		if (!cell || !cell->isWalkable()) {
 			ClearMovement(movement, transform);
 			return;

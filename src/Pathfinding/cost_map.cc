@@ -35,7 +35,7 @@ int CostMap::getWidth() {
 	return map_.getWidth();
 }
 
-Cell* CostMap::getCellAt(int x, int y) {
+MapCell* CostMap::getCellAt(int x, int y) {
 	return map_.getCellAt(x, y);
 }
 

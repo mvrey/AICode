@@ -4,9 +4,7 @@
 #include "Map.h"
 #include "MapGenerator.h"
 #include "MapRenderer.h"
-
-// Forward declaration - Cell is defined in Map.h
-typedef struct cell_s Cell;
+#include "MapCell.h"
 
 /// CostMap is a facade that combines Map, MapGenerator, and MapRenderer.
 /// It maintains backward compatibility with existing code.
@@ -33,7 +31,7 @@ public:
 	// Todo: Add setters / getters
 	int getHeight();
 	int getWidth();
-	Cell* getCellAt(int x, int y);
+	MapCell* getCellAt(int x, int y);
 
 	/// Returns if the given coordinate is walkable in CostMap coordinates
 	bool isWalkable(::MOMOS::Vec2 position);

@@ -25,7 +25,7 @@ namespace {
 	::MOMOS::Vec2 current = coords;
 
 	while (step_count < max_steps) {
-		Cell* cell = map->getCellAt(static_cast<int>(current.x), static_cast<int>(current.y));
+		MapCell* cell = map->getCellAt(static_cast<int>(current.x), static_cast<int>(current.y));
 		if (cell == nullptr || cell->isWalkable()) {
 			coords = current;
 			return coords;

@@ -168,7 +168,7 @@ void MapRenderer::Draw(const Map& map) {
 				::MOMOS::Vec2 screen_bottom_right = Camera::WorldToScreen(world_bottom_right);
 
 				// Get the cell and its cost
-				const Cell* cell = map.getCellAt(x, y);
+				const MapCell* cell = map.getCellAt(x, y);
 				float cost = 0.0f;
 				if (cell != nullptr) {
 					cost = cell->cost_;
@@ -268,7 +268,7 @@ void MapRenderer::Draw(const Map& map) {
 		for (int x = start_x; x <= end_x; ++x) {
 			for (int y = start_y; y <= end_y; ++y) {
 				// Get the cell and its cost
-				const Cell* cell = map.getCellAt(x, y);
+				const MapCell* cell = map.getCellAt(x, y);
 				float cost = 0.0f;
 				if (cell != nullptr) {
 					cost = cell->cost_;

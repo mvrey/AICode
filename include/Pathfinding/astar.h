@@ -13,14 +13,15 @@
 #include "../../include/config.h"
 #include "path.h"
 #include "cost_map.h"
+#include "MapCell.h"
 
 class AStar
 {
-	std::vector<Cell*> list_open_;
-	Cell*** list_open_indexes_;
+	std::vector<MapCell*> list_open_;
+	MapCell*** list_open_indexes_;
 	
-	std::vector<Cell*> list_closed_;
-	Cell*** list_closed_indexes_;
+	std::vector<MapCell*> list_closed_;
+	MapCell*** list_closed_indexes_;
 
 	CostMap *map_;
 

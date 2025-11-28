@@ -253,6 +253,7 @@
     <ClInclude Include="include\Pathfinding\astar.h" />
     <ClInclude Include="include\Pathfinding\cost_map.h" />
     <ClInclude Include="include\Pathfinding\Map.h" />
+    <ClInclude Include="include\Pathfinding\MapCell.h" />
     <ClInclude Include="include\Pathfinding\MapGenerator.h" />
     <ClInclude Include="include\Pathfinding\MapRenderer.h" />
     <ClInclude Include="include\Pathfinding\path.h" />
@@ -275,6 +276,7 @@
     <ClCompile Include="src\Pathfinding\astar.cc" />
     <ClCompile Include="src\Pathfinding\cost_map.cc" />
     <ClCompile Include="src\Pathfinding\Map.cc" />
+    <ClCompile Include="src\Pathfinding\MapCell.cc" />
     <ClCompile Include="src\Pathfinding\MapGenerator.cc" />
     <ClCompile Include="src\Pathfinding\MapRenderer.cc" />
     <ClCompile Include="src\Pathfinding\path.cc" />

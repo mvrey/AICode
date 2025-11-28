@@ -41,7 +41,7 @@ void PawnMovementSystem::Update(Registry& registry, double delta_time) {
 			::MOMOS::Vec2 path_step_map = movement.movement_path->path_[movement.deterministic_step_index];
 			
 			// Get the cell at the current path step
-			Cell* cell = map->getCellAt(static_cast<int>(path_step_map.x), static_cast<int>(path_step_map.y));
+			MapCell* cell = map->getCellAt(static_cast<int>(path_step_map.x), static_cast<int>(path_step_map.y));
 			if (cell != nullptr) {
 				// Use the cell's cost to modify speed: cost_ = 0.0f means full speed, higher cost = slower
 				// Formula: speed_multiplier = 1.0f - cost_

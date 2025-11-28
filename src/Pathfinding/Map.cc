@@ -28,7 +28,7 @@ void Map::Initialize(int width, int height,
 void Map::reset() {
 	// Delete existing cells
 	for (auto& column : cost_map_) {
-		for (Cell* cell : column) {
+		for (MapCell* cell : column) {
 			delete cell;
 		}
 		column.clear();
@@ -44,7 +44,7 @@ void Map::reset() {
 		cost_map_.emplace_back();
 
 		for (int h = 0; h < height_; h++) {
-			Cell* cell = new Cell();
+			MapCell* cell = new MapCell();
 			cell->position_.x = static_cast<float>(w);
 			cell->position_.y = static_cast<float>(h);
 			cell->resources.clear(); // Initialize empty resources list
@@ -76,14 +76,14 @@ int Map::getWidth() const {
 	return width_;
 }
 
-Cell* Map::getCellAt(int x, int y) {
+MapCell* Map::getCellAt(int x, int y) {
 	if (x >= 0 && y >= 0 && x < width_ && y < height_)
 		return cost_map_[x][y];
 
 	return nullptr;
 }
 
-const Cell* Map::getCellAt(int x, int y) const {
+const MapCell* Map::getCellAt(int x, int y) const {
 	if (x >= 0 && y >= 0 && x < width_ && y < height_)
 		return cost_map_[x][y];
 
@@ -91,7 +91,7 @@ const Cell* Map::getCellAt(int x, int y) const {
 }
 
 bool Map::isWalkable(MOMOS::Vec2 position) const {
-	const Cell* cell = getCellAt(static_cast<int>(position.x), static_cast<int>(position.y));
+		const MapCell* cell = getCellAt(static_cast<int>(position.x), static_cast<int>(position.y));
 	return cell ? cell->isWalkable() : false;
 }
 
@@ -149,7 +149,7 @@ bool Map::HandleCellClick(const ::MOMOS::Vec2& screen_pos) {
 	map_y = std::max(0, std::min(map_y, height_ - 1));
 
 	// Get the cell at the clicked position
-	const Cell* cell = getCellAt(map_x, map_y);
+		const MapCell* cell = getCellAt(map_x, map_y);
 	if (cell == nullptr) {
 		return false;
 	}
