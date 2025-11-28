@@ -58,6 +58,12 @@
     <Filter Include="Tests">
       <UniqueIdentifier>{f7f9d769-bb36-4ef7-9297-072cc1e18cfe}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Map">
+      <UniqueIdentifier>{8c72dee4-5bfc-4c90-bfb6-5aa90baade9a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Map">
+      <UniqueIdentifier>{ee1e6f65-6a64-4bd0-9098-ca0ebdcd53c4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\config.h">
@@ -414,26 +420,26 @@
     <ClInclude Include="tests\TestFramework.h">
       <Filter>Tests</Filter>
     </ClInclude>
-    <ClInclude Include="include\Map\Map.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Map\MapCell.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Map\MapGenerator.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Map\MapRenderer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Map\MapResourceType.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Map\MapResource.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="include\Map\ResourceTypeManager.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Map\Map.h">
+      <Filter>Header Files\Map</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Map\MapCell.h">
+      <Filter>Header Files\Map</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Map\MapGenerator.h">
+      <Filter>Header Files\Map</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Map\MapRenderer.h">
+      <Filter>Header Files\Map</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Map\MapResource.h">
+      <Filter>Header Files\Map</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Map\MapResourceType.h">
+      <Filter>Header Files\Map</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -530,26 +536,26 @@
     <ClCompile Include="src\game.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Map\Map.cc">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Map\MapCell.cc">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Map\MapGenerator.cc">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Map\MapRenderer.cc">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Map\MapResourceType.cc">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Map\MapResource.cc">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\Map\ResourceTypeManager.cc">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Map\Map.cc">
+      <Filter>Source Files\Map</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Map\MapCell.cc">
+      <Filter>Source Files\Map</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Map\MapGenerator.cc">
+      <Filter>Source Files\Map</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Map\MapRenderer.cc">
+      <Filter>Source Files\Map</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Map\MapResource.cc">
+      <Filter>Source Files\Map</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Map\MapResourceType.cc">
+      <Filter>Source Files\Map</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
