@@ -2,6 +2,7 @@
 #define __MAP__
 
 #include "../../include/config.h"
+#include "../../include/MapResource.h"
 #include <vector>
 
 typedef float Cost;
@@ -12,6 +13,9 @@ typedef struct cell_s {
 	Cost cost_ = 0.0f;
 	int f, g, h = 0;
 	cell_s *parent = nullptr;
+
+	/// List of resources present on this cell
+	std::vector<MapResource> resources;
 
 	bool isWalkable() const { return cost_ < 1.0f; }
 } Cell;

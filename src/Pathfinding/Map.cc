@@ -47,6 +47,7 @@ void Map::reset() {
 			Cell* cell = new Cell();
 			cell->position_.x = static_cast<float>(w);
 			cell->position_.y = static_cast<float>(h);
+			cell->resources.clear(); // Initialize empty resources list
 
 			bool walkable = true;
 			float cost = 0.0f;

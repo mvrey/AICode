@@ -105,6 +105,12 @@
     <ClInclude Include="include\Pathfinding\Map.h">
       <Filter>Header Files\Pathfinding</Filter>
     </ClInclude>
+    <ClInclude Include="include\MapResourceType.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\MapResource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="include\Pathfinding\MapGenerator.h">
       <Filter>Header Files\Pathfinding</Filter>
     </ClInclude>
@@ -448,6 +454,12 @@
     </ClCompile>
     <ClCompile Include="src\Pathfinding\Map.cc">
       <Filter>Source Files\Pathfinding</Filter>
+    </ClCompile>
+    <ClCompile Include="src\MapResourceType.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\MapResource.cc">
+      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Pathfinding\MapGenerator.cc">
       <Filter>Source Files\Pathfinding</Filter>

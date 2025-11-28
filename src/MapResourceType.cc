@@ -1,0 +1,12 @@
+#include "../include/MapResourceType.h"
+
+MapResourceType::MapResourceType() {
+}
+
+MapResourceType::MapResourceType(const std::string& name)
+	: name(name) {
+}
+
+MapResourceType::~MapResourceType() {
+}
+

@@ -258,6 +258,8 @@
     <ClInclude Include="include\Pathfinding\path.h" />
     <ClInclude Include="include\PrisonMap.h" />
     <ClInclude Include="include\SpritesheetLoader.h" />
+    <ClInclude Include="include\MapResourceType.h" />
+    <ClInclude Include="include\MapResource.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\ecs\PawnEcsManager.cc" />
@@ -279,6 +281,8 @@
     <ClCompile Include="src\SpritesheetLoader.cc" />
     <ClCompile Include="src\Camera.cc" />
     <ClCompile Include="src\PrisonMap.cc" />
+    <ClCompile Include="src\MapResourceType.cc" />
+    <ClCompile Include="src\MapResource.cc" />
     <ClCompile Include="src\ecs\Registry.cc" />
     <ClCompile Include="src\ecs\PawnEcs.cc" />
     <ClCompile Include="src\ecs\PawnFactory.cc" />
