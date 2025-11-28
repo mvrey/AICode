@@ -1,5 +1,5 @@
-#include "../../include/Pathfinding/MapRenderer.h"
-#include "../../include/Pathfinding/Map.h"
+#include "../../include/Map/MapRenderer.h"
+#include "../../include/Map/Map.h"
 #include "../../include/Camera.h"
 #include <MOMOS/draw.h>
 #include <MOMOS/sprite.h>

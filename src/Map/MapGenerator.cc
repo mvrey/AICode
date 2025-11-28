@@ -1,5 +1,5 @@
-#include "../../include/Pathfinding/MapGenerator.h"
-#include "../../include/Pathfinding/Map.h"
+#include "../../include/Map/MapGenerator.h"
+#include "../../include/Map/Map.h"
 #include <algorithm>
 #include <cstdlib>
 #include <vector>

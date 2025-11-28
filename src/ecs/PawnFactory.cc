@@ -108,7 +108,7 @@ ECS::Entity SpawnPawn() {
 	needs.joy = 1.0f;
 	
 	// Assign random decrease rates per second for each pawn
-	// Range: 0.01 to 0.05 per second (needs will deplete in 20-100 seconds if not replenished)
+	// Range: 0.001 to 0.005 per second (needs will deplete in 20-100 seconds if not replenished)
 	constexpr float kMinDecreaseRate = 0.001f;
 	constexpr float kMaxDecreaseRate = 0.005f;
 	constexpr float kRateRange = kMaxDecreaseRate - kMinDecreaseRate;

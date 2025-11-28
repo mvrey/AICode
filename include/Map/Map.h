@@ -1,7 +1,7 @@
 #ifndef __MAP__
 #define __MAP__
 
-#include "../../include/config.h"
+#include "../config.h"
 #include "MapCell.h"
 #include <vector>
 

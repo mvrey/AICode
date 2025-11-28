@@ -102,23 +102,23 @@
     <ClInclude Include="include\Pathfinding\cost_map.h">
       <Filter>Header Files\Pathfinding</Filter>
     </ClInclude>
-    <ClInclude Include="include\Pathfinding\Map.h">
-      <Filter>Header Files\Pathfinding</Filter>
+    <ClInclude Include="include\Map\Map.h">
+      <Filter>Header Files\Map</Filter>
     </ClInclude>
-    <ClInclude Include="include\Pathfinding\MapCell.h">
-      <Filter>Header Files\Pathfinding</Filter>
+    <ClInclude Include="include\Map\MapCell.h">
+      <Filter>Header Files\Map</Filter>
     </ClInclude>
-    <ClInclude Include="include\MapResourceType.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="include\Map\MapGenerator.h">
+      <Filter>Header Files\Map</Filter>
     </ClInclude>
-    <ClInclude Include="include\MapResource.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="include\Map\MapRenderer.h">
+      <Filter>Header Files\Map</Filter>
     </ClInclude>
-    <ClInclude Include="include\Pathfinding\MapGenerator.h">
-      <Filter>Header Files\Pathfinding</Filter>
+    <ClInclude Include="include\Map\MapResourceType.h">
+      <Filter>Header Files\Map</Filter>
     </ClInclude>
-    <ClInclude Include="include\Pathfinding\MapRenderer.h">
-      <Filter>Header Files\Pathfinding</Filter>
+    <ClInclude Include="include\Map\MapResource.h">
+      <Filter>Header Files\Map</Filter>
     </ClInclude>
     <ClInclude Include="include\Agents\Pathfinder.h">
       <Filter>Header Files\Agents</Filter>
@@ -455,23 +455,23 @@
     <ClCompile Include="src\Pathfinding\cost_map.cc">
       <Filter>Source Files\Pathfinding</Filter>
     </ClCompile>
-    <ClCompile Include="src\Pathfinding\Map.cc">
-      <Filter>Source Files\Pathfinding</Filter>
+    <ClCompile Include="src\Map\Map.cc">
+      <Filter>Source Files\Map</Filter>
     </ClCompile>
-    <ClCompile Include="src\Pathfinding\MapCell.cc">
-      <Filter>Source Files\Pathfinding</Filter>
+    <ClCompile Include="src\Map\MapCell.cc">
+      <Filter>Source Files\Map</Filter>
     </ClCompile>
-    <ClCompile Include="src\MapResourceType.cc">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="src\Map\MapGenerator.cc">
+      <Filter>Source Files\Map</Filter>
     </ClCompile>
-    <ClCompile Include="src\MapResource.cc">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="src\Map\MapRenderer.cc">
+      <Filter>Source Files\Map</Filter>
     </ClCompile>
-    <ClCompile Include="src\Pathfinding\MapGenerator.cc">
-      <Filter>Source Files\Pathfinding</Filter>
+    <ClCompile Include="src\Map\MapResourceType.cc">
+      <Filter>Source Files\Map</Filter>
     </ClCompile>
-    <ClCompile Include="src\Pathfinding\MapRenderer.cc">
-      <Filter>Source Files\Pathfinding</Filter>
+    <ClCompile Include="src\Map\MapResource.cc">
+      <Filter>Source Files\Map</Filter>
     </ClCompile>
     <ClCompile Include="src\Pathfinding\path.cc">
       <Filter>Source Files\Pathfinding</Filter>

@@ -1,4 +1,4 @@
-#include "../include/MapResourceType.h"
+#include "../../include/Map/MapResourceType.h"
 
 MapResourceType::MapResourceType() {
 }

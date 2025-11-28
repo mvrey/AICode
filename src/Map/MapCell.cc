@@ -1,4 +1,4 @@
-#include "../../include/Pathfinding/MapCell.h"
+#include "../../include/Map/MapCell.h"
 
 MapCell::MapCell() {
 }

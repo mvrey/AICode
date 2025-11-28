@@ -1,4 +1,5 @@
 #include "../../include/Pathfinding/cost_map.h"
+#include "../../include/Map/Map.h"
 
 CostMap::CostMap() {
 }

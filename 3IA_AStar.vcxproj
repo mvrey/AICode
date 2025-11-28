@@ -252,15 +252,15 @@
     <ClInclude Include="include\GameStatus.h" />
     <ClInclude Include="include\Pathfinding\astar.h" />
     <ClInclude Include="include\Pathfinding\cost_map.h" />
-    <ClInclude Include="include\Pathfinding\Map.h" />
-    <ClInclude Include="include\Pathfinding\MapCell.h" />
-    <ClInclude Include="include\Pathfinding\MapGenerator.h" />
-    <ClInclude Include="include\Pathfinding\MapRenderer.h" />
     <ClInclude Include="include\Pathfinding\path.h" />
     <ClInclude Include="include\PrisonMap.h" />
     <ClInclude Include="include\SpritesheetLoader.h" />
-    <ClInclude Include="include\MapResourceType.h" />
-    <ClInclude Include="include\MapResource.h" />
+    <ClInclude Include="include\Map\Map.h" />
+    <ClInclude Include="include\Map\MapCell.h" />
+    <ClInclude Include="include\Map\MapGenerator.h" />
+    <ClInclude Include="include\Map\MapRenderer.h" />
+    <ClInclude Include="include\Map\MapResourceType.h" />
+    <ClInclude Include="include\Map\MapResource.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\ecs\PawnEcsManager.cc" />
@@ -275,16 +275,16 @@
     <ClCompile Include="src\main.cc" />
     <ClCompile Include="src\Pathfinding\astar.cc" />
     <ClCompile Include="src\Pathfinding\cost_map.cc" />
-    <ClCompile Include="src\Pathfinding\Map.cc" />
-    <ClCompile Include="src\Pathfinding\MapCell.cc" />
-    <ClCompile Include="src\Pathfinding\MapGenerator.cc" />
-    <ClCompile Include="src\Pathfinding\MapRenderer.cc" />
     <ClCompile Include="src\Pathfinding\path.cc" />
     <ClCompile Include="src\SpritesheetLoader.cc" />
     <ClCompile Include="src\Camera.cc" />
     <ClCompile Include="src\PrisonMap.cc" />
-    <ClCompile Include="src\MapResourceType.cc" />
-    <ClCompile Include="src\MapResource.cc" />
+    <ClCompile Include="src\Map\Map.cc" />
+    <ClCompile Include="src\Map\MapCell.cc" />
+    <ClCompile Include="src\Map\MapGenerator.cc" />
+    <ClCompile Include="src\Map\MapRenderer.cc" />
+    <ClCompile Include="src\Map\MapResourceType.cc" />
+    <ClCompile Include="src\Map\MapResource.cc" />
     <ClCompile Include="src\ecs\Registry.cc" />
     <ClCompile Include="src\ecs\PawnEcs.cc" />
     <ClCompile Include="src\ecs\PawnFactory.cc" />

@@ -1,10 +1,10 @@
 #ifndef __COST_MAP__
 #define __COST_MAP__
 
-#include "Map.h"
-#include "MapGenerator.h"
-#include "MapRenderer.h"
-#include "MapCell.h"
+#include "../Map/Map.h"
+#include "../Map/MapGenerator.h"
+#include "../Map/MapRenderer.h"
+#include "../Map/MapCell.h"
 
 /// CostMap is a facade that combines Map, MapGenerator, and MapRenderer.
 /// It maintains backward compatibility with existing code.

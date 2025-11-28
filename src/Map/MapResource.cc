@@ -1,4 +1,4 @@
-#include "../include/MapResource.h"
+#include "../../include/Map/MapResource.h"
 #include <cstdlib>
 #include <algorithm>
 

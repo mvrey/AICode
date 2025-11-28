@@ -1,8 +1,8 @@
 #ifndef MAP_CELL_H
 #define MAP_CELL_H
 
-#include "../../include/config.h"
-#include "../../include/MapResource.h"
+#include "../config.h"
+#include "MapResource.h"
 #include <vector>
 
 typedef float Cost;

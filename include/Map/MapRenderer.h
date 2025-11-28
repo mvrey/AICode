@@ -2,7 +2,7 @@
 #define __MAP_RENDERER__
 
 #include "Map.h"
-#include "../../include/SpritesheetLoader.h"
+#include "../SpritesheetLoader.h"
 #include <vector>
 
 /// MapRenderer handles all drawing operations for the map.

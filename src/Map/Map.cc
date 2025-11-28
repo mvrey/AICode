@@ -1,4 +1,4 @@
-#include "../../include/Pathfinding/Map.h"
+#include "../../include/Map/Map.h"
 #include "../../include/Camera.h"
 #include "../../include/UI/InfoPanel.h"
 #include <MOMOS/input.h>
