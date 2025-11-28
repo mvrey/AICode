@@ -3,10 +3,12 @@
 #include "../../include/ecs/Entity.h"
 #include "../../include/ecs/components/NeedsComponent.h"
 #include "../../include/ecs/PawnEcs.h"
+#include "../../include/Map/MapResource.h"
 #include <utility>
 
 #include <MOMOS/draw.h>
 #include <algorithm>
+#include <cstdio>
 
 InfoPanel& InfoPanel::Get() {
 	static InfoPanel instance;
@@ -14,7 +16,7 @@ InfoPanel& InfoPanel::Get() {
 }
 
 InfoPanel::InfoPanel()
-	: message_("Nothing to show yet"), selected_pawn_() {
+	: message_("Nothing to show yet"), selected_pawn_(), selected_cell_resources_() {
 }
 
 void InfoPanel::SetMessage(std::string text) {
@@ -29,10 +31,28 @@ void InfoPanel::SetSelectedPawn(ECS::Entity pawn) {
 	selected_pawn_ = pawn;
 }
 
+void InfoPanel::SetSelectedCellResources(const std::vector<MapResource>& resources) {
+	selected_cell_resources_ = resources;
+}
+
 void InfoPanel::Draw() const {
-	// Determine panel height based on whether we're showing needs
+	// Determine panel height based on what we're showing
 	bool showing_needs = selected_pawn_.IsValid();
-	float panel_height = showing_needs ? kPanelHeightWithNeeds : kPanelHeight;
+	bool showing_resources = !selected_cell_resources_.empty();
+	
+	float panel_height = kPanelHeight;
+	if (showing_needs) {
+		panel_height = kPanelHeightWithNeeds;
+	}
+	if (showing_resources) {
+		// If showing both needs and resources, use the larger height
+		panel_height = std::max(panel_height, kPanelHeightWithResources);
+		// If only showing resources, use resources height
+		if (!showing_needs) {
+			panel_height = kPanelHeightWithResources;
+		}
+	}
+	
 	float panel_width = static_cast<float>(Screen::width);
 	float panel_top_y = static_cast<float>(Screen::height) - panel_height;
 	
@@ -52,14 +72,21 @@ void InfoPanel::Draw() const {
 	MOMOS::DrawSetTextSize(kTextSize);
 	MOMOS::DrawText(kTextPadding, panel_top_y + kTextPadding + 2.0f, message_.c_str());
 
+	float current_y = panel_top_y + kTextSize + kTextPadding * 2.0f;
+
 	// Draw needs bars if a pawn is selected
 	if (showing_needs) {
 		// Get registry from PawnECS
 		auto& registry = PawnECS::GetRegistry();
 		if (registry.HasComponent<ECS::NeedsComponent>(selected_pawn_)) {
-			float needs_start_y = panel_top_y + kTextSize + kTextPadding * 2.0f;
-			DrawNeedsBars(registry, selected_pawn_, needs_start_y);
+			DrawNeedsBars(registry, selected_pawn_, current_y);
+			current_y += (kNeedBarHeight + kNeedBarSpacing) * 3.0f; // 3 need bars
 		}
+	}
+
+	// Draw resources list if a cell with resources is selected
+	if (showing_resources) {
+		DrawResourcesList(current_y);
 	}
 }
 
@@ -139,5 +166,34 @@ void InfoPanel::DrawNeedBar(const char* name, float value, float x, float y, flo
 	MOMOS::DrawLine(bar_x + width, bar_y, bar_x + width, bar_y + height);
 	MOMOS::DrawLine(bar_x + width, bar_y + height, bar_x, bar_y + height);
 	MOMOS::DrawLine(bar_x, bar_y + height, bar_x, bar_y);
+}
+
+void InfoPanel::DrawResourcesList(float start_y) const {
+	if (selected_cell_resources_.empty()) {
+		return;
+	}
+
+	MOMOS::DrawSetFillColor(255, 255, 255, 255);
+	MOMOS::DrawSetTextSize(kTextSize - 2.0f);
+	
+	float x = kTextPadding;
+	float y = start_y;
+	
+	// Draw header
+	MOMOS::DrawSetTextSize(kTextSize);
+	MOMOS::DrawText(x, y, "Resources:");
+	y += kResourceLineSpacing;
+	
+	// Draw each resource
+	MOMOS::DrawSetTextSize(kTextSize - 2.0f);
+	for (const auto& resource : selected_cell_resources_) {
+		if (resource.type != nullptr && resource.amount > 0) {
+			char resource_text[128];
+			snprintf(resource_text, sizeof(resource_text), "  - %s: %d", 
+				resource.type->name.c_str(), resource.amount);
+			MOMOS::DrawText(x, y, resource_text);
+			y += kResourceLineSpacing;
+		}
+	}
 }
 

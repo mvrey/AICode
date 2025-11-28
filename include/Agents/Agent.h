@@ -93,8 +93,6 @@ public:
 
   /// Searches for the best path to the destination
   void setPathTo(::MOMOS::Vec2 dest);
-  /// Searches for a path to a specific room
-  bool goToRoom(Room room);
   /// Returns true if the current path has been completed
   bool moveFollowingPath();
   /// Clears all variables associated with movement along a path

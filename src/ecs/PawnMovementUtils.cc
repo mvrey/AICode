@@ -193,37 +193,6 @@ bool RequestPathTo(ECS::Registry& registry, ECS::Entity entity, const ::MOMOS::V
 	return true;
 }
 
-bool BuildRoomWaypointPath(ECS::Registry& registry, ECS::Entity entity, const Room& room, PrisonMap* prison, CostMap* map) {
-	if (!prison || !map) {
-		return false;
-	}
-
-	auto& movement = registry.GetComponent<ECS::MovementComponent>(entity);
-	auto& transform = registry.GetComponent<ECS::TransformComponent>(entity);
-
-	auto* current_room = prison->getRoomAt(map->ScreenToMapCoords(transform.position));
-	std::vector<::MOMOS::Vec2> waypoint_path;
-
-	if (current_room != nullptr) {
-		if (current_room->id_ == room.id_) {
-			ClearMovement(registry, entity);
-			waypoint_path.push_back(prison->getRandomPointInRoom(room));
-		} else {
-			waypoint_path = prison->getPathToRoom(current_room, const_cast<Room*>(&room));
-		}
-	}
-
-	if (waypoint_path.empty()) {
-		return false;
-	}
-
-	PopulateDeterministicSteps(movement, map, waypoint_path, prison->getRandomPointInRoom(room));
-	movement.path_set = true;
-	movement.movement_finished = false;
-	movement.movement_path = nullptr;
-	return true;
-}
-
 void SetDoorRouteActive(ECS::Registry& registry, ECS::Entity entity, bool active) {
 	registry.GetComponent<ECS::MovementComponent>(entity).door_route_set = active;
 }

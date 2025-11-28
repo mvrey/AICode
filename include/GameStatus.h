@@ -11,7 +11,6 @@
 #define GAMESTATUS_H
 
 #include "config.h"
-#include "PrisonMap.h"
 #include "Pathfinding/cost_map.h"
 class Pathfinder;
 
@@ -37,7 +36,6 @@ public:
 	//----------------///
 
 	/// PATHFINDING ///
-	PrisonMap* prison;
 	CostMap* map;
 	Pathfinder* pathfinder_;
 	//----------------///

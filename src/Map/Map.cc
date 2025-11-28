@@ -162,6 +162,9 @@ bool Map::HandleCellClick(const ::MOMOS::Vec2& screen_pos) {
 	snprintf(cost_text, sizeof(cost_text), "Cell Cost: %.2f", cell->cost_);
 	InfoPanel::Get().SetMessage(cost_text);
 	
+	// Set the resources for this cell in the InfoPanel
+	InfoPanel::Get().SetSelectedCellResources(cell->resources);
+	
 	return true;
 }
 
@@ -207,5 +210,7 @@ void Map::DrawCellSelection() const {
 
 void Map::ClearCellSelection() {
 	selected_cell_ = { -1.0f, -1.0f };
+	// Clear resources display when cell selection is cleared
+	InfoPanel::Get().SetSelectedCellResources(std::vector<MapResource>());
 }
 

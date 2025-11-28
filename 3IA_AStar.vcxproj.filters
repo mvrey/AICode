@@ -75,9 +75,6 @@
     <ClInclude Include="include\GameStatus.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\PrisonMap.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="include\Agents\Agent.h">
       <Filter>Header Files\Agents</Filter>
     </ClInclude>
@@ -447,9 +444,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\main.cc">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\PrisonMap.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Agents\Agent.cc">

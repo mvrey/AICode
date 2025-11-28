@@ -7,7 +7,6 @@
 #include <algorithm>
 
 #include "../include/GameStatus.h"
-#include "../include/PrisonMap.h"
 #include "../include/config.h"
 #include "../include/Camera.h"
 #include "../include/Pathfinding/astar.h"
@@ -204,15 +203,10 @@ int game(int argc, char** argv) {
 	// Load resource types from JSON
 	ResourceTypeManager::Get().LoadFromJSON("data/resource_types.json");
 
-	//Init variables and locations for this specific map
-	GameStatus::get()->prison = new PrisonMap();
-
 	GameStatus::get()->map = new CostMap();
 	GameStatus::get()->map->Load("data/map_03_60x44_bw.bmp", "data/map_03_960x704_layoutAB.bmp");
 	GameStatus::get()->pathfinder_ = new Pathfinder();
 	g_speed_controls.Initialize();
-
-	PrisonMap* prison = GameStatus::get()->prison;
 
 	MOMOS::DrawSetTextFont("data/medieval.ttf");
 	MOMOS::WindowSetMouseVisibility(true);

@@ -8,7 +8,6 @@
 
 #include <vector>
 #include "./Registry.h"
-#include "../PrisonMap.h"
 #include "../Pathfinding/cost_map.h"
 #include <MOMOS/math.h>
 #include "components/MovementComponent.h"
@@ -26,7 +25,6 @@ enum class PathFinalizationResult {
 void ClearMovement(ECS::Registry& registry, ECS::Entity entity);
 PathFinalizationResult TryFinalizePath(ECS::Registry& registry, ECS::Entity entity);
 bool RequestPathTo(ECS::Registry& registry, ECS::Entity entity, const ::MOMOS::Vec2& destination);
-bool BuildRoomWaypointPath(ECS::Registry& registry, ECS::Entity entity, const Room& room, PrisonMap* prison, CostMap* map);
 void SetDoorRouteActive(ECS::Registry& registry, ECS::Entity entity, bool active);
 void SetEscapeRouteActive(ECS::Registry& registry, ECS::Entity entity, bool active);
 void CycleDoorTarget(ECS::Registry& registry, ECS::Entity entity, int totalDoors);

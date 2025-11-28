@@ -2,6 +2,7 @@
 #include "../../include/ecs/PawnEcs.h"
 #include "../../include/Camera.h"
 #include "../../include/UI/InfoPanel.h"
+#include "../../include/Map/MapResource.h"
 #include <MOMOS/input.h>
 #include <MOMOS/draw.h>
 #include "../../include/ecs/components/PawnStateComponent.h"
@@ -53,6 +54,8 @@ bool HandleClick() {
 	if (found) {
 		InfoPanel::Get().SetMessage(closest_name);
 		InfoPanel::Get().SetSelectedPawn(g_selected_pawn);
+		// Clear cell resources when a pawn is selected
+		InfoPanel::Get().SetSelectedCellResources(std::vector<MapResource>());
 		return true;
 	}
 	

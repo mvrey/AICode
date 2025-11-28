@@ -8,7 +8,6 @@
 #include "../../../include/ecs/components/PawnComponents.h"
 #include "../../../include/ecs/PawnMovementUtils.h"
 #include "../../../include/GameStatus.h"
-#include "../../../include/PrisonMap.h"
 #include "../../../include/Pathfinding/cost_map.h"
 #include "../../../include/config.h"
 

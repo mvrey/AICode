@@ -280,68 +280,6 @@ void Agent::setPathTo(MOMOS::Vec2 dest) {
 }
 
 
-bool Agent::goToRoom(Room room) {
-	Agent* owner = this;
-	CostMap* map = GameStatus::get()->map;
-	PrisonMap* prison = GameStatus::get()->prison;
-
-
-	// Check if a new path must be generated
-	if (!getBody()->path_set_) {
-
-		//Search for a preprocessed waypoints path
-		Room* current_room = prison->getRoomAt(GameStatus::get()->map->ScreenToMapCoords(getBody()->pos_));
-		std::vector<::MOMOS::Vec2> waypoint_path;
-
-		if (current_room != nullptr) {
-			if (current_room->id_ == room.id_) {
-				clearMovement();
-				waypoint_path.clear();
-				waypoint_path.push_back(prison->getRandomPointInRoom(room));
-			} else
-				waypoint_path = prison->getPathToRoom(current_room, &room);
-		}
-
-
-		//Use preprocessed waypoints path
-		if (waypoint_path.size() > 0) {
-		
-			owner->getBody()->path_set_ = true;
-
-			//Concat waypoints with a random point in the target room
-			for (unsigned int i = 0; i < waypoint_path.size(); i++) {
-				owner->deterministic_steps_.push_back(GameStatus::get()->map->MapToScreenCoords(waypoint_path[i]));
-			}
-			owner->deterministic_steps_.push_back(map->MapToScreenCoords(prison->getRandomPointInRoom(room)));
-			owner->deterministic_step_num_ = 0;
-
-		} else {
-			
-			//If there are no waypoints available, generate an A* path
-			::MOMOS::Vec2 point = map->MapToScreenCoords(prison->getRandomPointInRoom(room));
-			setPathTo(point);
-		}
-	} else {
-		//Follow previously set path
-		return moveFollowingPath();
-	}
-
-	return false;
-
-	///////////////////////////////////////////
-
-	if (!getBody()->path_set_) {
-		//Pick random point in resting room
-		::MOMOS::Vec2 point = map->MapToScreenCoords(prison->getRandomPointInRoom(room));
-		setPathTo(point);
-	} else {
-		return moveFollowingPath();
-	}
-
-	return false;
-}
-
-
 bool Agent::moveFollowingPath() {
 	//check if the next step is a currently walkable point
 	if (!mind_->movement_finished_ && getBody()->path_set_) {

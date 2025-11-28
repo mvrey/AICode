@@ -253,7 +253,6 @@
     <ClInclude Include="include\Pathfinding\astar.h" />
     <ClInclude Include="include\Pathfinding\cost_map.h" />
     <ClInclude Include="include\Pathfinding\path.h" />
-    <ClInclude Include="include\PrisonMap.h" />
     <ClInclude Include="include\SpritesheetLoader.h" />
     <ClInclude Include="include\Map\Map.h" />
     <ClInclude Include="include\Map\MapCell.h" />
@@ -279,7 +278,6 @@
     <ClCompile Include="src\Pathfinding\path.cc" />
     <ClCompile Include="src\SpritesheetLoader.cc" />
     <ClCompile Include="src\Camera.cc" />
-    <ClCompile Include="src\PrisonMap.cc" />
     <ClCompile Include="src\Map\Map.cc" />
     <ClCompile Include="src\Map\MapCell.cc" />
     <ClCompile Include="src\Map\MapGenerator.cc" />
