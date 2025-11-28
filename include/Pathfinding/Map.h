@@ -66,6 +66,24 @@ public:
 	
 	/// Gets tile costs data (for MapRenderer)
 	const std::vector<std::vector<float>>& GetTileCosts() const { return tile_costs_; }
+	
+	/// Handles clicking on cells and stores the selected cell
+	/// @param screen_pos Screen coordinates of the click
+	/// @return true if a cell was clicked, false otherwise
+	bool HandleCellClick(const ::MOMOS::Vec2& screen_pos);
+	
+	/// Draws selection box around the currently selected cell
+	void DrawCellSelection() const;
+	
+	/// Gets the currently selected cell position
+	/// @return The selected cell position in map coordinates, or (-1, -1) if none selected
+	::MOMOS::Vec2 GetSelectedCell() const;
+	
+	/// Clears the current cell selection
+	void ClearCellSelection();
+	
+private:
+	::MOMOS::Vec2 selected_cell_ = { -1.0f, -1.0f }; // Invalid cell position
 };
 
 #endif // __MAP__

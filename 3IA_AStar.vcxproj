@@ -238,6 +238,7 @@
     <ClInclude Include="include\ecs\PawnInput.h" />
     <ClInclude Include="include\ecs\PawnEcsSystems.h" />
     <ClInclude Include="include\ecs\PawnFactory.h" />
+    <ClInclude Include="include\ecs\PawnSelection.h" />
     <ClInclude Include="include\ecs\system\PawnAISystem.h" />
     <ClInclude Include="include\ecs\system\PawnPathFollowSystem.h" />
     <ClInclude Include="include\ecs\system\PawnMovementSystem.h" />
@@ -279,6 +280,7 @@
     <ClCompile Include="src\ecs\Registry.cc" />
     <ClCompile Include="src\ecs\PawnEcs.cc" />
     <ClCompile Include="src\ecs\PawnFactory.cc" />
+    <ClCompile Include="src\ecs\PawnSelection.cc" />
     <ClCompile Include="src\ecs\PawnMovementUtils.cc" />
     <ClCompile Include="src\ecs\system\PawnAISystem.cc" />
     <ClCompile Include="src\ecs\system\PawnPathFollowSystem.cc" />

@@ -62,3 +62,19 @@ void CostMap::Print() {
 void CostMap::Draw() {
 	renderer_.Draw(map_);
 }
+
+bool CostMap::HandleCellClick(const ::MOMOS::Vec2& screen_pos) {
+	return map_.HandleCellClick(screen_pos);
+}
+
+void CostMap::DrawCellSelection() const {
+	map_.DrawCellSelection();
+}
+
+::MOMOS::Vec2 CostMap::GetSelectedCell() const {
+	return map_.GetSelectedCell();
+}
+
+void CostMap::ClearCellSelection() {
+	map_.ClearCellSelection();
+}

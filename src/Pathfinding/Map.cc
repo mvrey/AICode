@@ -1,7 +1,12 @@
 #include "../../include/Pathfinding/Map.h"
+#include "../../include/Camera.h"
+#include "../../include/UI/InfoPanel.h"
+#include <MOMOS/input.h>
+#include <MOMOS/draw.h>
 #include <algorithm>
 #include <cmath>
 #include <cstdio>
+#include <cstring>
 
 Map::Map() : width_(0), height_(0) {
 }
@@ -120,5 +125,86 @@ void Map::Print() const {
 			}
 		}
 	}
+}
+
+bool Map::HandleCellClick(const ::MOMOS::Vec2& screen_pos) {
+	if (!MOMOS::MouseButtonDown(1)) {
+		return false;
+	}
+
+	// Convert screen coordinates to world coordinates (accounting for camera)
+	::MOMOS::Vec2 world_click = Camera::ScreenToWorld(screen_pos);
+
+	// Calculate tile world dimensions (same as in MapRenderer::Draw)
+	float tile_world_width = static_cast<float>(Screen::width) / static_cast<float>(width_);
+	float tile_world_height = static_cast<float>(Screen::height) / static_cast<float>(height_);
+
+	// Convert world coordinates to map coordinates
+	int map_x = static_cast<int>(world_click.x / tile_world_width);
+	int map_y = static_cast<int>(world_click.y / tile_world_height);
+
+	// Clamp to valid map bounds
+	map_x = std::max(0, std::min(map_x, width_ - 1));
+	map_y = std::max(0, std::min(map_y, height_ - 1));
+
+	// Get the cell at the clicked position
+	const Cell* cell = getCellAt(map_x, map_y);
+	if (cell == nullptr) {
+		return false;
+	}
+
+	// Store selected cell position
+	selected_cell_ = { static_cast<float>(map_x), static_cast<float>(map_y) };
+
+	// Format and display the cell cost
+	char cost_text[64];
+	snprintf(cost_text, sizeof(cost_text), "Cell Cost: %.2f", cell->cost_);
+	InfoPanel::Get().SetMessage(cost_text);
+	
+	return true;
+}
+
+void Map::DrawCellSelection() const {
+	// Check if a cell is selected (valid position)
+	if (selected_cell_.x < 0.0f || selected_cell_.y < 0.0f) {
+		return;
+	}
+
+	// Calculate tile world dimensions
+	float tile_world_width = static_cast<float>(Screen::width) / static_cast<float>(width_);
+	float tile_world_height = static_cast<float>(Screen::height) / static_cast<float>(height_);
+
+	// Get cell position in world coordinates
+	int cell_x = static_cast<int>(selected_cell_.x);
+	int cell_y = static_cast<int>(selected_cell_.y);
+
+	// Calculate world bounds of the cell
+	::MOMOS::Vec2 world_top_left = {
+		cell_x * tile_world_width,
+		cell_y * tile_world_height
+	};
+	::MOMOS::Vec2 world_bottom_right = {
+		(cell_x + 1) * tile_world_width,
+		(cell_y + 1) * tile_world_height
+	};
+
+	// Convert to screen coordinates
+	::MOMOS::Vec2 top_left_screen = Camera::WorldToScreen(world_top_left);
+	::MOMOS::Vec2 bottom_right_screen = Camera::WorldToScreen(world_bottom_right);
+
+	// Draw green square around the cell
+	MOMOS::DrawSetStrokeColor(100, 255, 100, 255);
+	MOMOS::DrawLine(top_left_screen.x, top_left_screen.y, bottom_right_screen.x, top_left_screen.y);
+	MOMOS::DrawLine(bottom_right_screen.x, top_left_screen.y, bottom_right_screen.x, bottom_right_screen.y);
+	MOMOS::DrawLine(bottom_right_screen.x, bottom_right_screen.y, top_left_screen.x, bottom_right_screen.y);
+	MOMOS::DrawLine(top_left_screen.x, bottom_right_screen.y, top_left_screen.x, top_left_screen.y);
+}
+
+::MOMOS::Vec2 Map::GetSelectedCell() const {
+	return selected_cell_;
+}
+
+void Map::ClearCellSelection() {
+	selected_cell_ = { -1.0f, -1.0f };
 }
 

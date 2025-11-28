@@ -20,8 +20,10 @@
 #include "../include/UI/InfoPanel.h"
 #include "../include/ecs/PawnEcsSystems.h"
 #include "../include/ecs/PawnFactory.h"
+#include "../include/ecs/PawnSelection.h"
 #include <MOMOS/momos.h>
 #include <MOMOS/draw.h>
+#include <MOMOS/input.h>
 
 #include "../include/Agents/Pathfinder.h"
 
@@ -31,179 +33,6 @@ FpsCounter g_fps_counter;
 VSyncToggle g_vsync_toggle;
 
 namespace {
-
-	ECS::Entity g_selected_pawn;
-	::MOMOS::Vec2 g_selected_cell = { -1.0f, -1.0f }; // Invalid cell position
-
-
-
-bool HandlePawnClick() {
-	if (!MOMOS::MouseButtonDown(1)) {
-		return false;
-	}
-
-	::MOMOS::Vec2 mouse_screen = {
-		static_cast<float>(MOMOS::MousePositionX()),
-		static_cast<float>(MOMOS::MousePositionY())
-	};
-	::MOMOS::Vec2 world_click = Camera::ScreenToWorld(mouse_screen);
-
-	auto& registry = PawnECS::GetRegistry();
-	const float click_radius = 32.0f;
-	float best_distance_sq = click_radius * click_radius;
-	bool found = false;
-	std::string closest_name;
-	struct PawnClickBreak {};
-
-	try {
-		registry.ForEach<ECS::PawnStateComponent>([&](ECS::Entity entity, ECS::PawnStateComponent& state) {
-			if (!registry.HasComponent<ECS::TransformComponent>(entity)) {
-				return;
-			}
-			auto& transform = registry.GetComponent<ECS::TransformComponent>(entity);
-			float dx = transform.position.x - world_click.x;
-			float dy = transform.position.y - world_click.y;
-			float distance_sq = dx * dx + dy * dy;
-			if (distance_sq <= best_distance_sq) {
-				best_distance_sq = distance_sq;
-				found = true;
-				closest_name = state.name.empty() ? "Unnamed Pawn" : state.name;
-				g_selected_pawn = entity;
-				throw PawnClickBreak();
-			}
-		});
-	} catch (const PawnClickBreak&) {
-	}
-
-	if (found) {
-		InfoPanel::Get().SetMessage(closest_name);
-		g_selected_cell = { -1.0f, -1.0f }; // Clear cell selection when pawn is clicked
-		return true;
-	}
-	
-	// Clear selection if no pawn was found
-	g_selected_pawn = ECS::Entity();
-	return false;
-}
-
-void HandleCellClick() {
-	if (!MOMOS::MouseButtonDown(1)) {
-		return;
-	}
-
-	::MOMOS::Vec2 mouse_screen = {
-		static_cast<float>(MOMOS::MousePositionX()),
-		static_cast<float>(MOMOS::MousePositionY())
-	};
-
-	CostMap* map = GameStatus::get()->map;
-	if (map == nullptr) {
-		return;
-	}
-
-	// Convert screen coordinates to world coordinates (accounting for camera)
-	::MOMOS::Vec2 world_click = Camera::ScreenToWorld(mouse_screen);
-
-	// Calculate tile world dimensions (same as in CostMap::Draw)
-	float tile_world_width = static_cast<float>(Screen::width) / static_cast<float>(map->getWidth());
-	float tile_world_height = static_cast<float>(Screen::height) / static_cast<float>(map->getHeight());
-
-	// Convert world coordinates to map coordinates
-	int map_x = static_cast<int>(world_click.x / tile_world_width);
-	int map_y = static_cast<int>(world_click.y / tile_world_height);
-
-	// Clamp to valid map bounds
-	map_x = std::max(0, std::min(map_x, map->getWidth() - 1));
-	map_y = std::max(0, std::min(map_y, map->getHeight() - 1));
-
-	// Get the cell at the clicked position
-	Cell* cell = map->getCellAt(map_x, map_y);
-	if (cell == nullptr) {
-		return;
-	}
-
-	// Store selected cell position
-	g_selected_cell = { static_cast<float>(map_x), static_cast<float>(map_y) };
-
-	// Format and display the cell cost
-	char cost_text[64];
-	snprintf(cost_text, sizeof(cost_text), "Cell Cost: %.2f", cell->cost_);
-	InfoPanel::Get().SetMessage(cost_text);
-}
-
-void DrawPawnSelection() {
-	if (!g_selected_pawn.IsValid()) {
-		return;
-	}
-
-	auto& registry = PawnECS::GetRegistry();
-	if (!registry.HasComponent<ECS::TransformComponent>(g_selected_pawn)) {
-		return;
-	}
-
-	auto& transform = registry.GetComponent<ECS::TransformComponent>(g_selected_pawn);
-	const float half_screen = 16.0f;
-	const float half_world = half_screen / Camera::Zoom();
-
-	::MOMOS::Vec2 top_left = {
-		transform.position.x - half_world,
-		transform.position.y - half_world
-	};
-	::MOMOS::Vec2 bottom_right = {
-		transform.position.x + half_world,
-		transform.position.y + half_world
-	};
-
-	auto top_left_screen = Camera::WorldToScreen(top_left);
-	auto bottom_right_screen = Camera::WorldToScreen(bottom_right);
-
-	MOMOS::DrawSetStrokeColor(100, 255, 100, 255);
-	MOMOS::DrawLine(top_left_screen.x, top_left_screen.y, bottom_right_screen.x, top_left_screen.y);
-	MOMOS::DrawLine(bottom_right_screen.x, top_left_screen.y, bottom_right_screen.x, bottom_right_screen.y);
-	MOMOS::DrawLine(bottom_right_screen.x, bottom_right_screen.y, top_left_screen.x, bottom_right_screen.y);
-	MOMOS::DrawLine(top_left_screen.x, bottom_right_screen.y, top_left_screen.x, top_left_screen.y);
-}
-
-void DrawCellSelection() {
-	// Check if a cell is selected (valid position)
-	if (g_selected_cell.x < 0.0f || g_selected_cell.y < 0.0f) {
-		return;
-	}
-
-	CostMap* map = GameStatus::get()->map;
-	if (map == nullptr) {
-		return;
-	}
-
-	// Calculate tile world dimensions
-	float tile_world_width = static_cast<float>(Screen::width) / static_cast<float>(map->getWidth());
-	float tile_world_height = static_cast<float>(Screen::height) / static_cast<float>(map->getHeight());
-
-	// Get cell position in world coordinates
-	int cell_x = static_cast<int>(g_selected_cell.x);
-	int cell_y = static_cast<int>(g_selected_cell.y);
-
-	// Calculate world bounds of the cell
-	::MOMOS::Vec2 world_top_left = {
-		cell_x * tile_world_width,
-		cell_y * tile_world_height
-	};
-	::MOMOS::Vec2 world_bottom_right = {
-		(cell_x + 1) * tile_world_width,
-		(cell_y + 1) * tile_world_height
-	};
-
-	// Convert to screen coordinates
-	::MOMOS::Vec2 top_left_screen = Camera::WorldToScreen(world_top_left);
-	::MOMOS::Vec2 bottom_right_screen = Camera::WorldToScreen(world_bottom_right);
-
-	// Draw green square around the cell
-	MOMOS::DrawSetStrokeColor(100, 255, 100, 255);
-	MOMOS::DrawLine(top_left_screen.x, top_left_screen.y, bottom_right_screen.x, top_left_screen.y);
-	MOMOS::DrawLine(bottom_right_screen.x, top_left_screen.y, bottom_right_screen.x, bottom_right_screen.y);
-	MOMOS::DrawLine(bottom_right_screen.x, bottom_right_screen.y, top_left_screen.x, bottom_right_screen.y);
-	MOMOS::DrawLine(top_left_screen.x, bottom_right_screen.y, top_left_screen.x, top_left_screen.y);
-}
 
 } // namespace
 
@@ -228,9 +57,22 @@ void Input() {
 		float my = static_cast<float>(MOMOS::MousePositionY());
 		g_vsync_toggle.HandleClick(mx, my);
 	}
-	bool pawn_clicked = HandlePawnClick();
-	if (!pawn_clicked) {
-		HandleCellClick();
+	::MOMOS::Vec2 mouse_screen = {
+		static_cast<float>(MOMOS::MousePositionX()),
+		static_cast<float>(MOMOS::MousePositionY())
+	};
+	
+	bool pawn_clicked = PawnSelection::HandleClick();
+	if (pawn_clicked) {
+		// Clear cell selection when pawn is clicked
+		if (GameStatus::get()->map) {
+			GameStatus::get()->map->ClearCellSelection();
+		}
+	} else {
+		// Try to click on a cell
+		if (GameStatus::get()->map) {
+			GameStatus::get()->map->HandleCellClick(mouse_screen);
+		}
 	}
 
 	Camera::HandleInput(delta_seconds);
@@ -288,8 +130,10 @@ void Draw() {
 	}
 
 	PawnECS::Systems::Get().Render(0.0);
-	DrawPawnSelection();
-	DrawCellSelection();
+	PawnSelection::DrawSelection();
+	if (GameStatus::get()->map) {
+		GameStatus::get()->map->DrawCellSelection();
+	}
 	g_fps_counter.Draw();
 	g_vsync_toggle.Draw(g_fps_counter.GetTextRight(), g_fps_counter.GetTextBaselineY());
 	g_speed_controls.Draw();
