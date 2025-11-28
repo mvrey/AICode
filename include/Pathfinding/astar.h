@@ -13,7 +13,7 @@
 #include "../../include/config.h"
 #include "path.h"
 #include "cost_map.h"
-#include "MapCell.h"
+#include "../Map/MapCell.h"
 
 class AStar
 {
