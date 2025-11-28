@@ -409,14 +409,20 @@ void CostMap::Draw() {
 							};
 							::MOMOS::Vec2 screen_center = Camera::WorldToScreen(world_center);
 							
-							// Get sprite dimensions
+							// Get sprite dimensions and apply camera zoom (same as pawns)
+							float zoom = Camera::Zoom();
 							int sprite_width = MOMOS::SpriteWidth(grass_sprite);
 							int sprite_height = MOMOS::SpriteHeight(grass_sprite);
+							float half_width = sprite_width * 0.5f * zoom;
+							float half_height = sprite_height * 0.5f * zoom;
 							
-							// Draw sprite centered on the cell
-							MOMOS::DrawSprite(grass_sprite, 
-								screen_center.x - sprite_width * 0.5f,
-								screen_center.y - sprite_height * 0.5f);
+							// Draw sprite with zoom scaling (same as pawns)
+							::MOMOS::SpriteTransform sprite_transform{};
+							sprite_transform.x = screen_center.x - half_width;
+							sprite_transform.y = screen_center.y - half_height;
+							sprite_transform.scale_x = zoom;
+							sprite_transform.scale_y = zoom;
+							MOMOS::DrawSprite(grass_sprite, sprite_transform);
 						}
 					}
 				}
