@@ -261,6 +261,7 @@
     <ClInclude Include="include\Map\MapRenderer.h" />
     <ClInclude Include="include\Map\MapResourceType.h" />
     <ClInclude Include="include\Map\MapResource.h" />
+    <ClInclude Include="include\Map\ResourceTypeManager.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\ecs\PawnEcsManager.cc" />
@@ -285,6 +286,7 @@
     <ClCompile Include="src\Map\MapRenderer.cc" />
     <ClCompile Include="src\Map\MapResourceType.cc" />
     <ClCompile Include="src\Map\MapResource.cc" />
+    <ClCompile Include="src\Map\ResourceTypeManager.cc" />
     <ClCompile Include="src\ecs\Registry.cc" />
     <ClCompile Include="src\ecs\PawnEcs.cc" />
     <ClCompile Include="src\ecs\PawnFactory.cc" />
@@ -300,6 +302,9 @@
     <ClCompile Include="tests\AncientMythosTests.cpp" />
     <ClCompile Include="tests\PawnEcsTests.cpp" />
     <ClCompile Include="tests\RegistryTests.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="data\resource_types.json" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

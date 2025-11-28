@@ -21,6 +21,7 @@
 #include "../include/ecs/PawnEcsSystems.h"
 #include "../include/ecs/PawnFactory.h"
 #include "../include/ecs/PawnSelection.h"
+#include "../include/Map/ResourceTypeManager.h"
 #include <MOMOS/momos.h>
 #include <MOMOS/draw.h>
 #include <MOMOS/input.h>
@@ -199,6 +200,9 @@ int game(int argc, char** argv) {
 	};
 	Camera::ZoomBy(Camera::kZoomStep * 2.0f, initial_zoom_focus);
 	g_vsync_toggle.Initialize(false);
+
+	// Load resource types from JSON
+	ResourceTypeManager::Get().LoadFromJSON("data/resource_types.json");
 
 	//Init variables and locations for this specific map
 	GameStatus::get()->prison = new PrisonMap();

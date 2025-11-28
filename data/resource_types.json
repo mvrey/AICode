@@ -1,0 +1,37 @@
+{
+    "resource_types": {
+        "Tree": {
+            "name": "Tree",
+            "image_names": ["Tree1.png", "Tree2.png", "Tree3.png", "Tree4.png"],
+            "destroy_on_use": true,
+            "max_stack": 1,
+            "outputs": {
+                "Wood": [2, 4]
+            }
+        },
+        "Wood": {
+            "name": "Wood",
+            "image_names": [],
+            "destroy_on_use": false,
+            "max_stack": 64,
+            "outputs": {}
+        },
+        "Stone": {
+            "name": "Stone",
+            "image_names": ["MediumStone1.png", "MediumStone2.png"],
+            "destroy_on_use": true,
+            "max_stack": 1,
+            "outputs": {
+                "StoneChunk": [1, 3]
+            }
+        },
+        "StoneChunk": {
+            "name": "StoneChunk",
+            "image_names": [],
+            "destroy_on_use": false,
+            "max_stack": 64,
+            "outputs": {}
+        }
+    }
+}
+
