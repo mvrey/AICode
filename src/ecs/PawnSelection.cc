@@ -6,6 +6,7 @@
 #include <MOMOS/draw.h>
 #include "../../include/ecs/components/PawnStateComponent.h"
 #include "../../include/ecs/components/TransformComponent.h"
+#include "../../include/ecs/Registry.h"
 
 namespace PawnSelection {
 
@@ -51,11 +52,13 @@ bool HandleClick() {
 
 	if (found) {
 		InfoPanel::Get().SetMessage(closest_name);
+		InfoPanel::Get().SetSelectedPawn(g_selected_pawn);
 		return true;
 	}
 	
 	// Clear selection if no pawn was found
 	g_selected_pawn = ECS::Entity();
+	InfoPanel::Get().SetSelectedPawn(ECS::Entity()); // Clear pawn selection in InfoPanel
 	return false;
 }
 

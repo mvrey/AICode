@@ -109,8 +109,8 @@ ECS::Entity SpawnPawn() {
 	
 	// Assign random decrease rates per second for each pawn
 	// Range: 0.01 to 0.05 per second (needs will deplete in 20-100 seconds if not replenished)
-	constexpr float kMinDecreaseRate = 0.01f;
-	constexpr float kMaxDecreaseRate = 0.05f;
+	constexpr float kMinDecreaseRate = 0.001f;
+	constexpr float kMaxDecreaseRate = 0.005f;
 	constexpr float kRateRange = kMaxDecreaseRate - kMinDecreaseRate;
 	
 	needs.hunger_decrease_rate = kMinDecreaseRate + (static_cast<float>(rand()) / static_cast<float>(RAND_MAX)) * kRateRange;

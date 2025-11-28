@@ -11,7 +11,7 @@
 namespace ECS {
 
 void PawnNeedsSystem::Update(Registry& registry, double delta_time) {
-	const float delta_seconds = static_cast<float>(delta_time);
+	const float delta_seconds = static_cast<float>(delta_time) / 1000.0f;
 	
 	registry.ForEach<NeedsComponent>([delta_seconds](Entity /*entity*/, NeedsComponent& needs) {
 		// Decrease each need based on its rate

@@ -56,22 +56,28 @@ void Input() {
 		float mx = static_cast<float>(MOMOS::MousePositionX());
 		float my = static_cast<float>(MOMOS::MousePositionY());
 		g_vsync_toggle.HandleClick(mx, my);
-	}
-	::MOMOS::Vec2 mouse_screen = {
-		static_cast<float>(MOMOS::MousePositionX()),
-		static_cast<float>(MOMOS::MousePositionY())
-	};
-	
-	bool pawn_clicked = PawnSelection::HandleClick();
-	if (pawn_clicked) {
-		// Clear cell selection when pawn is clicked
-		if (GameStatus::get()->map) {
-			GameStatus::get()->map->ClearCellSelection();
-		}
-	} else {
-		// Try to click on a cell
-		if (GameStatus::get()->map) {
-			GameStatus::get()->map->HandleCellClick(mouse_screen);
+		
+		// Only process clicks when button is first pressed (MouseButtonDown)
+		::MOMOS::Vec2 mouse_screen = {
+			static_cast<float>(MOMOS::MousePositionX()),
+			static_cast<float>(MOMOS::MousePositionY())
+		};
+		
+		bool pawn_clicked = PawnSelection::HandleClick();
+		if (pawn_clicked) {
+			// Clear cell selection when pawn is clicked
+			if (GameStatus::get()->map) {
+				GameStatus::get()->map->ClearCellSelection();
+			}
+		} else {
+			// Clear pawn selection when clicking elsewhere
+			PawnSelection::ClearSelection();
+			InfoPanel::Get().SetSelectedPawn(ECS::Entity());
+			
+			// Try to click on a cell
+			if (GameStatus::get()->map) {
+				GameStatus::get()->map->HandleCellClick(mouse_screen);
+			}
 		}
 	}
 
