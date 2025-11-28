@@ -11,6 +11,8 @@
 #include <cmath>
 #include <ctgmath>
 #include "../../include/config.h"
+#include "../../include/SpritesheetLoader.h"
+#include <vector>
 
 typedef float Cost;
 
@@ -34,6 +36,9 @@ class CostMap
 	::MOMOS::SpriteHandle blocked_tile_sprite_;
 	std::vector<std::vector<bool>> tile_walkable_;
 	std::vector<std::vector<float>> tile_costs_; // Store cost values to preserve them across resets
+	
+	SpritesheetLoader spritesheet_loader_;  ///< Loader for grass sprites
+	std::vector<MOMOS::SpriteHandle> grass_sprites_;  ///< Available grass sprites
 
 public:
 	CostMap();

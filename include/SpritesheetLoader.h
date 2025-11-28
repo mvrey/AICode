@@ -46,6 +46,9 @@ public:
 
 	/// Releases all loaded sprites and cleans up resources
 	void Release();
+	
+	/// Clears the sprite map without releasing sprites (useful when sprites are managed elsewhere)
+	void ClearSpriteMap();
 
 	/// Destructor - automatically releases resources
 	~SpritesheetLoader();

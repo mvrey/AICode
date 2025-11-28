@@ -251,6 +251,7 @@
     <ClInclude Include="include\Pathfinding\cost_map.h" />
     <ClInclude Include="include\Pathfinding\path.h" />
     <ClInclude Include="include\PrisonMap.h" />
+    <ClInclude Include="include\SpritesheetLoader.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\ecs\PawnEcsManager.cc" />
@@ -266,6 +267,7 @@
     <ClCompile Include="src\Pathfinding\astar.cc" />
     <ClCompile Include="src\Pathfinding\cost_map.cc" />
     <ClCompile Include="src\Pathfinding\path.cc" />
+    <ClCompile Include="src\SpritesheetLoader.cc" />
     <ClCompile Include="src\Camera.cc" />
     <ClCompile Include="src\PrisonMap.cc" />
     <ClCompile Include="src\ecs\Registry.cc" />

@@ -108,6 +108,9 @@
     <ClInclude Include="include\Pathfinding\path.h">
       <Filter>Header Files\Pathfinding</Filter>
     </ClInclude>
+    <ClInclude Include="include\SpritesheetLoader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="deps\src\deps\chipmunk-7.0.1\include\chipmunk\cpArbiter.h">
       <Filter>Header Files\deps</Filter>
     </ClInclude>
@@ -427,6 +430,9 @@
     </ClCompile>
     <ClCompile Include="src\Pathfinding\path.cc">
       <Filter>Source Files\Pathfinding</Filter>
+    </ClCompile>
+    <ClCompile Include="src\SpritesheetLoader.cc">
+      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Camera.cc">
       <Filter>Source Files</Filter>

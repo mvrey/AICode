@@ -336,6 +336,12 @@ void SpritesheetLoader::Release() {
 	frames_.clear();
 }
 
+void SpritesheetLoader::ClearSpriteMap() {
+	// Clear the sprite map without releasing sprites
+	// This is useful when sprites are managed elsewhere
+	sprites_.clear();
+}
+
 SpritesheetLoader::~SpritesheetLoader() {
 	Release();
 }

@@ -1,12 +1,14 @@
 #include "../../include/Pathfinding/cost_map.h"
 #include "../../include/Camera.h"
 #include <MOMOS/draw.h>
+#include <MOMOS/sprite.h>
 
 #include <algorithm>
 #include <cmath>
 #include <cstdlib>
 #include <utility>
 #include <vector>
+#include <string>
 
 namespace {
 
@@ -22,6 +24,18 @@ CostMap::CostMap() {
 	height_ = 0;
 	tile_sprite_ = CreatePixelSprite(255, 255, 255, 255); // White sprite (kept for compatibility)
 	blocked_tile_sprite_ = CreatePixelSprite(0, 0, 0, 255); // Black sprite (kept for compatibility)
+	
+	// Load spritesheet and collect grass sprites
+	if (spritesheet_loader_.Load("data/textures.json", "data/textures.png")) {
+		// Collect all grass sprites (Grass1.png through Grass9.png)
+		for (int i = 1; i <= 9; ++i) {
+			std::string grass_name = "Grass" + std::to_string(i) + ".png";
+			MOMOS::SpriteHandle grass_sprite = spritesheet_loader_.GetSprite(grass_name);
+			if (grass_sprite) {
+				grass_sprites_.push_back(grass_sprite);
+			}
+		}
+	}
 }
 
 CostMap::CostMap(const CostMap& orig) {}
@@ -35,6 +49,17 @@ CostMap::~CostMap() {
 		MOMOS::SpriteRelease(blocked_tile_sprite_);
 		blocked_tile_sprite_ = nullptr;
 	}
+	
+	// Release grass sprites (they are independent textures created by SubSprite)
+	for (MOMOS::SpriteHandle sprite : grass_sprites_) {
+		if (sprite) {
+			MOMOS::SpriteRelease(sprite);
+		}
+	}
+	grass_sprites_.clear();
+	
+	// Clear the loader's sprite map to prevent it from trying to release sprites we've already released
+	spritesheet_loader_.ClearSpriteMap();
 }
 
 
@@ -362,6 +387,39 @@ void CostMap::Draw() {
 				
 				MOMOS::DrawSetFillColor(grey_value, grey_value, grey_value, 255);
 				MOMOS::DrawSolidPath(points, 5, false);
+				
+				// Draw grass sprite on 70% of cells with cost_ == 0
+				if (cost == 0.0f && !grass_sprites_.empty()) {
+					// Use deterministic hash based on cell position for consistent randomness
+					// This ensures the same cell always gets the same random selection
+					unsigned int hash = static_cast<unsigned int>(x * 73856093u) ^ static_cast<unsigned int>(y * 19349663u);
+					
+					// 70% chance to draw grass (using hash % 100 < 70)
+					if ((hash % 100) < 70) {
+						// Select random grass sprite based on cell position (use different hash for sprite selection)
+						unsigned int sprite_hash = static_cast<unsigned int>(x * 19349669u) ^ static_cast<unsigned int>(y * 83492791u);
+						unsigned int sprite_index = sprite_hash % static_cast<unsigned int>(grass_sprites_.size());
+						MOMOS::SpriteHandle grass_sprite = grass_sprites_[sprite_index];
+						
+						if (grass_sprite) {
+							// Calculate center of the cell in screen coordinates
+							::MOMOS::Vec2 world_center = {
+								(x + 0.5f) * tile_world_width,
+								(y + 0.5f) * tile_world_height
+							};
+							::MOMOS::Vec2 screen_center = Camera::WorldToScreen(world_center);
+							
+							// Get sprite dimensions
+							int sprite_width = MOMOS::SpriteWidth(grass_sprite);
+							int sprite_height = MOMOS::SpriteHeight(grass_sprite);
+							
+							// Draw sprite centered on the cell
+							MOMOS::DrawSprite(grass_sprite, 
+								screen_center.x - sprite_width * 0.5f,
+								screen_center.y - sprite_height * 0.5f);
+						}
+					}
+				}
 			}
 		}
 	}
