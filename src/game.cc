@@ -36,70 +36,6 @@ namespace {
 	::MOMOS::Vec2 g_selected_cell = { -1.0f, -1.0f }; // Invalid cell position
 
 
-constexpr float kCameraPanSpeed = 0.5f;
-constexpr float kEdgePanPadding = 20.0f;
-constexpr float kZoomStep = 0.25f;
-
-void HandleCameraZoom() {
-	float wheel_delta = static_cast<float>(MOMOS::MouseWheelY());
-	if (wheel_delta == 0.0f) {
-		return;
-	}
-
-	::MOMOS::Vec2 mouse_screen_position = {
-		static_cast<float>(MOMOS::MousePositionX()),
-		static_cast<float>(MOMOS::MousePositionY())
-	};
-
-	Camera::ZoomBy(wheel_delta * kZoomStep, mouse_screen_position);
-}
-
-void HandleCameraPan(float delta_seconds) {
-	if (delta_seconds <= 0.0f || !Camera::CanPan()) {
-		return;
-	}
-
-	::MOMOS::Vec2 direction = { 0.0f, 0.0f };
-
-	if (MOMOS::IsKeyPressed('A') || MOMOS::IsSpecialKeyPressed(MOMOS::kSpecialKey_Left)) {
-		direction.x -= 1.0f;
-	}
-	if (MOMOS::IsKeyPressed('D') || MOMOS::IsSpecialKeyPressed(MOMOS::kSpecialKey_Right)) {
-		direction.x += 1.0f;
-	}
-	if (MOMOS::IsKeyPressed('W') || MOMOS::IsSpecialKeyPressed(MOMOS::kSpecialKey_Up)) {
-		direction.y -= 1.0f;
-	}
-	if (MOMOS::IsKeyPressed('S') || MOMOS::IsSpecialKeyPressed(MOMOS::kSpecialKey_Down)) {
-		direction.y += 1.0f;
-	}
-
-	float mouse_x = static_cast<float>(MOMOS::MousePositionX());
-	float mouse_y = static_cast<float>(MOMOS::MousePositionY());
-
-	if (mouse_x < kEdgePanPadding) {
-		direction.x -= 1.0f;
-	} else if (mouse_x > Screen::width - kEdgePanPadding) {
-		direction.x += 1.0f;
-	}
-
-	if (mouse_y < kEdgePanPadding) {
-		direction.y -= 1.0f;
-	} else if (mouse_y > Screen::height - kEdgePanPadding) {
-		direction.y += 1.0f;
-	}
-
-	float magnitude = std::sqrt(direction.x * direction.x + direction.y * direction.y);
-	if (magnitude <= 0.0f) {
-		return;
-	}
-
-	direction.x /= magnitude;
-	direction.y /= magnitude;
-
-	float distance = kCameraPanSpeed * delta_seconds;
-	Camera::Pan(::MOMOS::Vec2{ direction.x * distance, direction.y * distance });
-}
 
 bool HandlePawnClick() {
 	if (!MOMOS::MouseButtonDown(1)) {
@@ -297,8 +233,7 @@ void Input() {
 		HandleCellClick();
 	}
 
-	HandleCameraZoom();
-	HandleCameraPan(delta_seconds);
+	Camera::HandleInput(delta_seconds);
 }
 
 
@@ -414,7 +349,7 @@ int game(int argc, char** argv) {
 		static_cast<float>(Screen::width) * 0.5f,
 		static_cast<float>(Screen::height) * 0.5f
 	};
-	Camera::ZoomBy(kZoomStep * 2.0f, initial_zoom_focus);
+	Camera::ZoomBy(Camera::kZoomStep * 2.0f, initial_zoom_focus);
 	g_vsync_toggle.Initialize(false);
 
 	//Init variables and locations for this specific map

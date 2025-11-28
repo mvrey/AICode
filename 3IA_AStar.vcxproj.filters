@@ -102,6 +102,15 @@
     <ClInclude Include="include\Pathfinding\cost_map.h">
       <Filter>Header Files\Pathfinding</Filter>
     </ClInclude>
+    <ClInclude Include="include\Pathfinding\Map.h">
+      <Filter>Header Files\Pathfinding</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Pathfinding\MapGenerator.h">
+      <Filter>Header Files\Pathfinding</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Pathfinding\MapRenderer.h">
+      <Filter>Header Files\Pathfinding</Filter>
+    </ClInclude>
     <ClInclude Include="include\Agents\Pathfinder.h">
       <Filter>Header Files\Agents</Filter>
     </ClInclude>
@@ -426,6 +435,15 @@
       <Filter>Source Files\Pathfinding</Filter>
     </ClCompile>
     <ClCompile Include="src\Pathfinding\cost_map.cc">
+      <Filter>Source Files\Pathfinding</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Pathfinding\Map.cc">
+      <Filter>Source Files\Pathfinding</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Pathfinding\MapGenerator.cc">
+      <Filter>Source Files\Pathfinding</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Pathfinding\MapRenderer.cc">
       <Filter>Source Files\Pathfinding</Filter>
     </ClCompile>
     <ClCompile Include="src\Pathfinding\path.cc">

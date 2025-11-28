@@ -1,12 +1,15 @@
 #include "../../include/Camera.h"
+#include <MOMOS/input.h>
 
 #include <cmath>
 
 namespace {
-
+ 
 constexpr float kMinZoom = 1.0f;
 constexpr float kMaxZoom = 3.5f;
 constexpr float kPanZoomThreshold = 1.001f;
+constexpr float kCameraPanSpeed = 0.5f;
+constexpr float kEdgePanPadding = 20.0f;
 
 ::MOMOS::Vec2 g_world_size = { static_cast<float>(Screen::width), static_cast<float>(Screen::height) };
 ::MOMOS::Vec2 g_center = { g_world_size.x * 0.5f, g_world_size.y * 0.5f };
@@ -118,6 +121,65 @@ void Pan(const ::MOMOS::Vec2& delta) {
 	g_center.x += delta.x;
 	g_center.y += delta.y;
 	ClampCenter();
+}
+
+void HandleInput(float delta_seconds) {
+	// Handle zoom
+	float wheel_delta = static_cast<float>(MOMOS::MouseWheelY());
+	if (wheel_delta != 0.0f) {
+		::MOMOS::Vec2 mouse_screen_position = {
+			static_cast<float>(MOMOS::MousePositionX()),
+			static_cast<float>(MOMOS::MousePositionY())
+		};
+		ZoomBy(wheel_delta * Camera::kZoomStep, mouse_screen_position);
+	}
+
+	// Handle pan
+	if (delta_seconds <= 0.0f || !CanPan()) {
+		return;
+	}
+
+	::MOMOS::Vec2 direction = { 0.0f, 0.0f };
+
+	// Keyboard controls
+	if (MOMOS::IsKeyPressed('A') || MOMOS::IsSpecialKeyPressed(MOMOS::kSpecialKey_Left)) {
+		direction.x -= 1.0f;
+	}
+	if (MOMOS::IsKeyPressed('D') || MOMOS::IsSpecialKeyPressed(MOMOS::kSpecialKey_Right)) {
+		direction.x += 1.0f;
+	}
+	if (MOMOS::IsKeyPressed('W') || MOMOS::IsSpecialKeyPressed(MOMOS::kSpecialKey_Up)) {
+		direction.y -= 1.0f;
+	}
+	if (MOMOS::IsKeyPressed('S') || MOMOS::IsSpecialKeyPressed(MOMOS::kSpecialKey_Down)) {
+		direction.y += 1.0f;
+	}
+
+	// Edge panning
+	float mouse_x = static_cast<float>(MOMOS::MousePositionX());
+	float mouse_y = static_cast<float>(MOMOS::MousePositionY());
+
+	if (mouse_x < kEdgePanPadding) {
+		direction.x -= 1.0f;
+	} else if (mouse_x > Screen::width - kEdgePanPadding) {
+		direction.x += 1.0f;
+	}
+
+	if (mouse_y < kEdgePanPadding) {
+		direction.y -= 1.0f;
+	} else if (mouse_y > Screen::height - kEdgePanPadding) {
+		direction.y += 1.0f;
+	}
+
+	// Normalize and apply pan
+	float magnitude = std::sqrt(direction.x * direction.x + direction.y * direction.y);
+	if (magnitude > 0.0f) {
+		direction.x /= magnitude;
+		direction.y /= magnitude;
+
+		float distance = kCameraPanSpeed * delta_seconds;
+		Pan(::MOMOS::Vec2{ direction.x * distance, direction.y * distance });
+	}
 }
 
 } // namespace Camera

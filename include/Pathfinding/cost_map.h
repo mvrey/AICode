@@ -1,48 +1,20 @@
-
-// project A Star
-// cost_map.h
-// author: Toni Barella
-// Artificial Intelligence - 3VGP
-// ESAT 2016/2017
-
 #ifndef __COST_MAP__
 #define __COST_MAP__
 
-#include <cmath>
-#include <ctgmath>
-#include "../../include/config.h"
-#include "../../include/SpritesheetLoader.h"
-#include <vector>
+#include "Map.h"
+#include "MapGenerator.h"
+#include "MapRenderer.h"
 
-typedef float Cost;
+// Forward declaration - Cell is defined in Map.h
+typedef struct cell_s Cell;
 
-// Use one of the next declarations
-typedef struct cell_s {
-	::MOMOS::Vec2 position_ = {0,0};
-	Cost cost_ = 0.0f;
-	int f, g, h = 0;
-	cell_s *parent = nullptr;
-
-	bool isWalkable() { return cost_ < 1.0f; }
-} Cell;
-
+/// CostMap is a facade that combines Map, MapGenerator, and MapRenderer.
+/// It maintains backward compatibility with existing code.
 class CostMap
 {
-	int width_;
-	int height_;
-	std::vector<std::vector<Cell*>> cost_map_;
-
-	::MOMOS::SpriteHandle tile_sprite_;
-	::MOMOS::SpriteHandle blocked_tile_sprite_;
-	std::vector<std::vector<bool>> tile_walkable_;
-	std::vector<std::vector<float>> tile_costs_; // Store cost values to preserve them across resets
-	
-	SpritesheetLoader spritesheet_loader_;  ///< Loader for grass sprites
-	std::vector<MOMOS::SpriteHandle> grass_sprites_;  ///< Available grass sprites
-	std::vector<MOMOS::SpriteHandle> medium_stone_sprites_;  ///< MediumStone1, MediumStone2 (for cost_ = 1.0)
-	std::vector<MOMOS::SpriteHandle> small_stone_sprites_;  ///< SmallStone1-5 (for cost_ = 0.75)
-	std::vector<MOMOS::SpriteHandle> dirt_sprites_;  ///< Dirt1, Dirt2 (for cost_ = 0.5)
-	std::vector<MOMOS::SpriteHandle> tree_sprites_;  ///< Tree1-4 (for cells without sprites)
+	Map map_;
+	MapGenerator generator_;
+	MapRenderer renderer_;
 
 public:
 	CostMap();
@@ -80,6 +52,6 @@ public:
 
 	/// Draws the cost map's tiles if available
 	void Draw();
-
 };
+
 #endif // __COST_MAP__
