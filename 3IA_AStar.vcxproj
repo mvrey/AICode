@@ -243,6 +243,8 @@
     <ClInclude Include="include\ecs\system\PawnPathFollowSystem.h" />
     <ClInclude Include="include\ecs\system\PawnMovementSystem.h" />
     <ClInclude Include="include\ecs\system\PawnRenderSystem.h" />
+    <ClInclude Include="include\ecs\system\PawnNeedsSystem.h" />
+    <ClInclude Include="include\ecs\components\NeedsComponent.h" />
     <ClInclude Include="include\Agents\Agent.h" />
     <ClInclude Include="include\Agents\Pathfinder.h" />
     <ClInclude Include="include\config.h" />
@@ -286,6 +288,7 @@
     <ClCompile Include="src\ecs\system\PawnPathFollowSystem.cc" />
     <ClCompile Include="src\ecs\system\PawnMovementSystem.cc" />
     <ClCompile Include="src\ecs\system\PawnRenderSystem.cc" />
+    <ClCompile Include="src\ecs\system\PawnNeedsSystem.cc" />
     <ClCompile Include="src\ecs\PawnInput.cc" />
     <ClCompile Include="src\ecs\PawnEcsSystems.cc" />
     <ClCompile Include="tests\AncientMythosTests.cpp" />

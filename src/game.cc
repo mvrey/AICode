@@ -198,6 +198,7 @@ int game(int argc, char** argv) {
 	GameStatus::get()->prison = new PrisonMap();
 
 	GameStatus::get()->map = new CostMap();
+	GameStatus::get()->map->Load("data/map_03_60x44_bw.bmp", "data/map_03_960x704_layoutAB.bmp");
 	GameStatus::get()->pathfinder_ = new Pathfinder();
 	g_speed_controls.Initialize();
 

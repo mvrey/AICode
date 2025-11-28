@@ -9,6 +9,7 @@
 #include "../../include/ecs/system/PawnPathFollowSystem.h"
 #include "../../include/ecs/system/PawnMovementSystem.h"
 #include "../../include/ecs/system/PawnRenderSystem.h"
+#include "../../include/ecs/system/PawnNeedsSystem.h"
 
 namespace PawnECS {
 
@@ -27,12 +28,16 @@ Systems& Systems::Get() {
 	if (!instance.render_system_) {
 		instance.render_system_ = new ECS::PawnRenderSystem();
 	}
+	if (!instance.needs_system_) {
+		instance.needs_system_ = new ECS::PawnNeedsSystem();
+	}
 	return instance;
 }
 
-// Ticks AI, pathing, and movement systems against the shared registry.
+// Ticks AI, pathing, movement, and needs systems against the shared registry.
 void Systems::Update(double delta_time) {
 	auto& registry = PawnECS::GetRegistry();
+	needs_system_->Update(registry, delta_time);
 	ai_system_->Update(registry, delta_time);
 	path_system_->Update(registry, delta_time);
 	movement_system_->Update(registry, delta_time);

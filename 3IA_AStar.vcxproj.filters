@@ -384,6 +384,12 @@
     <ClInclude Include="include\ecs\system\PawnRenderSystem.h">
       <Filter>Header Files\ecs\system</Filter>
     </ClInclude>
+    <ClInclude Include="include\ecs\system\PawnNeedsSystem.h">
+      <Filter>Header Files\ecs\system</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ecs\components\NeedsComponent.h">
+      <Filter>Header Files\ecs\components</Filter>
+    </ClInclude>
     <ClInclude Include="include\ecs\system\PawnPathFollowSystem.h">
       <Filter>Header Files\ecs\system</Filter>
     </ClInclude>
@@ -492,6 +498,9 @@
       <Filter>Source Files\ecs\system</Filter>
     </ClCompile>
     <ClCompile Include="src\ecs\system\PawnRenderSystem.cc">
+      <Filter>Source Files\ecs\system</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ecs\system\PawnNeedsSystem.cc">
       <Filter>Source Files\ecs\system</Filter>
     </ClCompile>
     <ClCompile Include="src\UI\VSyncToggle.cc">

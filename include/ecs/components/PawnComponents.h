@@ -10,6 +10,7 @@
 #include "SpriteComponent.h"
 #include "MovementComponent.h"
 #include "PawnStateComponent.h"
+#include "NeedsComponent.h"
 
 #endif // ECS_PAWN_COMPONENTS_H
 

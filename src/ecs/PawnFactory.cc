@@ -100,6 +100,23 @@ ECS::Entity SpawnPawn() {
 	state.original_speed = base_speed;
 	state.name = PickRandomPawnName();
 
+	// Initialize needs component with random decrease rates
+	auto& needs = registry.AddComponent<ECS::NeedsComponent>(entity);
+	// All needs start at full (1.0)
+	needs.hunger = 1.0f;
+	needs.energy = 1.0f;
+	needs.joy = 1.0f;
+	
+	// Assign random decrease rates per second for each pawn
+	// Range: 0.01 to 0.05 per second (needs will deplete in 20-100 seconds if not replenished)
+	constexpr float kMinDecreaseRate = 0.01f;
+	constexpr float kMaxDecreaseRate = 0.05f;
+	constexpr float kRateRange = kMaxDecreaseRate - kMinDecreaseRate;
+	
+	needs.hunger_decrease_rate = kMinDecreaseRate + (static_cast<float>(rand()) / static_cast<float>(RAND_MAX)) * kRateRange;
+	needs.energy_decrease_rate = kMinDecreaseRate + (static_cast<float>(rand()) / static_cast<float>(RAND_MAX)) * kRateRange;
+	needs.joy_decrease_rate = kMinDecreaseRate + (static_cast<float>(rand()) / static_cast<float>(RAND_MAX)) * kRateRange;
+
 	return entity;
 }
 
