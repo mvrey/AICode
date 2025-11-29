@@ -33,6 +33,15 @@ void InfoPanel::SetSelectedPawn(ECS::Entity pawn) {
 
 void InfoPanel::SetSelectedCellResources(const std::vector<MapResource>& resources) {
 	selected_cell_resources_ = resources;
+	// Debug: Print resource count (can be removed later)
+	printf("InfoPanel: Set %zu resources\n", resources.size());
+	for (size_t i = 0; i < resources.size(); ++i) {
+		if (resources[i].type != nullptr) {
+			printf("  Resource %zu: %s (amount: %d)\n", i, resources[i].type->name.c_str(), resources[i].amount);
+		} else {
+			printf("  Resource %zu: null type (amount: %d)\n", i, resources[i].amount);
+		}
+	}
 }
 
 void InfoPanel::Draw() const {
@@ -186,6 +195,7 @@ void InfoPanel::DrawResourcesList(float start_y) const {
 	
 	// Draw each resource
 	MOMOS::DrawSetTextSize(kTextSize - 2.0f);
+	int valid_resources = 0;
 	for (const auto& resource : selected_cell_resources_) {
 		if (resource.type != nullptr && resource.amount > 0) {
 			char resource_text[128];
@@ -193,7 +203,13 @@ void InfoPanel::DrawResourcesList(float start_y) const {
 				resource.type->name.c_str(), resource.amount);
 			MOMOS::DrawText(x, y, resource_text);
 			y += kResourceLineSpacing;
+			valid_resources++;
 		}
+	}
+	
+	// If no valid resources were found, show a message
+	if (valid_resources == 0 && !selected_cell_resources_.empty()) {
+		MOMOS::DrawText(x, y, "  (resources have invalid data)");
 	}
 }
 

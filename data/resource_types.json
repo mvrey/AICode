@@ -2,7 +2,7 @@
     "resource_types": {
         "Tree": {
             "name": "Tree",
-            "image_names": ["Tree1.png", "Tree2.png", "Tree3.png", "Tree4.png"],
+            "image_names": ["Tree1.png", "Tree2.png", "Tree3.png"],
             "destroy_on_use": true,
             "max_stack": 1,
             "outputs": {

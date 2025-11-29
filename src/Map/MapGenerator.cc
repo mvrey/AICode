@@ -1,5 +1,7 @@
 #include "../../include/Map/MapGenerator.h"
 #include "../../include/Map/Map.h"
+#include "../../include/Map/ResourceTypeManager.h"
+#include "../../include/Map/MapResource.h"
 #include <algorithm>
 #include <cstdlib>
 #include <vector>
@@ -168,6 +170,33 @@ bool MapGenerator::GenerateTileMap(Map& map, int cols, int rows, float blocked_r
 
 	// Initialize the map with generated data
 	map.Initialize(safe_cols, safe_rows, tile_walkable, tile_costs);
+	
+	// Add tree resources to cells (4% of walkable cells)
+	const MapResourceType* tree_type = ResourceTypeManager::Get().GetResourceType("Tree");
+	if (tree_type != nullptr && !tree_type->image_names.empty()) {
+		int trees_added = 0;
+		for (int x = 0; x < safe_cols; ++x) {
+			for (int y = 0; y < safe_rows; ++y) {
+				// Only add trees to walkable cells (cost == 0.0f)
+				if (tile_walkable[x][y] && tile_costs[x][y] == 0.0f) {
+					// Check if this cell should have a tree (4% chance)
+					// Use deterministic hash based on cell position for consistent randomness
+					unsigned int tree_hash = static_cast<unsigned int>(x * 91234567u) ^ static_cast<unsigned int>(y * 45678901u);
+					if ((tree_hash % 100) < 4) {
+						MapCell* cell = map.getCellAt(x, y);
+						if (cell != nullptr) {
+							// Add a tree resource to this cell
+							cell->resources.push_back(MapResource(tree_type, 1));
+							trees_added++;
+						}
+					}
+				}
+			}
+		}
+		// Debug: Print how many trees were added (can be removed later)
+		 printf("Added %d tree resources to map\n", trees_added);
+	}
+	
 	return true;
 }
 

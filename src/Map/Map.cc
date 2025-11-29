@@ -165,6 +165,9 @@ bool Map::HandleCellClick(const ::MOMOS::Vec2& screen_pos) {
 	// Set the resources for this cell in the InfoPanel
 	InfoPanel::Get().SetSelectedCellResources(cell->resources);
 	
+	// Debug: Print resource count for clicked cell
+	printf("Cell (%d, %d) has %zu resources\n", map_x, map_y, cell->resources.size());
+	
 	return true;
 }
 

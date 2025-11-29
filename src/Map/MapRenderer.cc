@@ -1,6 +1,7 @@
 #include "../../include/Map/MapRenderer.h"
 #include "../../include/Map/Map.h"
 #include "../../include/Camera.h"
+#include "../../include/Map/ResourceTypeManager.h"
 #include <MOMOS/draw.h>
 #include <MOMOS/sprite.h>
 
@@ -73,15 +74,6 @@ void MapRenderer::LoadSprites() {
 				dirt_sprites_.push_back(dirt_sprite);
 			}
 		}
-		
-		// Collect tree sprites (Tree1-4 for cells without sprites)
-		for (int i = 1; i <= 4; ++i) {
-			std::string tree_name = "Tree" + std::to_string(i) + ".png";
-			MOMOS::SpriteHandle tree_sprite = spritesheet_loader_.GetSprite(tree_name);
-			if (tree_sprite) {
-				tree_sprites_.push_back(tree_sprite);
-			}
-		}
 	}
 }
 
@@ -117,14 +109,6 @@ void MapRenderer::ReleaseSprites() {
 		}
 	}
 	dirt_sprites_.clear();
-	
-	// Release tree sprites
-	for (MOMOS::SpriteHandle sprite : tree_sprites_) {
-		if (sprite) {
-			MOMOS::SpriteRelease(sprite);
-		}
-	}
-	tree_sprites_.clear();
 	
 	// Clear the loader's sprite map to prevent it from trying to release sprites we've already released
 	spritesheet_loader_.ClearSpriteMap();
@@ -263,64 +247,56 @@ void MapRenderer::Draw(const Map& map) {
 		}
 	}
 	
-	// Second pass: Draw trees on top of all other sprites
-	if (start_x <= end_x && start_y <= end_y && !tree_sprites_.empty()) {
+	// Second pass: Draw resources from cells on top of all other sprites
+	if (start_x <= end_x && start_y <= end_y) {
 		for (int x = start_x; x <= end_x; ++x) {
 			for (int y = start_y; y <= end_y; ++y) {
-				// Get the cell and its cost
 				const MapCell* cell = map.getCellAt(x, y);
-				float cost = 0.0f;
-				if (cell != nullptr) {
-					cost = cell->cost_;
+				if (cell == nullptr || cell->resources.empty()) {
+					continue;
 				}
 				
-				// Check if this cell should have a tree (4% of cells with no sprite)
-				bool has_sprite = false;
-				const float epsilon = 0.01f;
-				
-				if (cost == 0.0f) {
-					// Check if grass was drawn (70% chance)
-					unsigned int grass_hash = static_cast<unsigned int>(x * 73856093u) ^ static_cast<unsigned int>(y * 19349663u);
-					has_sprite = (grass_hash % 100) < 70;
-				} else {
-					// Check if cost sprite should be drawn
-					has_sprite = (std::abs(cost - 1.0f) < epsilon && !medium_stone_sprites_.empty()) ||
-					             (std::abs(cost - 0.75f) < epsilon && !small_stone_sprites_.empty()) ||
-					             (std::abs(cost - 0.5f) < epsilon && !dirt_sprites_.empty());
-				}
-				
-				// If no sprite was drawn, 4% chance to draw a tree
-				if (!has_sprite) {
-					unsigned int tree_hash = static_cast<unsigned int>(x * 91234567u) ^ static_cast<unsigned int>(y * 45678901u);
-					if ((tree_hash % 100) < 4) {
-						// Select random tree sprite based on cell position
-						unsigned int tree_sprite_hash = static_cast<unsigned int>(x * 19349669u) ^ static_cast<unsigned int>(y * 83492791u);
-						unsigned int tree_index = tree_sprite_hash % static_cast<unsigned int>(tree_sprites_.size());
-						MOMOS::SpriteHandle tree_sprite = tree_sprites_[tree_index];
+				// Draw each resource in the cell
+				for (const auto& resource : cell->resources) {
+					if (resource.type == nullptr || resource.amount <= 0) {
+						continue;
+					}
+					
+					// Get the resource type's image names
+					const std::vector<std::string>& image_names = resource.type->image_names;
+					if (image_names.empty()) {
+						continue;
+					}
+					
+					// Select an image based on cell position for consistency
+					unsigned int image_hash = static_cast<unsigned int>(x * 19349669u) ^ static_cast<unsigned int>(y * 83492791u);
+					unsigned int image_index = image_hash % static_cast<unsigned int>(image_names.size());
+					const std::string& image_name = image_names[image_index];
+					
+					// Get sprite from spritesheet loader
+					MOMOS::SpriteHandle resource_sprite = spritesheet_loader_.GetSprite(image_name);
+					if (resource_sprite) {
+						// Calculate center of the cell in screen coordinates
+						::MOMOS::Vec2 world_center = {
+							(x + 0.5f) * tile_world_width,
+							(y + 0.5f) * tile_world_height
+						};
+						::MOMOS::Vec2 screen_center = Camera::WorldToScreen(world_center);
 						
-						if (tree_sprite) {
-							// Calculate center of the cell in screen coordinates
-							::MOMOS::Vec2 world_center = {
-								(x + 0.5f) * tile_world_width,
-								(y + 0.5f) * tile_world_height
-							};
-							::MOMOS::Vec2 screen_center = Camera::WorldToScreen(world_center);
-							
-							// Get sprite dimensions and apply camera zoom
-							float zoom = Camera::Zoom();
-							int sprite_width = MOMOS::SpriteWidth(tree_sprite);
-							int sprite_height = MOMOS::SpriteHeight(tree_sprite);
-							float half_width = sprite_width * 0.5f * zoom;
-							float half_height = sprite_height * 0.5f * zoom;
-							
-							// Draw sprite with zoom scaling
-							::MOMOS::SpriteTransform sprite_transform{};
-							sprite_transform.x = screen_center.x - half_width;
-							sprite_transform.y = screen_center.y - half_height;
-							sprite_transform.scale_x = zoom;
-							sprite_transform.scale_y = zoom;
-							MOMOS::DrawSprite(tree_sprite, sprite_transform);
-						}
+						// Get sprite dimensions and apply camera zoom
+						float zoom = Camera::Zoom();
+						int sprite_width = MOMOS::SpriteWidth(resource_sprite);
+						int sprite_height = MOMOS::SpriteHeight(resource_sprite);
+						float half_width = sprite_width * 0.5f * zoom;
+						float half_height = sprite_height * 0.5f * zoom;
+						
+						// Draw sprite with zoom scaling
+						::MOMOS::SpriteTransform sprite_transform{};
+						sprite_transform.x = screen_center.x - half_width;
+						sprite_transform.y = screen_center.y - half_height;
+						sprite_transform.scale_x = zoom;
+						sprite_transform.scale_y = zoom;
+						MOMOS::DrawSprite(resource_sprite, sprite_transform);
 					}
 				}
 			}

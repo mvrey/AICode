@@ -15,7 +15,6 @@ class MapRenderer {
 	std::vector<MOMOS::SpriteHandle> medium_stone_sprites_;
 	std::vector<MOMOS::SpriteHandle> small_stone_sprites_;
 	std::vector<MOMOS::SpriteHandle> dirt_sprites_;
-	std::vector<MOMOS::SpriteHandle> tree_sprites_;
 	
 	// Legacy sprites (kept for compatibility)
 	::MOMOS::SpriteHandle tile_sprite_;
