@@ -1,4 +1,7 @@
 #include "../../include/Camera.h"
+#include "../../include/ecs/Entity.h"
+#include "../../include/ecs/PawnEcs.h"
+#include "../../include/ecs/components/TransformComponent.h"
 #include <MOMOS/input.h>
 
 #include <cmath>
@@ -14,6 +17,10 @@ constexpr float kEdgePanPadding = 20.0f;
 ::MOMOS::Vec2 g_world_size = { static_cast<float>(Screen::width), static_cast<float>(Screen::height) };
 ::MOMOS::Vec2 g_center = { g_world_size.x * 0.5f, g_world_size.y * 0.5f };
 float g_zoom = kMinZoom;
+ECS::Entity g_following_entity;
+bool g_is_following = false;
+::MOMOS::Vec2 g_last_manual_center = g_center;
+float g_last_manual_zoom = g_zoom;
 
 ::MOMOS::Vec2 ScreenCenter() {
 	return ::MOMOS::Vec2{
@@ -111,6 +118,11 @@ void ZoomBy(float delta, const ::MOMOS::Vec2& focus_screen) {
 	g_center.x += focus_before.x - focus_after.x;
 	g_center.y += focus_before.y - focus_after.y;
 	ClampCenter();
+	
+	// Manual zoom disables follow
+	if (g_is_following) {
+		StopFollowing();
+	}
 }
 
 void Pan(const ::MOMOS::Vec2& delta) {
@@ -121,11 +133,65 @@ void Pan(const ::MOMOS::Vec2& delta) {
 	g_center.x += delta.x;
 	g_center.y += delta.y;
 	ClampCenter();
+	
+	// Manual pan disables follow
+	if (g_is_following) {
+		StopFollowing();
+	}
 }
 
 void FocusOn(const ::MOMOS::Vec2& world_pos) {
 	g_center = world_pos;
 	ClampCenter();
+	// Manual focus disables follow
+	if (g_is_following) {
+		StopFollowing();
+	}
+}
+
+void StartFollowing(ECS::Entity entity) {
+	g_following_entity = entity;
+	g_is_following = true;
+	g_last_manual_center = g_center;
+	g_last_manual_zoom = g_zoom;
+	
+	// Immediately focus on the entity (but don't call FocusOn which would stop following)
+	auto& registry = PawnECS::GetRegistry();
+	if (registry.HasComponent<ECS::TransformComponent>(entity)) {
+		const auto& transform = registry.GetComponent<ECS::TransformComponent>(entity);
+		g_center = transform.position;
+		ClampCenter();
+	}
+}
+
+void StopFollowing() {
+	g_is_following = false;
+	g_following_entity = ECS::Entity();
+}
+
+void UpdateFollow(float /*delta_seconds*/) {
+	if (!g_is_following || !g_following_entity.IsValid()) {
+		return;
+	}
+
+	auto& registry = PawnECS::GetRegistry();
+	if (!registry.HasComponent<ECS::TransformComponent>(g_following_entity)) {
+		StopFollowing();
+		return;
+	}
+
+	const auto& transform = registry.GetComponent<ECS::TransformComponent>(g_following_entity);
+	// Directly update camera center without calling FocusOn (which would stop following)
+	g_center = transform.position;
+	ClampCenter();
+}
+
+bool IsFollowing() {
+	return g_is_following;
+}
+
+ECS::Entity GetFollowingEntity() {
+	return g_following_entity;
 }
 
 void HandleInput(float delta_seconds) {
@@ -137,6 +203,7 @@ void HandleInput(float delta_seconds) {
 			static_cast<float>(MOMOS::MousePositionY())
 		};
 		ZoomBy(wheel_delta * Camera::kZoomStep, mouse_screen_position);
+		// Manual zoom via wheel disables follow (handled in ZoomBy)
 	}
 
 	// Handle pan

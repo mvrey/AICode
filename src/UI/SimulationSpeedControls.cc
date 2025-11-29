@@ -25,13 +25,17 @@ const SimulationSpeedControls::SpeedControlOption SimulationSpeedControls::kOpti
 SimulationSpeedControls::SimulationSpeedControls()
 	: speed_index_(1)
 	, last_nonzero_speed_index_(1)
-	, hovered_button_(-1) {
+	, hovered_button_(-1)
+	, minus_key_was_pressed_(false)
+	, plus_key_was_pressed_(false) {
 }
 
 void SimulationSpeedControls::Initialize() {
 	speed_index_ = 1;
 	last_nonzero_speed_index_ = 1;
 	hovered_button_ = -1;
+	minus_key_was_pressed_ = false;
+	plus_key_was_pressed_ = false;
 	ApplySpeedIndex(speed_index_);
 }
 
@@ -40,6 +44,34 @@ void SimulationSpeedControls::HandleInput() {
 	float my = static_cast<float>(MOMOS::MousePositionY());
 	hovered_button_ = ButtonIndexAt(mx, my);
 
+	// Handle keyboard shortcuts for '-' and '+' keys
+	// Check for minus key (both regular and with shift)
+	bool minus_pressed = MOMOS::IsKeyPressed('-');
+	
+	// For plus, check both '+' and '=' since '=' is shift+'+' on most keyboards
+	bool plus_pressed = MOMOS::IsKeyPressed('+') || MOMOS::IsKeyPressed('=');
+	
+	// Only trigger on key press (not while held down)
+	bool minus_just_pressed = minus_pressed && !minus_key_was_pressed_;
+	bool plus_just_pressed = plus_pressed && !plus_key_was_pressed_;
+	
+	minus_key_was_pressed_ = minus_pressed;
+	plus_key_was_pressed_ = plus_pressed;
+	
+	if (minus_just_pressed) {
+		printf("Minus key just pressed! Button disabled: %d\n", ButtonDisabled(0) ? 1 : 0);
+		if (!ButtonDisabled(0)) {
+			DecreaseSpeed();
+		}
+	}
+	if (plus_just_pressed) {
+		printf("Plus/Equals key just pressed! Button disabled: %d\n", ButtonDisabled(2) ? 1 : 0);
+		if (!ButtonDisabled(2)) {
+			IncreaseSpeed();
+		}
+	}
+
+	// Handle mouse clicks
 	if (hovered_button_ != -1 && MOMOS::MouseButtonDown(1) && !ButtonDisabled(hovered_button_)) {
 		switch (hovered_button_) {
 		case 0:
@@ -107,6 +139,10 @@ void SimulationSpeedControls::Draw() const {
 		float text_y = by + kButtonHeight / 2.0f + 5.0f;
 		MOMOS::DrawText(text_x, text_y, button_label);
 	}
+}
+
+bool SimulationSpeedControls::IsClickOnControls(float x, float y) const {
+	return ButtonIndexAt(x, y) != -1;
 }
 
 double SimulationSpeedControls::CurrentMultiplier() const {

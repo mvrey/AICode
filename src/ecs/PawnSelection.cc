@@ -56,6 +56,10 @@ bool HandleClick() {
 	}
 
 	if (found) {
+		// If camera was following a different pawn, stop it
+		if (Camera::IsFollowing() && g_selected_pawn != Camera::GetFollowingEntity()) {
+			Camera::StopFollowing();
+		}
 		InfoPanel::Get().SetMessage(closest_name);
 		InfoPanel::Get().SetSelectedPawn(g_selected_pawn);
 		// Clear cell resources when a pawn is selected
@@ -179,6 +183,10 @@ bool HandleKeyboardNavigation() {
 		InfoPanel::Get().SetSelectedCellResources(std::vector<MapResource>());
 		
 		// Focus camera on the selected pawn
+		// If camera was following, stop it (user manually selected a different pawn)
+		if (Camera::IsFollowing()) {
+			Camera::StopFollowing();
+		}
 		if (registry.HasComponent<ECS::TransformComponent>(g_selected_pawn)) {
 			const auto& transform = registry.GetComponent<ECS::TransformComponent>(g_selected_pawn);
 			Camera::FocusOn(transform.position);

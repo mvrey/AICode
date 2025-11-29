@@ -60,9 +60,24 @@ void Input() {
 	if (MOMOS::MouseButtonDown(1)) {
 		float mx = static_cast<float>(MOMOS::MousePositionX());
 		float my = static_cast<float>(MOMOS::MousePositionY());
-		g_vsync_toggle.HandleClick(mx, my);
 		
-		// Only process clicks when button is first pressed (MouseButtonDown)
+		// Check UI controls first - if any is clicked, don't process game world clicks
+		if (g_vsync_toggle.HandleClick(mx, my)) {
+			return; // VSync button was clicked, stop processing
+		}
+		
+		// Check SimulationSpeedControls (HandleInput already called at top for hover/click)
+		if (g_speed_controls.IsClickOnControls(mx, my)) {
+			// Click was on speed controls, don't process game world clicks
+			return;
+		}
+		
+		// Check InfoPanel button
+		if (InfoPanel::Get().HandleClick(mx, my)) {
+			return; // InfoPanel button was clicked, stop processing
+		}
+		
+		// Only process game world clicks if no UI element was clicked
 		::MOMOS::Vec2 mouse_screen = {
 			static_cast<float>(MOMOS::MousePositionX()),
 			static_cast<float>(MOMOS::MousePositionY())
@@ -87,6 +102,9 @@ void Input() {
 	}
 
 	Camera::HandleInput(delta_seconds);
+	
+	// Update camera follow behavior
+	Camera::UpdateFollow(delta_seconds);
 }
 
 
@@ -180,6 +198,10 @@ bool checkGameStarted() {
 void Update(double m_iTimeStep) {
 	double effective_step = m_iTimeStep * GameStatus::get()->simulation_speed_;
 	GameStatus::get()->game_time += effective_step;
+	
+	// Update camera follow behavior
+	float delta_seconds = static_cast<float>(effective_step) / 1000.0f;
+	Camera::UpdateFollow(delta_seconds);
 
 	bool started = checkGameStarted();
 	if (started && effective_step > 0.0) {

@@ -10,6 +10,12 @@ public:
 	void Initialize();
 	void HandleInput();
 	void Draw() const;
+	
+	/// Checks if a click at the given coordinates is on any speed control button
+	/// @param x Mouse X coordinate
+	/// @param y Mouse Y coordinate
+	/// @return true if click is on a button, false otherwise
+	bool IsClickOnControls(float x, float y) const;
 
 	double CurrentMultiplier() const;
 
@@ -48,6 +54,10 @@ private:
 	int speed_index_;
 	int last_nonzero_speed_index_;
 	int hovered_button_;
+	
+	// Keyboard state tracking
+	bool minus_key_was_pressed_;
+	bool plus_key_was_pressed_;
 };
 
 #endif

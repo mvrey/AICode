@@ -5,6 +5,7 @@
 #include "../../include/ecs/components/PawnStateComponent.h"
 #include "../../include/ecs/PawnEcs.h"
 #include "../../include/Map/MapResource.h"
+#include "../../include/Camera.h"
 #include <utility>
 
 #include <MOMOS/draw.h>
@@ -18,6 +19,7 @@ InfoPanel& InfoPanel::Get() {
 
 InfoPanel::InfoPanel()
 	: message_("Nothing to show yet"), selected_pawn_(), selected_cell_resources_() {
+	follow_button_bounds_[0] = follow_button_bounds_[1] = follow_button_bounds_[2] = follow_button_bounds_[3] = 0.0f;
 }
 
 void InfoPanel::SetMessage(std::string text) {
@@ -94,6 +96,11 @@ void InfoPanel::Draw() const {
 			DrawPawnState(registry, selected_pawn_, current_y);
 			current_y += kResourceLineSpacing; // Add spacing after state
 		}
+		
+		// Draw follow button
+		float button_x = panel_width - kFollowButtonWidth - kTextPadding;
+		float button_y = panel_top_y + kTextPadding;
+		DrawFollowButton(button_x, button_y);
 		
 		if (registry.HasComponent<ECS::NeedsComponent>(selected_pawn_)) {
 			DrawNeedsBars(registry, selected_pawn_, current_y);
@@ -233,6 +240,58 @@ void InfoPanel::DrawPawnState(const ECS::Registry& registry, ECS::Entity pawn, f
 	char state_text[128];
 	snprintf(state_text, sizeof(state_text), "State: %s", GetStateName(state.status));
 	MOMOS::DrawText(x, y, state_text);
+}
+
+void InfoPanel::DrawFollowButton(float x, float y) const {
+	// Store button bounds for click detection
+	follow_button_bounds_[0] = x;
+	follow_button_bounds_[1] = y;
+	follow_button_bounds_[2] = x + kFollowButtonWidth;
+	follow_button_bounds_[3] = y + kFollowButtonHeight;
+	
+	float points[10] = {
+		follow_button_bounds_[0], follow_button_bounds_[1],
+		follow_button_bounds_[2], follow_button_bounds_[1],
+		follow_button_bounds_[2], follow_button_bounds_[3],
+		follow_button_bounds_[0], follow_button_bounds_[3],
+		follow_button_bounds_[0], follow_button_bounds_[1]
+	};
+	
+	bool is_following = Camera::IsFollowing();
+	unsigned char baseColor = is_following ? 90 : 60;
+	unsigned char alpha = is_following ? 200 : 140;
+	
+	MOMOS::DrawSetFillColor(baseColor, baseColor, baseColor, alpha);
+	MOMOS::DrawSolidPath(points, 5);
+	MOMOS::DrawSetStrokeColor(220, 220, 220, 180);
+	MOMOS::DrawPath(points, 5);
+	
+	const char* label = is_following ? "Follow: ON" : "Follow: OFF";
+	MOMOS::DrawSetFillColor(240, 240, 240, 255);
+	MOMOS::DrawSetTextSize(14.0f);
+	MOMOS::DrawText(x + 8.0f, y + kFollowButtonHeight / 2.0f + 5.0f, label);
+}
+
+bool InfoPanel::IsFollowButtonClicked(float mouse_x, float mouse_y) const {
+	return mouse_x >= follow_button_bounds_[0] && mouse_x <= follow_button_bounds_[2] &&
+		mouse_y >= follow_button_bounds_[1] && mouse_y <= follow_button_bounds_[3];
+}
+
+bool InfoPanel::HandleClick(float mouse_x, float mouse_y) {
+	if (!selected_pawn_.IsValid()) {
+		return false;
+	}
+	
+	if (IsFollowButtonClicked(mouse_x, mouse_y)) {
+		if (Camera::IsFollowing()) {
+			Camera::StopFollowing();
+		} else {
+			Camera::StartFollowing(selected_pawn_);
+		}
+		return true;
+	}
+	
+	return false;
 }
 
 const char* InfoPanel::GetStateName(PawnStatus status) {

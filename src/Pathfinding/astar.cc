@@ -44,7 +44,10 @@ bool AStar::GeneratePath(MOMOS::Vec2 origin, MOMOS::Vec2 destination, Path *path
 		node_start->parent = nullptr;
 	}
 
-	//Put node_start on the OPEN list
+	//Put node_start on the OPEN list (check for null first)
+	if (node_start == nullptr || node_goal == nullptr) {
+		return false; // Invalid start or goal
+	}
 	list_open_.push_back(node_start);
 
 
@@ -70,20 +73,33 @@ bool AStar::GeneratePath(MOMOS::Vec2 origin, MOMOS::Vec2 destination, Path *path
 		int x, y;
 
 		//Get the node off the OPEN list with the lowest f and call it node_current
+		// Check for null pointers first
+		if (list_open_[0] == nullptr) {
+			// Remove null pointer and continue
+			list_open_.erase(list_open_.begin());
+			continue;
+		}
 		node_current = *list_open_[0];
 		int lowest_index = 0;
 
 		//Search for the discovered node with the lowest distance to destination
 		for (unsigned int i = 0; i < list_open_.size(); i++) {
-			if (list_open_[i]->f < node_current.f) {
+			if (list_open_[i] != nullptr && list_open_[i]->f < node_current.f) {
 				lowest_index = i;
 			}
 		}
 
-		//Assign node_current
+		//Assign node_current (check for null)
+		if (list_open_[lowest_index] == nullptr) {
+			// Remove null pointer and continue
+			list_open_.erase(list_open_.begin() + lowest_index);
+			continue;
+		}
 		node_current = *list_open_[lowest_index];
-		//Remove element
-		list_open_[lowest_index] = list_open_[list_open_.size() - 1];
+		//Remove element (check for null before swapping)
+		if (list_open_.size() > 1) {
+			list_open_[lowest_index] = list_open_[list_open_.size() - 1];
+		}
 		list_open_.resize(list_open_.size() - 1);
 
 
@@ -168,9 +184,14 @@ bool AStar::GeneratePath(MOMOS::Vec2 origin, MOMOS::Vec2 destination, Path *path
 				bool found = false;
 				for (unsigned int h = 0; h < list_open_.size() && !found; h++) {
 					existing_cell = list_open_[h];
+					if (existing_cell == nullptr) {
+						continue; // Skip null pointers
+					}
 					if (existing_cell->position_.x == node_successor.position_.x && existing_cell->position_.y == node_successor.position_.y) {
 						//Swap the element to be removed for the last one in the vector, and shrink its size by 1
-						list_open_[h] = list_open_[list_open_.size() - 1];
+						if (list_open_.size() > 1) {
+							list_open_[h] = list_open_[list_open_.size() - 1];
+						}
 						list_open_.resize(list_open_.size() - 1);
 						//Update index
 						list_open_indexes_[(int)node_successor.position_.x][(int)node_successor.position_.y] = nullptr;
@@ -213,13 +234,16 @@ bool AStar::GeneratePath(MOMOS::Vec2 origin, MOMOS::Vec2 destination, Path *path
 
 		// Add node_successor to the OPEN list
 		MapCell *true_successor = map_->getCellAt((int)node_successor.position_.x, (int)node_successor.position_.y);
-			true_successor->parent = node_successor.parent;
-			true_successor->f = node_successor.f;
-			true_successor->g = node_successor.g;
-			true_successor->h = node_successor.h;
-			list_open_.push_back(true_successor);
-			//Update index
-			list_open_indexes_[(int)true_successor->position_.x][(int)true_successor->position_.y] = true_successor;
+		if (true_successor == nullptr) {
+			continue; // Skip if cell is null
+		}
+		true_successor->parent = node_successor.parent;
+		true_successor->f = node_successor.f;
+		true_successor->g = node_successor.g;
+		true_successor->h = node_successor.h;
+		list_open_.push_back(true_successor);
+		//Update index
+		list_open_indexes_[(int)true_successor->position_.x][(int)true_successor->position_.y] = true_successor;
 
 		}
 

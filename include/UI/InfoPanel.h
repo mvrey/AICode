@@ -19,6 +19,7 @@ public:
 	void SetSelectedPawn(ECS::Entity pawn);
 	void SetSelectedCellResources(const std::vector<MapResource>& resources);
 	void Draw() const;
+	bool HandleClick(float mouse_x, float mouse_y);
 
 private:
 	InfoPanel();
@@ -27,6 +28,8 @@ private:
 	void DrawNeedBar(const char* name, float value, float x, float y, float width, float height) const;
 	void DrawResourcesList(float start_y) const;
 	void DrawPawnState(const ECS::Registry& registry, ECS::Entity pawn, float start_y) const;
+	void DrawFollowButton(float x, float y) const;
+	bool IsFollowButtonClicked(float mouse_x, float mouse_y) const;
 	static const char* GetStateName(PawnStatus status);
 
 	std::string message_;
@@ -43,6 +46,9 @@ private:
 	static constexpr float kNeedBarWidth = 200.0f;
 	static constexpr float kNeedLabelWidth = 80.0f;
 	static constexpr float kResourceLineSpacing = 18.0f;
+	static constexpr float kFollowButtonWidth = 120.0f;
+	static constexpr float kFollowButtonHeight = 24.0f;
+	mutable float follow_button_bounds_[4]; // [x, y, x+width, y+height]
 };
 
 #endif // INFO_PANEL_H

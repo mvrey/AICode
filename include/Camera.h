@@ -1,6 +1,7 @@
 #pragma once
 
 #include "config.h"
+#include "ecs/Entity.h"
 #include <MOMOS/math.h>
 
 namespace Camera {
@@ -25,6 +26,24 @@ void HandleInput(float delta_seconds);
 /// Focuses the camera on a world position
 /// @param world_pos The world position to focus on
 void FocusOn(const ::MOMOS::Vec2& world_pos);
+
+/// Starts following an entity (camera will track its position)
+/// @param entity The entity to follow
+void StartFollowing(ECS::Entity entity);
+
+/// Stops following any entity
+void StopFollowing();
+
+/// Updates camera follow behavior (should be called each frame)
+/// @param delta_seconds Time since last frame in seconds
+void UpdateFollow(float delta_seconds);
+
+/// Checks if camera is currently following an entity
+bool IsFollowing();
+
+/// Gets the entity the camera is currently following
+/// @return The entity being followed, or invalid entity if not following
+ECS::Entity GetFollowingEntity();
 
 } // namespace Camera
 
