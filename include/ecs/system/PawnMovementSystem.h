@@ -14,7 +14,7 @@ namespace ECS {
 class PawnMovementSystem : public IEcsSystem {
 public:
 	// Moves every entity that has both Movement and Transform components.
-	void Update(Registry& registry, double delta_time) override;
+	void Update(Registry& registry, double delta_time, const GameContext* context = nullptr) override;
 };
 
 } // namespace ECS

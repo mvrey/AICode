@@ -3,11 +3,12 @@
 
 #include "../config.h"
 #include "MapCell.h"
+#include "../Providers/IMapResourceQuery.h"
 #include <vector>
 
 /// Map class holds the core map data and provides access methods.
 /// It manages the cell grid and provides coordinate transformations.
-class Map {
+class Map : public IMapResourceQuery {
 	int width_;
 	int height_;
 	std::vector<std::vector<MapCell*>> cost_map_;
@@ -70,6 +71,14 @@ public:
 	
 	/// Clears the current cell selection
 	void ClearCellSelection();
+	
+	// IMapResourceQuery implementation
+	std::vector<MapResource> GetResourcesAt(int x, int y) const override;
+	::MOMOS::Vec2 CellToWorld(int x, int y) const override;
+	MapCell* GetCellAt(int x, int y) override { return getCellAt(x, y); }
+	const MapCell* GetCellAt(int x, int y) const override { return getCellAt(x, y); }
+	int GetWidth() const override { return getWidth(); }
+	int GetHeight() const override { return getHeight(); }
 	
 private:
 	::MOMOS::Vec2 selected_cell_ = { -1.0f, -1.0f }; // Invalid cell position

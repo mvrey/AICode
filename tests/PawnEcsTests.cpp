@@ -7,7 +7,8 @@
 #include "../include/ecs/system/PawnMovementSystem.h"
 #include "../include/ecs/system/PawnRenderSystem.h"
 #include "../include/GameStatus.h"
-#include "../include/Pathfinding/cost_map.h"
+#include "../include/Map/Map.h"
+#include "../include/Map/MapGenerator.h"
 
 namespace {
 
@@ -19,8 +20,9 @@ void ResetPawnRegistry() {
 void EnsureGameStatus() {
 	auto* status = GameStatus::get();
 	if (!status->map) {
-		status->map = new CostMap();
-		status->map->InitializeSynthetic(64, 64, true);
+		status->map = new Map();
+		MapGenerator generator;
+		generator.InitializeSynthetic(*status->map, 64, 64, true);
 	}
 }
 

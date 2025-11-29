@@ -13,7 +13,7 @@ namespace ECS {
 class PawnNeedsSystem : public IEcsSystem {
 public:
 	// Decreases needs based on their decrease rates and delta_time.
-	void Update(Registry& registry, double delta_time) override;
+	void Update(Registry& registry, double delta_time, const GameContext* context = nullptr) override;
 };
 
 } // namespace ECS

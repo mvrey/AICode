@@ -5,7 +5,7 @@
 #ifndef RESOURCE_PROVIDER_REGISTRY_H
 #define RESOURCE_PROVIDER_REGISTRY_H
 
-#include "../Pathfinding/cost_map.h"
+#include "IMapResourceQuery.h"
 
 /// System that automatically registers MapResources as need providers
 /// Scans the map and creates providers for resources that have need mappings
@@ -15,7 +15,7 @@ public:
 
 	/// Scan the map and register all resources as providers
 	/// Should be called after map generation and whenever map changes
-	void RegisterMapResources(CostMap& cost_map);
+	void RegisterMapResources(IMapResourceQuery& map_query);
 
 	/// Clear all registered resource providers
 	void Clear();

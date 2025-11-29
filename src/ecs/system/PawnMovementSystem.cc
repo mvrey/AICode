@@ -7,9 +7,10 @@
 #include "../../../include/ecs/Registry.h"
 #include "../../../include/ecs/components/MovementComponent.h"
 #include "../../../include/ecs/components/TransformComponent.h"
-#include "../../../include/GameStatus.h"
+#include "../../../include/Core/GameContext.h"
+#include "../../../include/Core/MapService.h"
 #include "../../../include/Camera.h"
-#include "../../../include/Pathfinding/cost_map.h"
+#include "../../../include/Map/Map.h"
 #include "../../../include/Pathfinding/path.h"
 #include "../../../include/config.h"
 
@@ -19,11 +20,12 @@
 namespace ECS {
 
 // Moves every entity that has both Movement and Transform components.
-void PawnMovementSystem::Update(Registry& registry, double delta_time) {
-	CostMap* map = GameStatus::get()->map;
-	if (map == nullptr) {
+void PawnMovementSystem::Update(Registry& registry, double delta_time, const GameContext* context) {
+	if (!context || !context->map || !context->map->GetMap()) {
 		return;
 	}
+	
+	Map* map = context->map->GetMap();
 
 	registry.ForEach<MovementComponent>([&](Entity entity, MovementComponent& movement) {
 		if (!registry.HasComponent<TransformComponent>(entity))

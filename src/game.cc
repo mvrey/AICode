@@ -23,6 +23,21 @@
 #include "../include/Map/ResourceTypeManager.h"
 #include "../include/Needs/NeedsConfig.h"
 #include "../include/Providers/ResourceProviderRegistry.h"
+#include "../include/Core/GameTimeService.h"
+#include "../include/Core/MapService.h"
+#include "../include/Core/PathfindingService.h"
+#include "../include/Core/GameStateService.h"
+#include "../include/Core/GameContext.h"
+#include "../include/Core/InputManager.h"
+#include "../include/Core/UIInputHandler.h"
+#include "../include/Core/GameWorldInputHandler.h"
+#include "../include/Core/CameraInputHandler.h"
+#include "../include/Core/SystemManager.h"
+#include "../include/Core/RenderPipeline.h"
+#include "../include/Core/LegacyAgentManager.h"
+#include "../include/Map/Map.h"
+#include "../include/Map/MapGenerator.h"
+#include "../include/Map/MapRenderer.h"
 #include <MOMOS/momos.h>
 #include <MOMOS/draw.h>
 #include <MOMOS/input.h>
@@ -34,6 +49,18 @@ SimulationSpeedControls g_speed_controls;
 FpsCounter g_fps_counter;
 VSyncToggle g_vsync_toggle;
 
+// Services (created in game() and used throughout)
+static GameTimeService* g_time_service = nullptr;
+static MapService* g_map_service = nullptr;
+static PathfindingService* g_pathfinding_service = nullptr;
+static GameStateService* g_state_service = nullptr;
+static GameContext* g_game_context = nullptr;
+static MapRenderer* g_map_renderer = nullptr;
+static InputManager* g_input_manager = nullptr;
+static SystemManager* g_system_manager = nullptr;
+static RenderPipeline* g_render_pipeline = nullptr;
+static LegacyAgentManager* g_legacy_agent_manager = nullptr;
+
 namespace {
 
 } // namespace
@@ -41,132 +68,27 @@ namespace {
 
 /// Process user input
 void Input() {
-	g_speed_controls.HandleInput();
-
-	// Handle keyboard navigation for pawn selection
+	// Handle keyboard navigation for pawn selection (always processed)
 	PawnSelection::HandleKeyboardNavigation();
-
-	static double last_input_time = 0.0;
-	double current_time = MOMOS::Time();
-	if (last_input_time == 0.0) {
-		last_input_time = current_time;
-	}
-	float delta_seconds = static_cast<float>(current_time - last_input_time);
-	if (delta_seconds < 0.0f) {
-		delta_seconds = 0.0f;
-	}
-	last_input_time = current_time;
-
-	if (MOMOS::MouseButtonDown(1)) {
-		float mx = static_cast<float>(MOMOS::MousePositionX());
-		float my = static_cast<float>(MOMOS::MousePositionY());
-		
-		// Check UI controls first - if any is clicked, don't process game world clicks
-		if (g_vsync_toggle.HandleClick(mx, my)) {
-			return; // VSync button was clicked, stop processing
-		}
-		
-		// Check SimulationSpeedControls (HandleInput already called at top for hover/click)
-		if (g_speed_controls.IsClickOnControls(mx, my)) {
-			// Click was on speed controls, don't process game world clicks
-			return;
-		}
-		
-		// Check InfoPanel button
-		if (InfoPanel::Get().HandleClick(mx, my)) {
-			return; // InfoPanel button was clicked, stop processing
-		}
-		
-		// Only process game world clicks if no UI element was clicked
-		::MOMOS::Vec2 mouse_screen = {
-			static_cast<float>(MOMOS::MousePositionX()),
-			static_cast<float>(MOMOS::MousePositionY())
-		};
-		
-		bool pawn_clicked = PawnSelection::HandleClick();
-		if (pawn_clicked) {
-			// Clear cell selection when pawn is clicked
-			if (GameStatus::get()->map) {
-				GameStatus::get()->map->ClearCellSelection();
-			}
-		} else {
-			// Clear pawn selection when clicking elsewhere
-			PawnSelection::ClearSelection();
-			InfoPanel::Get().SetSelectedPawn(ECS::Entity());
-			
-			// Try to click on a cell
-			if (GameStatus::get()->map) {
-				GameStatus::get()->map->HandleCellClick(mouse_screen);
-			}
-		}
-	}
-
-	Camera::HandleInput(delta_seconds);
 	
-	// Update camera follow behavior
-	Camera::UpdateFollow(delta_seconds);
-}
-
-
-/// Updates agents. If acummTime runs out, it will keep on calculating next frame where it left of.
-void UpdateAI(double accumTime) {
-	//Keep track of remaining time left on this frame
-	double start, end;
-	bool timeout = false;
-	int j = (Agent::last_updated_id_ == -1) ? 0 : Agent::last_updated_id_;
-
-	for (unsigned int i = j; i < Agent::agents_.size() && !timeout; i++) {
-		Agent* agent = Agent::agents_[i];
-
-		start = GameStatus::get()->game_time;
-		agent->update(accumTime);
-		end = GameStatus::get()->game_time;
-
-		if (agent->getBody() && agent->getBody()->pos_.y > Screen::height)
-			agent->aliveStatus_ = kDead;
-
-		accumTime -= end - start;
-		if (accumTime <= 0.0f) {
-			Agent::last_updated_id_ = i;
-			timeout = true;
-		}
-
-		//Once the last agent has been updated, return to the first one if there's still time
-		if (i == j - 1) {
-			i = 0;
-		}
-	}
-
-	if (!timeout) {
-		Agent::last_updated_id_ = -1;
+	// Process all input handlers via InputManager
+	if (g_input_manager) {
+		g_input_manager->ProcessInput();
 	}
 }
+
+
+// UpdateAI removed - now handled by LegacyAgentManager via SystemManager
 
 
 void Draw() {
 	MOMOS::DrawBegin();
 	MOMOS::DrawClear(200, 200, 200);
 
-	//Draw map background image
-	GameStatus::get()->map->Draw();
-
-	//Draw agents
-	for (unsigned int i = 0; i < Agent::agents_.size(); i++) {
-		//Skip dead agents and managers (agents with no body)
-		if (Agent::agents_[i]->aliveStatus_ == kAlive && Agent::agents_[i]->getBody()) {
-			Agent::agents_[i]->render();
-		}
+	// Render via RenderPipeline
+	if (g_render_pipeline) {
+		g_render_pipeline->Render();
 	}
-
-	PawnECS::Systems::Get().Render(0.0);
-	PawnSelection::DrawSelection();
-	if (GameStatus::get()->map) {
-		GameStatus::get()->map->DrawCellSelection();
-	}
-	g_fps_counter.Draw();
-	g_vsync_toggle.Draw(g_fps_counter.GetTextRight(), g_fps_counter.GetTextBaselineY());
-	g_speed_controls.Draw();
-	InfoPanel::Get().Draw();
 
 	MOMOS::DrawEnd();
 	MOMOS::WindowFrame();
@@ -175,13 +97,16 @@ void Draw() {
 
 /** Checks and returns if the agents have been created and the simulation has started. **/
 bool checkGameStarted() {
-	auto* status = GameStatus::get();
-	if (!status->pawns_created) {
-		status->pawns_created = true;
+	if (!g_state_service) {
+		return false;
+	}
+	
+	if (!g_state_service->ArePawnsCreated()) {
+		g_state_service->SetPawnsCreated(true);
 
 		// Pathfinder manager should be the first one to update each frame
-		if (status->pathfinder_) {
-			Agent::agents_.push_back(status->pathfinder_);
+		if (g_pathfinding_service && g_pathfinding_service->GetPathfinder()) {
+			Agent::agents_.push_back(g_pathfinding_service->GetPathfinder());
 		}
 
 		const int total_pawns = 100;
@@ -190,25 +115,27 @@ bool checkGameStarted() {
 		}
 	}
 
-	return status->pawns_created;
+	return g_state_service->ArePawnsCreated();
 }
 
 
 /// Main update loop
 void Update(double m_iTimeStep) {
-	double effective_step = m_iTimeStep * GameStatus::get()->simulation_speed_;
-	GameStatus::get()->game_time += effective_step;
-	
-	// Update camera follow behavior
-	float delta_seconds = static_cast<float>(effective_step) / 1000.0f;
-	Camera::UpdateFollow(delta_seconds);
-
-	bool started = checkGameStarted();
-	if (started && effective_step > 0.0) {
-		UpdateAI(effective_step);
+	if (!g_time_service || !g_system_manager) {
+		return;
 	}
-
-	PawnECS::Systems::Get().Update(effective_step);
+	
+	double effective_step = g_time_service->GetEffectiveTimeStep(m_iTimeStep);
+	g_time_service->AdvanceTime(m_iTimeStep);
+	
+	// Keep GameStatus synchronized for backward compatibility
+	if (GameStatus::get()) {
+		GameStatus::get()->game_time = g_time_service->GetGameTime();
+		GameStatus::get()->simulation_speed_ = g_time_service->GetSimulationSpeed();
+	}
+	
+	// Update all systems via SystemManager
+	g_system_manager->Update(effective_step, g_game_context);
 }
 
 
@@ -227,20 +154,123 @@ int game(int argc, char** argv) {
 	Camera::ZoomBy(Camera::kZoomStep * 2.0f, initial_zoom_focus);
 	g_vsync_toggle.Initialize(false);
 
+	// Create services
+	g_time_service = new GameTimeService();
+	g_map_service = new MapService();
+	g_pathfinding_service = new PathfindingService();
+	g_state_service = new GameStateService();
+	
+	// Create game context
+	g_game_context = new GameContext(g_time_service, g_map_service, g_pathfinding_service, g_state_service);
+	
 	// Load resource types from JSON
 	ResourceTypeManager::Get().LoadFromJSON("data/resource_types.json");
 
 	// Load needs configuration from JSON
 	NeedsConfig::Get().LoadFromJSON("data/needs_config.json");
 
-	GameStatus::get()->map = new CostMap();
-	GameStatus::get()->map->Load("data/map_03_60x44_bw.bmp", "data/map_03_960x704_layoutAB.bmp");
+	// Create Map and load it
+	Map* map = new Map();
+	MapGenerator generator;
+	if (!generator.Load(*map, "data/map_03_60x44_bw.bmp", "data/map_03_960x704_layoutAB.bmp")) {
+		// Handle error - for now just continue
+	}
+	g_map_service->SetMap(map);
+	
+	// Create MapRenderer for drawing
+	g_map_renderer = new MapRenderer();
 	
 	// Register map resources as need providers (after map is loaded)
-	ResourceProviderRegistry::Get().RegisterMapResources(*GameStatus::get()->map);
+	ResourceProviderRegistry::Get().RegisterMapResources(*map);
 	
-	GameStatus::get()->pathfinder_ = new Pathfinder();
+	// Create pathfinder and initialize it
+	Pathfinder* pathfinder = new Pathfinder();
+	pathfinder->init(map); // Initialize pathfinder with map
+	g_pathfinding_service->SetPathfinder(pathfinder);
+	
+	// Keep GameStatus for backward compatibility (legacy code still uses it)
+	// TODO: Remove this once all code is migrated
+	GameStatus::get()->map = map; // Store Map* for backward compatibility
+	GameStatus::get()->pathfinder_ = pathfinder;
+	GameStatus::get()->game_time = 0.0; // Initialize for backward compatibility
+	GameStatus::get()->simulation_speed_ = 1.0f; // Initialize for backward compatibility
+	GameStatus::get()->pawns_created = false; // Initialize for backward compatibility
+	
 	g_speed_controls.Initialize();
+	// Wire speed controls to time service
+	// Note: g_time_service is static, so we can access it directly without capture
+	g_speed_controls.SetSpeedChangedCallback(
+		[](float speed) {
+			if (g_time_service) {
+				g_time_service->SetSimulationSpeed(speed);
+				GameStatus::get()->simulation_speed_ = speed; // For backward compatibility
+			}
+		});
+	
+	// Create legacy agent manager
+	g_legacy_agent_manager = new LegacyAgentManager();
+	
+	// Create and configure InputManager
+	g_input_manager = new InputManager();
+	g_input_manager->RegisterHandler(new UIInputHandler(&g_speed_controls, &g_vsync_toggle, &InfoPanel::Get()));
+	g_input_manager->RegisterHandler(new GameWorldInputHandler(g_map_service, &InfoPanel::Get()));
+	g_input_manager->RegisterHandler(new CameraInputHandler());
+	
+	// Create and configure SystemManager
+	g_system_manager = new SystemManager();
+	// Register systems in priority order (higher = updated first)
+	g_system_manager->RegisterSystem(100, [](double delta_time, const GameContext* context) {
+		// Camera follow update (highest priority)
+		if (context && context->time) {
+			float delta_seconds = static_cast<float>(delta_time) / 1000.0f;
+			Camera::UpdateFollow(delta_seconds);
+		}
+	});
+	g_system_manager->RegisterSystem(80, [](double delta_time, const GameContext* context) {
+		// Legacy Agent AI system
+		if (g_legacy_agent_manager && context && context->time && delta_time > 0.0) {
+			bool started = checkGameStarted();
+			if (started) {
+				g_legacy_agent_manager->Update(delta_time, context->time);
+			}
+		}
+	});
+	g_system_manager->RegisterSystem(50, [](double delta_time, const GameContext* context) {
+		// ECS systems
+		PawnECS::Systems::Get().Update(delta_time, context);
+	});
+	
+	// Create and configure RenderPipeline
+	g_render_pipeline = new RenderPipeline();
+	// Background layer - map
+	g_render_pipeline->RegisterRenderer(RenderPipeline::Layer::Background, []() {
+		if (g_map_renderer && g_map_service && g_map_service->GetMap()) {
+			g_map_renderer->Draw(*g_map_service->GetMap());
+		}
+	});
+	// Entities layer - agents and pawns
+	g_render_pipeline->RegisterRenderer(RenderPipeline::Layer::Entities, []() {
+		// Draw legacy agents
+		if (g_legacy_agent_manager) {
+			g_legacy_agent_manager->Render();
+		}
+		// Draw ECS pawns
+		PawnECS::Systems::Get().Render(0.0, g_game_context);
+	});
+	// Overlay layer - selections and indicators
+	g_render_pipeline->RegisterRenderer(RenderPipeline::Layer::Overlay, []() {
+		PawnSelection::DrawSelection();
+		if (g_map_service && g_map_service->GetMap()) {
+			g_map_service->GetMap()->DrawCellSelection();
+		}
+	});
+	// UI layer - all UI elements
+	g_render_pipeline->RegisterRenderer(RenderPipeline::Layer::UI, []() {
+		g_fps_counter.Draw();
+		g_vsync_toggle.Draw(g_fps_counter.GetTextRight(), g_fps_counter.GetTextBaselineY());
+		g_speed_controls.Draw();
+		InfoPanel::Get().Draw();
+	});
 
 	MOMOS::DrawSetTextFont("data/medieval.ttf");
 	MOMOS::WindowSetMouseVisibility(true);
@@ -268,6 +298,28 @@ int game(int argc, char** argv) {
 
 		Draw();
 	}
+
+	// Cleanup
+	delete g_render_pipeline;
+	g_render_pipeline = nullptr;
+	delete g_system_manager;
+	g_system_manager = nullptr;
+	delete g_input_manager;
+	g_input_manager = nullptr;
+	delete g_legacy_agent_manager;
+	g_legacy_agent_manager = nullptr;
+	delete g_map_renderer;
+	g_map_renderer = nullptr;
+	delete g_game_context;
+	g_game_context = nullptr;
+	delete g_state_service;
+	g_state_service = nullptr;
+	delete g_pathfinding_service;
+	g_pathfinding_service = nullptr;
+	delete g_map_service; // This will delete the map
+	g_map_service = nullptr;
+	delete g_time_service;
+	g_time_service = nullptr;
 
 	return 0;
 }

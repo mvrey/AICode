@@ -9,7 +9,7 @@
 #include "../../include/Needs/NeedsConfig.h"
 #include "../../include/GameStatus.h"
 #include "../../include/config.h"
-#include "../../include/Pathfinding/cost_map.h"
+#include "../../include/Map/Map.h"
 
 #include <MOMOS/sprite.h>
 
@@ -58,10 +58,12 @@ ECS::Entity SpawnPawn() {
 	auto& transform = registry.AddComponent<ECS::TransformComponent>(entity);
 	
 	// Find a random walkable position
+	// TODO: Phase 3 - Inject MapService and GameTimeService instead of using GameStatus
+	// For now, using GameStatus for backward compatibility
 	::MOMOS::Vec2 spawn_position = { static_cast<float>(Screen::width) / 2.0f, static_cast<float>(Screen::height) / 2.0f };
 	auto* status = GameStatus::get();
 	if (status && status->map) {
-		CostMap* map = status->map;
+		Map* map = status->map;
 		int width = map->getWidth();
 		int height = map->getHeight();
 		
@@ -89,6 +91,7 @@ ECS::Entity SpawnPawn() {
 
 	auto& movement = registry.AddComponent<ECS::MovementComponent>(entity);
 	constexpr float kBasePAWNSpeed = 0.05f;
+	// TODO: Phase 3 - Get simulation speed from GameTimeService instead of GameStatus
 	float base_speed = kBasePAWNSpeed * GameStatus::get()->simulation_speed_;
 	movement.speed = base_speed;
 	movement.last_movement_update = 0.0;
@@ -140,14 +143,7 @@ ECS::Entity SpawnPawn() {
 		std::make_unique<Need>(NeedId::Joy, 1.0f, joy_decay, joy_config.threshold)
 	);
 
-	// Also keep NeedsComponent for backward compatibility with UI
-	auto& needs = registry.AddComponent<ECS::NeedsComponent>(entity);
-	needs.hunger = 1.0f;
-	needs.energy = 1.0f;
-	needs.joy = 1.0f;
-	needs.hunger_decrease_rate = hunger_decay;
-	needs.energy_decrease_rate = energy_decay;
-	needs.joy_decrease_rate = joy_decay;
+	// NeedsComponent removed - UI now reads directly from NeedsControllerComponent
 
 	return entity;
 }

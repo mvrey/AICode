@@ -7,8 +7,9 @@
 #include "../../../include/ecs/Registry.h"
 #include "../../../include/ecs/components/PawnComponents.h"
 #include "../../../include/ecs/PawnMovementUtils.h"
-#include "../../../include/GameStatus.h"
-#include "../../../include/Pathfinding/cost_map.h"
+#include "../../../include/Core/GameContext.h"
+#include "../../../include/Core/MapService.h"
+#include "../../../include/Map/Map.h"
 #include "../../../include/config.h"
 
 #include <MOMOS/math.h>
@@ -18,7 +19,7 @@ namespace {
 
 namespace MovementUtils = PawnECS::MovementUtils;
 
-bool SampleWalkableDestination(CostMap* map, ::MOMOS::Vec2& out) {
+bool SampleWalkableDestination(Map* map, ::MOMOS::Vec2& out) {
 	if (!map) {
 		return false;
 	}
@@ -46,13 +47,12 @@ bool SampleWalkableDestination(CostMap* map, ::MOMOS::Vec2& out) {
 
 namespace ECS {
 
-void PawnAISystem::Update(Registry& registry, double /*delta_time*/) {
-	auto* status = GameStatus::get();
-	if (!status || !status->map) {
+void PawnAISystem::Update(Registry& registry, double /*delta_time*/, const GameContext* context) {
+	if (!context || !context->map || !context->map->GetMap()) {
 		return;
 	}
 
-	CostMap* map = status->map;
+	Map* map = context->map->GetMap();
 
 	registry.ForEach<PawnStateComponent>([&](Entity entity, PawnStateComponent& state) {
 		// Skip pawns that are in need-satisfaction states - they're handled by PawnNeedSatisfactionSystem
@@ -82,6 +82,8 @@ void PawnAISystem::Update(Registry& registry, double /*delta_time*/) {
 			return true;
 		};
 
+		auto finalize_result = MovementUtils::TryFinalizePath(registry, entity, context);
+
 		if (movement.movement_finished) {
 			state.has_wander_target = false;
 			MovementUtils::ClearMovement(registry, entity);
@@ -91,7 +93,7 @@ void PawnAISystem::Update(Registry& registry, double /*delta_time*/) {
 			return;
 		}
 
-		auto finalize_result = MovementUtils::TryFinalizePath(registry, entity);
+		finalize_result = MovementUtils::TryFinalizePath(registry, entity, context);
 
 		if (finalize_result == MovementUtils::PathFinalizationResult::kFailure) {
 			state.has_wander_target = false;
@@ -99,12 +101,12 @@ void PawnAISystem::Update(Registry& registry, double /*delta_time*/) {
 			if (!ensureTarget()) {
 				return;
 			}
-			MovementUtils::RequestPathTo(registry, entity, state.wander_target);
+			MovementUtils::RequestPathTo(registry, entity, state.wander_target, context);
 			return;
 		}
 
 		if (!movement.path_set) {
-			MovementUtils::RequestPathTo(registry, entity, state.wander_target);
+			MovementUtils::RequestPathTo(registry, entity, state.wander_target, context);
 			return;
 		}
 
@@ -112,7 +114,7 @@ void PawnAISystem::Update(Registry& registry, double /*delta_time*/) {
 			state.has_wander_target = false;
 			MovementUtils::ClearMovement(registry, entity);
 			if (ensureTarget()) {
-				MovementUtils::RequestPathTo(registry, entity, state.wander_target);
+				MovementUtils::RequestPathTo(registry, entity, state.wander_target, context);
 			}
 		}
 	});

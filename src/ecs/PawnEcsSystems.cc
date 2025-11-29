@@ -5,6 +5,7 @@
 //------------------------------------------------------------------------------
 #include "../../include/ecs/PawnEcsSystems.h"
 #include "../../include/ecs/PawnEcs.h"
+#include "../../include/Core/GameContext.h"
 #include "../../include/ecs/system/PawnAISystem.h"
 #include "../../include/ecs/system/PawnPathFollowSystem.h"
 #include "../../include/ecs/system/PawnMovementSystem.h"
@@ -39,19 +40,19 @@ Systems& Systems::Get() {
 }
 
 // Ticks AI, pathing, movement, and needs systems against the shared registry.
-void Systems::Update(double delta_time) {
+void Systems::Update(double delta_time, const GameContext* context) {
 	auto& registry = PawnECS::GetRegistry();
-	needs_system_->Update(registry, delta_time);
-	need_satisfaction_system_->Update(registry, delta_time);
-	ai_system_->Update(registry, delta_time);
-	path_system_->Update(registry, delta_time);
-	movement_system_->Update(registry, delta_time);
+	needs_system_->Update(registry, delta_time, context);
+	need_satisfaction_system_->Update(registry, delta_time, context);
+	ai_system_->Update(registry, delta_time, context);
+	path_system_->Update(registry, delta_time, context);
+	movement_system_->Update(registry, delta_time, context);
 }
 
 // Executes the render pass for ECS pawns.
-void Systems::Render(double delta_time) {
+void Systems::Render(double delta_time, const GameContext* context) {
 	auto& registry = PawnECS::GetRegistry();
-	render_system_->Update(registry, delta_time);
+	render_system_->Update(registry, delta_time, context);
 }
 
 } // namespace PawnECS

@@ -8,6 +8,8 @@
 
 #include "Registry.h"
 
+struct GameContext;
+
 namespace ECS {
 class PawnAISystem;
 class PawnPathFollowSystem;
@@ -26,9 +28,9 @@ public:
 	static Systems& Get();
 
 	// Runs AI, path following, and movement passes for the frame.
-	void Update(double delta_time);
+	void Update(double delta_time, const GameContext* context = nullptr);
 	// Runs the render system pass for the frame.
-	void Render(double delta_time);
+	void Render(double delta_time, const GameContext* context = nullptr);
 
 private:
 	Systems() = default;

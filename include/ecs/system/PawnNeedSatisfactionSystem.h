@@ -12,7 +12,7 @@ namespace ECS {
 /// System that handles pawn need satisfaction by integrating PawnAI and PawnFSM
 class PawnNeedSatisfactionSystem : public IEcsSystem {
 public:
-	void Update(Registry& registry, double delta_time) override;
+	void Update(Registry& registry, double delta_time, const GameContext* context = nullptr) override;
 };
 
 } // namespace ECS

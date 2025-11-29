@@ -8,8 +8,10 @@
 #include "../../../include/ecs/Registry.h"
 #include "../../../include/ecs/components/MovementComponent.h"
 #include "../../../include/ecs/components/TransformComponent.h"
-#include "../../../include/GameStatus.h"
-#include "../../../include/Pathfinding/cost_map.h"
+#include "../../../include/Core/GameContext.h"
+#include "../../../include/Core/MapService.h"
+#include "../../../include/Core/GameTimeService.h"
+#include "../../../include/Map/Map.h"
 
 #include <MOMOS/math.h>
 #include <cmath>
@@ -33,11 +35,12 @@ namespace ECS {
 
 // Steps entities toward their current deterministic waypoint and reacts when
 // cells become invalid or when the path is completed.
-void PawnPathFollowSystem::Update(Registry& registry, double /*delta_time*/) {
-	CostMap* map = GameStatus::get()->map;
-	if (!map) {
+void PawnPathFollowSystem::Update(Registry& registry, double /*delta_time*/, const GameContext* context) {
+	if (!context || !context->map || !context->map->GetMap()) {
 		return;
 	}
+	
+	Map* map = context->map->GetMap();
 
 	registry.ForEach<MovementComponent>([&](Entity entity, MovementComponent& movement) {
 		if (!registry.HasComponent<TransformComponent>(entity)) {
@@ -64,7 +67,9 @@ void PawnPathFollowSystem::Update(Registry& registry, double /*delta_time*/) {
 			return;
 		}
 
-		movement.last_movement_update = GameStatus::get()->game_time;
+		if (context->time) {
+			movement.last_movement_update = context->time->GetGameTime();
+		}
 
 		::MOMOS::Vec2 diff{ target.x - transform.position.x, target.y - transform.position.y };
 		float dist_sq = diff.x * diff.x + diff.y * diff.y;

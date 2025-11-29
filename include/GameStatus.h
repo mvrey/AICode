@@ -11,7 +11,7 @@
 #define GAMESTATUS_H
 
 #include "config.h"
-#include "Pathfinding/cost_map.h"
+class Map;
 class Pathfinder;
 
 //forward declarations for agent cache
@@ -36,7 +36,7 @@ public:
 	//----------------///
 
 	/// PATHFINDING ///
-	CostMap* map;
+	Map* map;  // Changed from CostMap* to Map* in Phase 1 decoupling
 	Pathfinder* pathfinder_;
 	//----------------///
 

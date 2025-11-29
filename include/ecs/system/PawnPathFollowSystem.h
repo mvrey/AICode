@@ -14,7 +14,7 @@ namespace ECS {
 class PawnPathFollowSystem : public IEcsSystem {
 public:
 	// Processes all MovementComponents that currently have active paths.
-	void Update(Registry& registry, double delta_time) override;
+	void Update(Registry& registry, double delta_time, const GameContext* context = nullptr) override;
 };
 
 } // namespace ECS

@@ -1,4 +1,5 @@
 #include "../../include/Agents/Pathfinder.h"
+#include "../../include/Map/Map.h"
 
 /*****************************/
 /************ AGENT **********/
@@ -8,8 +9,8 @@
 Pathfinder::Pathfinder() {
 	mind_ = new PathfinderMind();
 	mind_->owner_ = this;
-
-	init();
+	map_ = nullptr;
+	astar_ = nullptr;
 }
 
 
@@ -23,9 +24,12 @@ Pathfinder::~Pathfinder() {
 }
 
 
-void Pathfinder::init() {
+void Pathfinder::init(Map* map) {
+	map_ = map;
 	astar_ = new AStar();
-	astar_->PreProcess(GameStatus::get()->map);
+	if (map) {
+		astar_->PreProcess(map);
+	}
 }
 
 
@@ -71,7 +75,7 @@ void PathfinderMind::reason() {
 		return;
 	}
 
-	CostMap* map = GameStatus::get()->map;
+	Map* map = owner_->map_;
 	if (!map) {
 		return;
 	}
@@ -89,7 +93,7 @@ void PathfinderMind::reason() {
 		return;
 	}
 
-	GameStatus::get()->map->reset();
+	map->reset();
 	owner_->astar_->GeneratePath(command->start, command->end, command->path_);
 	command->calculated = true;
 	command->pending_ = false;

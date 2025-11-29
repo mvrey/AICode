@@ -240,3 +240,17 @@ void Map::ClearCellSelection() {
 	InfoPanel::Get().SetSelectedCellResources(std::vector<MapResource>());
 }
 
+// IMapResourceQuery implementation
+std::vector<MapResource> Map::GetResourcesAt(int x, int y) const {
+	const MapCell* cell = getCellAt(x, y);
+	if (cell) {
+		return cell->resources;
+	}
+	return std::vector<MapResource>();
+}
+
+::MOMOS::Vec2 Map::CellToWorld(int x, int y) const {
+	::MOMOS::Vec2 cell_pos = { static_cast<float>(x), static_cast<float>(y) };
+	return MapToScreenCoords(cell_pos);
+}
+

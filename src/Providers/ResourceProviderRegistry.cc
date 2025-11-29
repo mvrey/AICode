@@ -6,7 +6,7 @@
 #include "../../include/Providers/ProviderRegistry.h"
 #include "../../include/Providers/MapResourceProvider.h"
 #include "../../include/Providers/ResourceNeedMapping.h"
-#include "../../include/Pathfinding/cost_map.h"
+#include "../../include/Providers/IMapResourceQuery.h"
 #include "../../include/Map/MapCell.h"
 #include "../../include/Map/MapResource.h"
 #include <memory>
@@ -16,27 +16,25 @@ ResourceProviderRegistry& ResourceProviderRegistry::Get() {
 	return instance;
 }
 
-void ResourceProviderRegistry::RegisterMapResources(CostMap& cost_map) {
+void ResourceProviderRegistry::RegisterMapResources(IMapResourceQuery& map_query) {
 	// Clear existing resource providers first
 	Clear();
 
 	ResourceNeedMapping& mapping = ResourceNeedMapping::Get();
 	ProviderRegistry& provider_registry = ProviderRegistry::Get();
 
-	Map& map = cost_map.GetMap();
-	int width = map.getWidth();
-	int height = map.getHeight();
+	// Get dimensions from interface
+	int width = map_query.GetWidth();
+	int height = map_query.GetHeight();
 
 	// Scan all cells and register resources as providers
 	for (int x = 0; x < width; ++x) {
 		for (int y = 0; y < height; ++y) {
-			MapCell* cell = map.getCellAt(x, y);
-			if (!cell) {
-				continue;
-			}
-
-			// Check each resource in the cell
-			for (auto& resource : cell->resources) {
+			// Get resources using the interface
+			std::vector<MapResource> resources = map_query.GetResourcesAt(x, y);
+			
+			// Check each resource
+			for (auto& resource : resources) {
 				if (!resource.type || !resource.CanUse()) {
 					continue;
 				}
@@ -46,9 +44,9 @@ void ResourceProviderRegistry::RegisterMapResources(CostMap& cost_map) {
 				float restore_amount;
 				double use_duration;
 				if (mapping.GetNeedForResource(resource.type->name, need_id, restore_amount, use_duration)) {
-					// Create a provider for this resource using coordinates
+					// Create a provider for this resource using the interface
 					auto provider = std::make_unique<MapResourceProvider>(
-						x, y, resource.type->name, need_id, restore_amount, use_duration
+						&map_query, x, y, resource.type->name, need_id, restore_amount, use_duration
 					);
 					provider_registry.RegisterProvider(std::move(provider));
 				}

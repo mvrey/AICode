@@ -1,7 +1,9 @@
 #include "../../include/UI/InfoPanel.h"
 #include "../../include/ecs/Registry.h"
 #include "../../include/ecs/Entity.h"
-#include "../../include/ecs/components/NeedsComponent.h"
+#include "../../include/ecs/components/NeedsControllerComponent.h"
+#include "../../include/Needs/NeedId.h"
+#include "../../include/Needs/INeed.h"
 #include "../../include/ecs/components/PawnStateComponent.h"
 #include "../../include/ecs/PawnEcs.h"
 #include "../../include/Map/MapResource.h"
@@ -102,7 +104,7 @@ void InfoPanel::Draw() const {
 		float button_y = panel_top_y + kTextPadding;
 		DrawFollowButton(button_x, button_y);
 		
-		if (registry.HasComponent<ECS::NeedsComponent>(selected_pawn_)) {
+		if (registry.HasComponent<ECS::NeedsControllerComponent>(selected_pawn_)) {
 			DrawNeedsBars(registry, selected_pawn_, current_y);
 			current_y += (kNeedBarHeight + kNeedBarSpacing) * 3.0f; // 3 need bars
 		}
@@ -115,19 +117,31 @@ void InfoPanel::Draw() const {
 }
 
 void InfoPanel::DrawNeedsBars(const ECS::Registry& registry, ECS::Entity pawn, float start_y) const {
-	const auto& needs = registry.GetComponent<ECS::NeedsComponent>(pawn);
+	const auto& needs_comp = registry.GetComponent<ECS::NeedsControllerComponent>(pawn);
+	if (!needs_comp.controller) {
+		return;
+	}
 	
 	float x = kTextPadding;
 	float y = start_y;
 	
+	// Get need values directly from NeedsController
+	INeed* hunger_need = needs_comp.controller->GetNeed(NeedId::Hunger);
+	INeed* energy_need = needs_comp.controller->GetNeed(NeedId::Energy);
+	INeed* joy_need = needs_comp.controller->GetNeed(NeedId::Joy);
+	
 	// Draw each need bar
-	DrawNeedBar("Hunger:", needs.hunger, x, y, kNeedBarWidth, kNeedBarHeight);
+	float hunger_value = hunger_need ? hunger_need->GetValue() : 0.0f;
+	float energy_value = energy_need ? energy_need->GetValue() : 0.0f;
+	float joy_value = joy_need ? joy_need->GetValue() : 0.0f;
+	
+	DrawNeedBar("Hunger:", hunger_value, x, y, kNeedBarWidth, kNeedBarHeight);
 	y += kNeedBarHeight + kNeedBarSpacing;
 	
-	DrawNeedBar("Energy:", needs.energy, x, y, kNeedBarWidth, kNeedBarHeight);
+	DrawNeedBar("Energy:", energy_value, x, y, kNeedBarWidth, kNeedBarHeight);
 	y += kNeedBarHeight + kNeedBarSpacing;
 	
-	DrawNeedBar("Joy:", needs.joy, x, y, kNeedBarWidth, kNeedBarHeight);
+	DrawNeedBar("Joy:", joy_value, x, y, kNeedBarWidth, kNeedBarHeight);
 }
 
 void InfoPanel::DrawNeedBar(const char* name, float value, float x, float y, float width, float height) const {

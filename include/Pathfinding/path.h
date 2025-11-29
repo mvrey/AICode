@@ -10,7 +10,7 @@
 
 #include "../../include/config.h"
 
-class CostMap;
+class Map;
 
 class Path
 {
@@ -23,7 +23,7 @@ public:
 	int Length();
 	::MOMOS::Vec2 NextPoint();
 
-	void Print(CostMap *map); // Prints the path's positions
+	void Print(Map *map); // Prints the path's positions
 	
 	std::vector<::MOMOS::Vec2> path_;
 	int current_point_;

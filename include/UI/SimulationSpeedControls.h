@@ -1,6 +1,8 @@
 #ifndef SIMULATION_SPEED_CONTROLS_H
 #define SIMULATION_SPEED_CONTROLS_H
 
+#include <functional>
+
 class SimulationSpeedControls {
 public:
 	static constexpr int kButtonCount = 3;
@@ -10,6 +12,10 @@ public:
 	void Initialize();
 	void HandleInput();
 	void Draw() const;
+	
+	/// Sets callback to be called when speed changes
+	/// @param callback Function that receives the new speed multiplier
+	void SetSpeedChangedCallback(std::function<void(float)> callback);
 	
 	/// Checks if a click at the given coordinates is on any speed control button
 	/// @param x Mouse X coordinate
@@ -58,6 +64,9 @@ private:
 	// Keyboard state tracking
 	bool minus_key_was_pressed_;
 	bool plus_key_was_pressed_;
+	
+	// Callback for speed changes
+	std::function<void(float)> on_speed_changed_;
 };
 
 #endif

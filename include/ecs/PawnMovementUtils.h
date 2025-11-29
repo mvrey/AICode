@@ -8,10 +8,12 @@
 
 #include <vector>
 #include "./Registry.h"
-#include "../Pathfinding/cost_map.h"
+#include "../Map/Map.h"
 #include <MOMOS/math.h>
 #include "components/MovementComponent.h"
 #include "components/TransformComponent.h"
+
+struct GameContext;
 
 namespace PawnECS {
 namespace MovementUtils {
@@ -23,8 +25,8 @@ enum class PathFinalizationResult {
 };
 
 void ClearMovement(ECS::Registry& registry, ECS::Entity entity);
-PathFinalizationResult TryFinalizePath(ECS::Registry& registry, ECS::Entity entity);
-bool RequestPathTo(ECS::Registry& registry, ECS::Entity entity, const ::MOMOS::Vec2& destination);
+PathFinalizationResult TryFinalizePath(ECS::Registry& registry, ECS::Entity entity, const GameContext* context);
+bool RequestPathTo(ECS::Registry& registry, ECS::Entity entity, const ::MOMOS::Vec2& destination, const GameContext* context);
 void SetDoorRouteActive(ECS::Registry& registry, ECS::Entity entity, bool active);
 void SetEscapeRouteActive(ECS::Registry& registry, ECS::Entity entity, bool active);
 void CycleDoorTarget(ECS::Registry& registry, ECS::Entity entity, int totalDoors);

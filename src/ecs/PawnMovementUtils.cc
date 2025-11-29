@@ -1,7 +1,10 @@
 #include "../../include/ecs/PawnMovementUtils.h"
 
 #include "../../include/Agents/Pathfinder.h"
-#include "../../include/GameStatus.h"
+#include "../../include/Core/GameContext.h"
+#include "../../include/Core/MapService.h"
+#include "../../include/Core/PathfindingService.h"
+#include "../../include/Map/Map.h"
 
 #include <cmath>
 #include <vector>
@@ -9,7 +12,7 @@
 
 namespace {
 
-::MOMOS::Vec2 SnapToWalkable(CostMap* map, ::MOMOS::Vec2 coords, const ::MOMOS::Vec2& dest) {
+::MOMOS::Vec2 SnapToWalkable(Map* map, ::MOMOS::Vec2 coords, const ::MOMOS::Vec2& dest) {
 	if (!map) {
 		return coords;
 	}
@@ -66,7 +69,7 @@ namespace {
 	return current;
 }
 
-void PopulateDeterministicSteps(ECS::MovementComponent& movement, CostMap* map, const std::vector<::MOMOS::Vec2>& path) {
+void PopulateDeterministicSteps(ECS::MovementComponent& movement, Map* map, const std::vector<::MOMOS::Vec2>& path) {
 	movement.deterministic_steps.clear();
 	if (!map) {
 		return;
@@ -79,7 +82,7 @@ void PopulateDeterministicSteps(ECS::MovementComponent& movement, CostMap* map, 
 	movement.deterministic_step_index = 0;
 }
 
-void PopulateDeterministicSteps(ECS::MovementComponent& movement, CostMap* map, const std::vector<::MOMOS::Vec2>& path, const ::MOMOS::Vec2& extra) {
+void PopulateDeterministicSteps(ECS::MovementComponent& movement, Map* map, const std::vector<::MOMOS::Vec2>& path, const ::MOMOS::Vec2& extra) {
 	PopulateDeterministicSteps(movement, map, path);
 	if (map) {
 		movement.deterministic_steps.push_back(map->MapToScreenCoords(extra));
@@ -111,7 +114,7 @@ void ClearMovement(ECS::Registry& registry, ECS::Entity entity) {
 	movement.escape_route_set = false;
 }
 
-PathFinalizationResult TryFinalizePath(ECS::Registry& registry, ECS::Entity entity) {
+PathFinalizationResult TryFinalizePath(ECS::Registry& registry, ECS::Entity entity, const GameContext* context) {
 	auto& movement = registry.GetComponent<ECS::MovementComponent>(entity);
 	if (!movement.path_command || movement.path_command->pending_ || movement.path_command->path_ == nullptr) {
 		return PathFinalizationResult::kNotReady;
@@ -137,8 +140,7 @@ PathFinalizationResult TryFinalizePath(ECS::Registry& registry, ECS::Entity enti
 		return PathFinalizationResult::kFailure;
 	}
 
-	auto* status = GameStatus::get();
-	if (!status || !status->map) {
+	if (!context || !context->map || !context->map->GetMap()) {
 		delete path;
 		delete path_command;
 		movement.path_command = nullptr;
@@ -146,7 +148,7 @@ PathFinalizationResult TryFinalizePath(ECS::Registry& registry, ECS::Entity enti
 		return PathFinalizationResult::kNotReady;
 	}
 
-	PopulateDeterministicSteps(movement, status->map, points);
+	PopulateDeterministicSteps(movement, context->map->GetMap(), points);
 	movement.path_set = true;
 	movement.movement_finished = false;
 	movement.movement_path = path;
@@ -155,19 +157,18 @@ PathFinalizationResult TryFinalizePath(ECS::Registry& registry, ECS::Entity enti
 	return PathFinalizationResult::kSuccess;
 }
 
-bool RequestPathTo(ECS::Registry& registry, ECS::Entity entity, const ::MOMOS::Vec2& destination) {
-	auto* status = GameStatus::get();
-	if (!status || !status->map || !status->pathfinder_) {
+bool RequestPathTo(ECS::Registry& registry, ECS::Entity entity, const ::MOMOS::Vec2& destination, const GameContext* context) {
+	if (!context || !context->map || !context->map->GetMap() || !context->pathfinding || !context->pathfinding->GetPathfinder()) {
 		return false;
 	}
 
 	auto& movement = registry.GetComponent<ECS::MovementComponent>(entity);
 	auto& transform = registry.GetComponent<ECS::TransformComponent>(entity);
-	auto* map = status->map;
+	Map* map = context->map->GetMap();
 
-	auto start = map->ScreenToMapCoords(transform.position);
-	auto target = map->ScreenToMapCoords(destination);
-	auto snapped = SnapToWalkable(map, start, target);
+	::MOMOS::Vec2 start = map->ScreenToMapCoords(transform.position);
+	::MOMOS::Vec2 target = map->ScreenToMapCoords(destination);
+	::MOMOS::Vec2 snapped = SnapToWalkable(map, start, target);
 
 	transform.position = map->MapToScreenCoords(snapped);
 
@@ -188,7 +189,7 @@ bool RequestPathTo(ECS::Registry& registry, ECS::Entity entity, const ::MOMOS::V
 	command->end = target;
 	command->calculated = false;
 	command->pending_ = true;
-	status->pathfinder_->search(command);
+	context->pathfinding->GetPathfinder()->search(command);
 	movement.path_command = command;
 	return true;
 }

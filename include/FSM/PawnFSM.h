@@ -13,6 +13,8 @@ namespace ECS {
 	class Registry;
 }
 
+struct GameContext;
+
 /// FSM system that executes pawn states
 /// Handles movement, working timers, and need restoration
 /// Does NOT make decisions - those come from PawnAI
@@ -22,14 +24,15 @@ public:
 	/// @param registry The ECS registry
 	/// @param entity The pawn entity
 	/// @param delta_time Time since last update
-	void Update(ECS::Registry& registry, ECS::Entity entity, double delta_time);
+	/// @param context Game context for pathfinding (may be nullptr)
+	void Update(ECS::Registry& registry, ECS::Entity entity, double delta_time, const GameContext* context = nullptr);
 
 private:
 	/// Handle Idle state
 	void HandleIdle(ECS::Registry& registry, ECS::Entity entity);
 
 	/// Handle MoveToProvider state - moves pawn to provider location
-	void HandleMoveToProvider(ECS::Registry& registry, ECS::Entity entity, double delta_time);
+	void HandleMoveToProvider(ECS::Registry& registry, ECS::Entity entity, double delta_time, const GameContext* context = nullptr);
 
 	/// Handle Working state - timer-based interaction with provider
 	void HandleWorking(ECS::Registry& registry, ECS::Entity entity, double delta_time);

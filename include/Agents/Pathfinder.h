@@ -10,6 +10,8 @@
 #include "../Pathfinding/astar.h"
 #include <unordered_map>
 
+class Map;
+
 class Pathfinder;
 
 //Psychic attributes. Managers are mind-pure.
@@ -49,7 +51,7 @@ public:
 	Pathfinder(const Pathfinder& orig);
 	virtual ~Pathfinder();
 
-	void init();
+	void init(Map* map);
 	///Processes PathCommand queue
 	void update(double accumTime) override;
 	///Apends a PathCommand to the queue
@@ -60,6 +62,7 @@ public:
 	PathfinderMind* mind_;
 
 	AStar* astar_;
+	Map* map_; // Store map reference for pathfinding
 	std::vector<PathCommand*> commands_;
 
 	//Cached paths

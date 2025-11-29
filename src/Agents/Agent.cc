@@ -8,6 +8,7 @@
 #include "../../include/Agents/Agent.h"
 #include "../../include/Camera.h"
 #include "../../include/Agents/Pathfinder.h"
+#include "../../include/Map/Map.h"
 
 std::vector<Agent*> Agent::agents_ = {};
 unsigned int Agent::last_id_ = 0;
@@ -230,7 +231,7 @@ float AgentBody::getDistanceTo(MOMOS::Vec2 dest) {
 
 void Agent::setPathTo(MOMOS::Vec2 dest) {
 	Agent* owner = this;
-	CostMap* map = GameStatus::get()->map;
+	Map* map = GameStatus::get()->map;
 	MOMOS::Vec2 current_map_pos = map->ScreenToMapCoords(getBody()->pos_);
 	bool displaced = false;
 

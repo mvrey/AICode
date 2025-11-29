@@ -14,7 +14,7 @@ namespace ECS {
 class PawnAISystem : public IEcsSystem {
 public:
 // Evaluates AI logic for every entity owning a PawnStateComponent.
-	void Update(Registry& registry, double delta_time) override;
+	void Update(Registry& registry, double delta_time, const GameContext* context = nullptr) override;
 };
 
 } // namespace ECS

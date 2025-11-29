@@ -13,7 +13,7 @@ namespace ECS {
 class PawnRenderSystem : public IEcsSystem {
 public:
 	// Issues draw calls for the current frame.
-	void Update(Registry& registry, double delta_time) override;
+	void Update(Registry& registry, double delta_time, const GameContext* context = nullptr) override;
 };
 
 } // namespace ECS

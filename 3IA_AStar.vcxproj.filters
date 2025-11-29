@@ -1,93 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Source Files">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
-    </Filter>
-    <Filter Include="Header Files">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
-    </Filter>
-    <Filter Include="Resource Files">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
-    </Filter>
-    <Filter Include="Header Files\Agents">
-      <UniqueIdentifier>{a987736c-5f92-4a7d-9028-5f77fa9bb517}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Pathfinding">
-      <UniqueIdentifier>{dc29e959-3062-449e-a005-e5b3855e6b43}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Agents">
-      <UniqueIdentifier>{019f969b-9960-445b-bd89-1ec699c50181}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Pathfinding">
-      <UniqueIdentifier>{fbbc41ff-33d3-420a-9fa0-00cff51345f2}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\deps">
-      <UniqueIdentifier>{a972001f-dfae-4927-9f35-c60dbb95a85f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\UI">
-      <UniqueIdentifier>{6eedbf54-2d77-44f2-a316-c1f52cc73426}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\UI">
-      <UniqueIdentifier>{13a20c2f-1aec-470b-a844-e9cde1ad1a71}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\ecs">
-      <UniqueIdentifier>{1dce16ad-91ac-45e5-9f68-620643c752b6}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\ecs\components">
-      <UniqueIdentifier>{9904600e-35b8-4051-b246-b2edb534bc69}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\ecs\system">
-      <UniqueIdentifier>{c1782444-6b5c-4adf-a979-22cabfa78790}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\ecs">
-      <UniqueIdentifier>{d11efb08-1dc9-4f85-9777-fffdbf84a5ea}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\ecs\system">
-      <UniqueIdentifier>{9bb1d111-8a62-486d-abce-e6781eeb8fa6}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Needs">
-      <UniqueIdentifier>{a1b2c3d4-e5f6-7890-abcd-ef1234567890}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Needs">
-      <UniqueIdentifier>{b2c3d4e5-f6a7-8901-bcde-f23456789012}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Providers">
-      <UniqueIdentifier>{c3d4e5f6-a7b8-9012-cdef-345678901234}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Providers">
-      <UniqueIdentifier>{d4e5f6a7-b8c9-0123-def0-456789012345}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\PawnAI">
-      <UniqueIdentifier>{e5f6a7b8-c9d0-1234-ef01-567890123456}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\PawnAI">
-      <UniqueIdentifier>{f6a7b8c9-d0e1-2345-f012-678901234567}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\FSM">
-      <UniqueIdentifier>{a7b8c9d0-e1f2-3456-0123-789012345678}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\FSM">
-      <UniqueIdentifier>{b8c9d0e1-f2a3-4567-1234-890123456789}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Managers">
-      <UniqueIdentifier>{55dc6c61-f7be-490c-9414-4569a9eb85bb}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Managers">
-      <UniqueIdentifier>{454b9a6d-8bec-47de-9605-76e55af987f7}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Tests">
-      <UniqueIdentifier>{f7f9d769-bb36-4ef7-9297-072cc1e18cfe}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Map">
-      <UniqueIdentifier>{8c72dee4-5bfc-4c90-bfb6-5aa90baade9a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Map">
-      <UniqueIdentifier>{ee1e6f65-6a64-4bd0-9098-ca0ebdcd53c4}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\FSM">
       <UniqueIdentifier>{d7dccce5-0aed-423f-a914-9054c4a66ba2}</UniqueIdentifier>
     </Filter>
@@ -112,531 +25,552 @@
     <Filter Include="Source Files\Providers">
       <UniqueIdentifier>{885e0d43-2263-4b1b-89b2-e9a8be4738d0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src">
+      <UniqueIdentifier>{78b260fe-186d-45f3-9b00-6f628cb906d3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Map">
+      <UniqueIdentifier>{78e3e660-e70c-4bea-a8d1-2b1fe7a2d6c4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Agents">
+      <UniqueIdentifier>{b67b42b4-0a9b-43fc-94c6-1c999e7a6acb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Pathfinding">
+      <UniqueIdentifier>{0c9dd4fc-a59d-4da1-bb61-e9f09fe25feb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\UI">
+      <UniqueIdentifier>{b5c1f112-64e4-4151-b51d-f6d5d96f2d84}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\ecs">
+      <UniqueIdentifier>{c7c05e8f-30a4-4994-baa7-373f365f6419}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\ecs\system">
+      <UniqueIdentifier>{81401f6f-33e1-4780-953b-e94215e04bb7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Needs">
+      <UniqueIdentifier>{54faf8c0-e0fa-48d6-adcb-fdf8046cfb95}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Providers">
+      <UniqueIdentifier>{e2a502e5-a6d3-46fb-a938-27aac3e9bc1d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\PawnAI">
+      <UniqueIdentifier>{994230a9-bbec-43c9-8566-a7f9bfda9da2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\FSM">
+      <UniqueIdentifier>{edce8351-fcc9-4905-bdf9-496a733f222d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include">
+      <UniqueIdentifier>{ca70e03c-af25-4bac-9f9b-9bc64da930a2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\Map">
+      <UniqueIdentifier>{36e2583e-b3b0-401b-8267-5a4174a7dc09}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\Agents">
+      <UniqueIdentifier>{7f80bbfe-1a25-4a02-96ff-44f4c882615e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\Pathfinding">
+      <UniqueIdentifier>{e2ae11cc-f88d-48e1-b476-ac525c903c34}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\UI">
+      <UniqueIdentifier>{700a9819-dbe3-4cd9-9c12-ed7d4ac7d0b6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\ecs">
+      <UniqueIdentifier>{448096d0-e797-4af5-920f-27e2919dce6f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\ecs\components">
+      <UniqueIdentifier>{3ebbd807-bbb7-4d55-a4cf-4b8f91fb4106}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\ecs\system">
+      <UniqueIdentifier>{8a6dcc2d-d218-40d9-a3a8-cbc4461fc94c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="deps">
+      <UniqueIdentifier>{a0a98bc3-b364-4017-9287-f9970e069a22}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="deps\src">
+      <UniqueIdentifier>{39c169be-5416-48a3-8670-1a31fa58a1e8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="deps\src\deps">
+      <UniqueIdentifier>{5703f6be-31cc-459f-8ee6-a6a0ba740bd3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="deps\src\deps\glfw3_2_1">
+      <UniqueIdentifier>{fc1c2f7f-2460-4aeb-953d-4defab1e2289}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="deps\src\deps\glfw3_2_1\include">
+      <UniqueIdentifier>{d8d2b94b-f5b2-4cbc-a191-d61a67eb36b8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="deps\src\deps\glfw3_2_1\include\GLFW">
+      <UniqueIdentifier>{c7691bd7-eb46-4949-9979-5f271fa66d8c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="deps\src\deps\glfw3_2_1\src">
+      <UniqueIdentifier>{8bf32206-adc7-4aa2-b8f8-9dc417a607ed}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="deps\src\deps\glew2_0_0">
+      <UniqueIdentifier>{ae62fd49-8547-47a6-8bf7-32441e22245f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="deps\src\deps\glew2_0_0\include">
+      <UniqueIdentifier>{aeac3403-9e60-496a-8434-cd590f2b7122}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="deps\src\deps\glew2_0_0\include\GL">
+      <UniqueIdentifier>{7f30a5f9-9b79-4592-986e-71b872529a78}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="deps\src\deps\chipmunk-7.0.1">
+      <UniqueIdentifier>{7a8c51f2-6a92-49be-906c-8e130d933385}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="deps\src\deps\chipmunk-7.0.1\include">
+      <UniqueIdentifier>{79ad9b59-51e7-469a-9939-3cb4119a3f45}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="deps\src\deps\chipmunk-7.0.1\include\chipmunk">
+      <UniqueIdentifier>{29630a43-e6eb-4911-95ed-7dac79609908}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="deps\src\deps\chipmunk-7.0.1\src">
+      <UniqueIdentifier>{7216b766-34c8-4fb6-b638-429ead4a4c78}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="deps\src\deps\SOIL">
+      <UniqueIdentifier>{66f7e3cd-a56c-4cae-ad09-07a500b5ee85}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="deps\src\deps\SOIL\src">
+      <UniqueIdentifier>{be725473-ba68-47ee-a311-05a1f938ef61}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="deps\src\deps\sqlite3">
+      <UniqueIdentifier>{68805254-4f7b-421b-b0b1-1060b7acea29}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="deps\include">
+      <UniqueIdentifier>{22e0609f-559a-4cec-8d49-287457fe9b17}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="deps\include\MOMOS">
+      <UniqueIdentifier>{913712cf-d38c-474f-a563-69a8e9a3878d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="deps\include\fontstash">
+      <UniqueIdentifier>{c9b1ba65-111e-498d-9587-e69d976b2e7c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="data">
+      <UniqueIdentifier>{524da02e-760f-4767-86be-1e0ca4f91235}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="tests">
+      <UniqueIdentifier>{c490b151-19c0-4422-9eea-4ce09690c6f0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="include\config.h">
+    <ClInclude Include="include\Needs\NeedsController.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\FSM\PawnFSM.h">
+      <Filter>Header Files\FSM</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Needs\INeed.h">
+      <Filter>Header Files\Needs</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Needs\Need.h">
+      <Filter>Header Files\Needs</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Needs\NeedId.h">
+      <Filter>Header Files\Needs</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Needs\NeedsConfig.h">
+      <Filter>Header Files\Needs</Filter>
+    </ClInclude>
+    <ClInclude Include="include\PawnAI\PawnAI.h">
+      <Filter>Header Files\PawnAI</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Providers\INeedProvider.h">
+      <Filter>Header Files\Providers</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Providers\MapResourceProvider.h">
+      <Filter>Header Files\Providers</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Providers\ProviderRegistry.h">
+      <Filter>Header Files\Providers</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Providers\ResourceNeedMapping.h">
+      <Filter>Header Files\Providers</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Providers\ResourceProviderRegistry.h">
+      <Filter>Header Files\Providers</Filter>
+    </ClInclude>
+    <ClInclude Include="include\config.h">
+      <Filter>include</Filter>
     </ClInclude>
     <ClInclude Include="include\Camera.h">
-      <Filter>Header Files</Filter>
+      <Filter>include</Filter>
     </ClInclude>
     <ClInclude Include="include\GameStatus.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Agents\Agent.h">
-      <Filter>Header Files\Agents</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Pathfinding\astar.h">
-      <Filter>Header Files\Pathfinding</Filter>
-    </ClInclude>
-    <ClInclude Include="deps\src\deps\chipmunk-7.0.1\include\chipmunk\chipmunk.h">
-      <Filter>Header Files\deps</Filter>
-    </ClInclude>
-    <ClInclude Include="deps\src\deps\chipmunk-7.0.1\include\chipmunk\chipmunk_ffi.h">
-      <Filter>Header Files\deps</Filter>
-    </ClInclude>
-    <ClInclude Include="deps\src\deps\chipmunk-7.0.1\include\chipmunk\chipmunk_private.h">
-      <Filter>Header Files\deps</Filter>
-    </ClInclude>
-    <ClInclude Include="deps\src\deps\chipmunk-7.0.1\include\chipmunk\chipmunk_types.h">
-      <Filter>Header Files\deps</Filter>
-    </ClInclude>
-    <ClInclude Include="deps\src\deps\chipmunk-7.0.1\include\chipmunk\chipmunk_unsafe.h">
-      <Filter>Header Files\deps</Filter>
-    </ClInclude>
-    <ClInclude Include="deps\src\deps\glfw3_2_1\src\cocoa_joystick.h">
-      <Filter>Header Files\deps</Filter>
-    </ClInclude>
-    <ClInclude Include="deps\src\deps\glfw3_2_1\src\cocoa_platform.h">
-      <Filter>Header Files\deps</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Pathfinding\cost_map.h">
-      <Filter>Header Files\Pathfinding</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Agents\Pathfinder.h">
-      <Filter>Header Files\Agents</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Pathfinding\path.h">
-      <Filter>Header Files\Pathfinding</Filter>
+      <Filter>include</Filter>
     </ClInclude>
     <ClInclude Include="include\SpritesheetLoader.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="deps\src\deps\chipmunk-7.0.1\include\chipmunk\cpArbiter.h">
-      <Filter>Header Files\deps</Filter>
-    </ClInclude>
-    <ClInclude Include="deps\src\deps\chipmunk-7.0.1\include\chipmunk\cpBB.h">
-      <Filter>Header Files\deps</Filter>
-    </ClInclude>
-    <ClInclude Include="deps\src\deps\chipmunk-7.0.1\include\chipmunk\cpBody.h">
-      <Filter>Header Files\deps</Filter>
-    </ClInclude>
-    <ClInclude Include="deps\src\deps\chipmunk-7.0.1\include\chipmunk\cpConstraint.h">
-      <Filter>Header Files\deps</Filter>
-    </ClInclude>
-    <ClInclude Include="deps\src\deps\chipmunk-7.0.1\include\chipmunk\cpDampedRotarySpring.h">
-      <Filter>Header Files\deps</Filter>
-    </ClInclude>
-    <ClInclude Include="deps\src\deps\chipmunk-7.0.1\include\chipmunk\cpDampedSpring.h">
-      <Filter>Header Files\deps</Filter>
-    </ClInclude>
-    <ClInclude Include="deps\src\deps\chipmunk-7.0.1\include\chipmunk\cpGearJoint.h">
-      <Filter>Header Files\deps</Filter>
-    </ClInclude>
-    <ClInclude Include="deps\src\deps\chipmunk-7.0.1\include\chipmunk\cpGrooveJoint.h">
-      <Filter>Header Files\deps</Filter>
-    </ClInclude>
-    <ClInclude Include="deps\src\deps\chipmunk-7.0.1\include\chipmunk\cpHastySpace.h">
-      <Filter>Header Files\deps</Filter>
-    </ClInclude>
-    <ClInclude Include="deps\src\deps\chipmunk-7.0.1\include\chipmunk\cpMarch.h">
-      <Filter>Header Files\deps</Filter>
-    </ClInclude>
-    <ClInclude Include="deps\src\deps\chipmunk-7.0.1\include\chipmunk\cpPinJoint.h">
-      <Filter>Header Files\deps</Filter>
-    </ClInclude>
-    <ClInclude Include="deps\src\deps\chipmunk-7.0.1\include\chipmunk\cpPivotJoint.h">
-      <Filter>Header Files\deps</Filter>
-    </ClInclude>
-    <ClInclude Include="deps\src\deps\chipmunk-7.0.1\include\chipmunk\cpPolyline.h">
-      <Filter>Header Files\deps</Filter>
-    </ClInclude>
-    <ClInclude Include="deps\src\deps\chipmunk-7.0.1\include\chipmunk\cpPolyShape.h">
-      <Filter>Header Files\deps</Filter>
-    </ClInclude>
-    <ClInclude Include="deps\src\deps\chipmunk-7.0.1\include\chipmunk\cpRatchetJoint.h">
-      <Filter>Header Files\deps</Filter>
-    </ClInclude>
-    <ClInclude Include="deps\src\deps\chipmunk-7.0.1\include\chipmunk\cpRobust.h">
-      <Filter>Header Files\deps</Filter>
-    </ClInclude>
-    <ClInclude Include="deps\src\deps\chipmunk-7.0.1\include\chipmunk\cpRotaryLimitJoint.h">
-      <Filter>Header Files\deps</Filter>
-    </ClInclude>
-    <ClInclude Include="deps\src\deps\chipmunk-7.0.1\include\chipmunk\cpShape.h">
-      <Filter>Header Files\deps</Filter>
-    </ClInclude>
-    <ClInclude Include="deps\src\deps\chipmunk-7.0.1\include\chipmunk\cpSimpleMotor.h">
-      <Filter>Header Files\deps</Filter>
-    </ClInclude>
-    <ClInclude Include="deps\src\deps\chipmunk-7.0.1\include\chipmunk\cpSlideJoint.h">
-      <Filter>Header Files\deps</Filter>
-    </ClInclude>
-    <ClInclude Include="deps\src\deps\chipmunk-7.0.1\include\chipmunk\cpSpace.h">
-      <Filter>Header Files\deps</Filter>
-    </ClInclude>
-    <ClInclude Include="deps\src\deps\chipmunk-7.0.1\include\chipmunk\cpSpatialIndex.h">
-      <Filter>Header Files\deps</Filter>
-    </ClInclude>
-    <ClInclude Include="deps\src\deps\chipmunk-7.0.1\include\chipmunk\cpTransform.h">
-      <Filter>Header Files\deps</Filter>
-    </ClInclude>
-    <ClInclude Include="deps\src\deps\chipmunk-7.0.1\include\chipmunk\cpVect.h">
-      <Filter>Header Files\deps</Filter>
-    </ClInclude>
-    <ClInclude Include="deps\include\MOMOS\draw.h">
-      <Filter>Header Files\deps</Filter>
-    </ClInclude>
-    <ClInclude Include="deps\src\deps\glfw3_2_1\src\egl_context.h">
-      <Filter>Header Files\deps</Filter>
-    </ClInclude>
-    <ClInclude Include="deps\src\deps\glew2_0_0\include\GL\eglew.h">
-      <Filter>Header Files\deps</Filter>
-    </ClInclude>
-    <ClInclude Include="deps\include\fontstash\fontstash.h">
-      <Filter>Header Files\deps</Filter>
-    </ClInclude>
-    <ClInclude Include="deps\src\deps\glew2_0_0\include\GL\glew.h">
-      <Filter>Header Files\deps</Filter>
-    </ClInclude>
-    <ClInclude Include="deps\include\fontstash\glfontstash.h">
-      <Filter>Header Files\deps</Filter>
-    </ClInclude>
-    <ClInclude Include="deps\src\deps\glfw3_2_1\include\GLFW\glfw3.h">
-      <Filter>Header Files\deps</Filter>
-    </ClInclude>
-    <ClInclude Include="deps\src\deps\glfw3_2_1\include\GLFW\glfw3native.h">
-      <Filter>Header Files\deps</Filter>
-    </ClInclude>
-    <ClInclude Include="deps\src\deps\glfw3_2_1\src\glx_context.h">
-      <Filter>Header Files\deps</Filter>
-    </ClInclude>
-    <ClInclude Include="deps\src\deps\glew2_0_0\include\GL\glxew.h">
-      <Filter>Header Files\deps</Filter>
-    </ClInclude>
-    <ClInclude Include="deps\src\deps\SOIL\src\image_DXT.h">
-      <Filter>Header Files\deps</Filter>
-    </ClInclude>
-    <ClInclude Include="deps\src\deps\SOIL\src\image_helper.h">
-      <Filter>Header Files\deps</Filter>
-    </ClInclude>
-    <ClInclude Include="deps\include\MOMOS\input.h">
-      <Filter>Header Files\deps</Filter>
-    </ClInclude>
-    <ClInclude Include="deps\src\deps\glfw3_2_1\src\internal.h">
-      <Filter>Header Files\deps</Filter>
-    </ClInclude>
-    <ClInclude Include="deps\src\deps\glfw3_2_1\src\linux_joystick.h">
-      <Filter>Header Files\deps</Filter>
-    </ClInclude>
-    <ClInclude Include="deps\include\MOMOS\math.h">
-      <Filter>Header Files\deps</Filter>
-    </ClInclude>
-    <ClInclude Include="deps\src\deps\glfw3_2_1\src\mir_platform.h">
-      <Filter>Header Files\deps</Filter>
-    </ClInclude>
-    <ClInclude Include="deps\include\MOMOS\momos.h">
-      <Filter>Header Files\deps</Filter>
-    </ClInclude>
-    <ClInclude Include="deps\src\deps\glfw3_2_1\src\nsgl_context.h">
-      <Filter>Header Files\deps</Filter>
-    </ClInclude>
-    <ClInclude Include="deps\src\deps\glfw3_2_1\src\posix_time.h">
-      <Filter>Header Files\deps</Filter>
-    </ClInclude>
-    <ClInclude Include="deps\src\deps\glfw3_2_1\src\posix_tls.h">
-      <Filter>Header Files\deps</Filter>
-    </ClInclude>
-    <ClInclude Include="deps\src\deps\chipmunk-7.0.1\src\prime.h">
-      <Filter>Header Files\deps</Filter>
-    </ClInclude>
-    <ClInclude Include="deps\include\ref_ptr.h">
-      <Filter>Header Files\deps</Filter>
-    </ClInclude>
-    <ClInclude Include="deps\include\referenced.h">
-      <Filter>Header Files\deps</Filter>
-    </ClInclude>
-    <ClInclude Include="deps\include\MOMOS\resource_manager.h">
-      <Filter>Header Files\deps</Filter>
-    </ClInclude>
-    <ClInclude Include="deps\include\MOMOS\shader.h">
-      <Filter>Header Files\deps</Filter>
-    </ClInclude>
-    <ClInclude Include="deps\src\deps\SOIL\src\SOIL.h">
-      <Filter>Header Files\deps</Filter>
-    </ClInclude>
-    <ClInclude Include="deps\include\MOMOS\sprite.h">
-      <Filter>Header Files\deps</Filter>
-    </ClInclude>
-    <ClInclude Include="deps\include\MOMOS\sprite_renderer.h">
-      <Filter>Header Files\deps</Filter>
-    </ClInclude>
-    <ClInclude Include="deps\src\deps\sqlite3\sqlite3.h">
-      <Filter>Header Files\deps</Filter>
-    </ClInclude>
-    <ClInclude Include="deps\src\deps\sqlite3\sqlite3ext.h">
-      <Filter>Header Files\deps</Filter>
-    </ClInclude>
-    <ClInclude Include="deps\src\deps\SOIL\src\stb_image_aug.h">
-      <Filter>Header Files\deps</Filter>
-    </ClInclude>
-    <ClInclude Include="deps\include\fontstash\stb_truetype.h">
-      <Filter>Header Files\deps</Filter>
-    </ClInclude>
-    <ClInclude Include="deps\src\deps\SOIL\src\stbi_DDS_aug.h">
-      <Filter>Header Files\deps</Filter>
-    </ClInclude>
-    <ClInclude Include="deps\src\deps\SOIL\src\stbi_DDS_aug_c.h">
-      <Filter>Header Files\deps</Filter>
-    </ClInclude>
-    <ClInclude Include="deps\include\MOMOS\texture.h">
-      <Filter>Header Files\deps</Filter>
-    </ClInclude>
-    <ClInclude Include="deps\include\MOMOS\time.h">
-      <Filter>Header Files\deps</Filter>
-    </ClInclude>
-    <ClInclude Include="deps\include\types.h">
-      <Filter>Header Files\deps</Filter>
-    </ClInclude>
-    <ClInclude Include="deps\src\deps\glfw3_2_1\src\wgl_context.h">
-      <Filter>Header Files\deps</Filter>
-    </ClInclude>
-    <ClInclude Include="deps\src\deps\glew2_0_0\include\GL\wglew.h">
-      <Filter>Header Files\deps</Filter>
-    </ClInclude>
-    <ClInclude Include="deps\src\deps\glfw3_2_1\src\win32_joystick.h">
-      <Filter>Header Files\deps</Filter>
-    </ClInclude>
-    <ClInclude Include="deps\src\deps\glfw3_2_1\src\win32_platform.h">
-      <Filter>Header Files\deps</Filter>
-    </ClInclude>
-    <ClInclude Include="deps\include\MOMOS\window.h">
-      <Filter>Header Files\deps</Filter>
-    </ClInclude>
-    <ClInclude Include="deps\include\Window.h">
-      <Filter>Header Files\deps</Filter>
-    </ClInclude>
-    <ClInclude Include="deps\src\deps\glfw3_2_1\src\wl_platform.h">
-      <Filter>Header Files\deps</Filter>
-    </ClInclude>
-    <ClInclude Include="deps\src\deps\glfw3_2_1\src\x11_platform.h">
-      <Filter>Header Files\deps</Filter>
-    </ClInclude>
-    <ClInclude Include="deps\src\deps\glfw3_2_1\src\xkb_unicode.h">
-      <Filter>Header Files\deps</Filter>
-    </ClInclude>
-    <ClInclude Include="include\UI\SimulationSpeedControls.h">
-      <Filter>Header Files\UI</Filter>
-    </ClInclude>
-    <ClInclude Include="include\UI\VSyncToggle.h">
-      <Filter>Header Files\UI</Filter>
-    </ClInclude>
-    <ClInclude Include="include\UI\FpsCounter.h">
-      <Filter>Header Files\UI</Filter>
-    </ClInclude>
-    <ClInclude Include="include\UI\InfoPanel.h">
-      <Filter>Header Files\UI</Filter>
-    </ClInclude>
-    <ClInclude Include="include\ecs\ComponentPool.h">
-      <Filter>Header Files\ecs</Filter>
-    </ClInclude>
-    <ClInclude Include="include\ecs\Entity.h">
-      <Filter>Header Files\ecs</Filter>
-    </ClInclude>
-    <ClInclude Include="include\ecs\PawnEcs.h">
-      <Filter>Header Files\ecs</Filter>
-    </ClInclude>
-    <ClInclude Include="include\ecs\PawnInput.h">
-      <Filter>Header Files\ecs</Filter>
-    </ClInclude>
-    <ClInclude Include="include\ecs\PawnMovementUtils.h">
-      <Filter>Header Files\ecs</Filter>
-    </ClInclude>
-    <ClInclude Include="include\ecs\System.h">
-      <Filter>Header Files\ecs</Filter>
-    </ClInclude>
-    <ClInclude Include="include\ecs\Registry.h">
-      <Filter>Header Files\ecs</Filter>
-    </ClInclude>
-    <ClInclude Include="include\ecs\components\MovementComponent.h">
-      <Filter>Header Files\ecs\components</Filter>
-    </ClInclude>
-    <ClInclude Include="include\ecs\components\PawnComponents.h">
-      <Filter>Header Files\ecs\components</Filter>
-    </ClInclude>
-    <ClInclude Include="include\ecs\components\PawnStateComponent.h">
-      <Filter>Header Files\ecs\components</Filter>
-    </ClInclude>
-    <ClInclude Include="include\ecs\components\SpriteComponent.h">
-      <Filter>Header Files\ecs\components</Filter>
-    </ClInclude>
-    <ClInclude Include="include\ecs\components\TransformComponent.h">
-      <Filter>Header Files\ecs\components</Filter>
-    </ClInclude>
-    <ClInclude Include="include\ecs\system\PawnRenderSystem.h">
-      <Filter>Header Files\ecs\system</Filter>
-    </ClInclude>
-    <ClInclude Include="include\ecs\system\PawnNeedsSystem.h">
-      <Filter>Header Files\ecs\system</Filter>
-    </ClInclude>
-    <ClInclude Include="include\ecs\system\PawnNeedSatisfactionSystem.h">
-      <Filter>Header Files\ecs\system</Filter>
-    </ClInclude>
-    <ClInclude Include="include\ecs\components\NeedsComponent.h">
-      <Filter>Header Files\ecs\components</Filter>
-    </ClInclude>
-    <ClInclude Include="include\ecs\components\NeedsControllerComponent.h">
-      <Filter>Header Files\ecs\components</Filter>
-    </ClInclude>
-    <ClInclude Include="include\ecs\components\NeedSatisfactionComponent.h">
-      <Filter>Header Files\ecs\components</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Needs\NeedId.h">
-      <Filter>Header Files\Needs</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Needs\INeed.h">
-      <Filter>Header Files\Needs</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Needs\Need.h">
-      <Filter>Header Files\Needs</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Needs\NeedsController.h">
-      <Filter>Header Files\Needs</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Needs\NeedsConfig.h">
-      <Filter>Header Files\Needs</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Providers\INeedProvider.h">
-      <Filter>Header Files\Providers</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Providers\ProviderRegistry.h">
-      <Filter>Header Files\Providers</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Providers\MapResourceProvider.h">
-      <Filter>Header Files\Providers</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Providers\ResourceNeedMapping.h">
-      <Filter>Header Files\Providers</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Providers\ResourceProviderRegistry.h">
-      <Filter>Header Files\Providers</Filter>
-    </ClInclude>
-    <ClInclude Include="include\PawnAI\PawnAI.h">
-      <Filter>Header Files\PawnAI</Filter>
-    </ClInclude>
-    <ClInclude Include="include\FSM\PawnFSM.h">
-      <Filter>Header Files\FSM</Filter>
-    </ClInclude>
-    <ClInclude Include="include\ecs\system\PawnPathFollowSystem.h">
-      <Filter>Header Files\ecs\system</Filter>
-    </ClInclude>
-    <ClInclude Include="include\ecs\system\PawnMovementSystem.h">
-      <Filter>Header Files\ecs\system</Filter>
-    </ClInclude>
-    <ClInclude Include="include\ecs\system\PawnAISystem.h">
-      <Filter>Header Files\ecs\system</Filter>
-    </ClInclude>
-    <ClInclude Include="include\ecs\PawnEcsSystems.h">
-      <Filter>Header Files\ecs</Filter>
-    </ClInclude>
-    <ClInclude Include="include\ecs\PawnFactory.h">
-      <Filter>Header Files\ecs</Filter>
-    </ClInclude>
-    <ClInclude Include="include\ecs\PawnSelection.h">
-      <Filter>Header Files\ecs</Filter>
-    </ClInclude>
-    <ClInclude Include="include\ecs\PawnEcsManager.h">
-      <Filter>Header Files\ecs</Filter>
-    </ClInclude>
-    <ClInclude Include="tests\AncientMythosTests.h">
-      <Filter>Tests</Filter>
-    </ClInclude>
-    <ClInclude Include="tests\PawnEcsTests.h">
-      <Filter>Tests</Filter>
-    </ClInclude>
-    <ClInclude Include="tests\RegistryTests.h">
-      <Filter>Tests</Filter>
-    </ClInclude>
-    <ClInclude Include="tests\TestFramework.h">
-      <Filter>Tests</Filter>
+      <Filter>include</Filter>
     </ClInclude>
     <ClInclude Include="include\Map\ResourceTypeManager.h">
-      <Filter>Header Files</Filter>
+      <Filter>include\Map</Filter>
     </ClInclude>
     <ClInclude Include="include\Map\Map.h">
-      <Filter>Header Files\Map</Filter>
+      <Filter>include\Map</Filter>
     </ClInclude>
     <ClInclude Include="include\Map\MapCell.h">
-      <Filter>Header Files\Map</Filter>
+      <Filter>include\Map</Filter>
     </ClInclude>
     <ClInclude Include="include\Map\MapGenerator.h">
-      <Filter>Header Files\Map</Filter>
+      <Filter>include\Map</Filter>
     </ClInclude>
     <ClInclude Include="include\Map\MapRenderer.h">
-      <Filter>Header Files\Map</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Map\MapResource.h">
-      <Filter>Header Files\Map</Filter>
+      <Filter>include\Map</Filter>
     </ClInclude>
     <ClInclude Include="include\Map\MapResourceType.h">
-      <Filter>Header Files\Map</Filter>
+      <Filter>include\Map</Filter>
     </ClInclude>
-    <ClInclude Include="include\Needs\NeedsController.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="include\Map\MapResource.h">
+      <Filter>include\Map</Filter>
     </ClInclude>
-    <ClInclude Include="include\FSM\PawnFSM.h">
-      <Filter>Header Files\FSM</Filter>
+    <ClInclude Include="include\Agents\Agent.h">
+      <Filter>include\Agents</Filter>
     </ClInclude>
-    <ClInclude Include="include\Needs\INeed.h">
-      <Filter>Header Files\Needs</Filter>
+    <ClInclude Include="include\Agents\Pathfinder.h">
+      <Filter>include\Agents</Filter>
     </ClInclude>
-    <ClInclude Include="include\Needs\Need.h">
-      <Filter>Header Files\Needs</Filter>
+    <ClInclude Include="include\Pathfinding\astar.h">
+      <Filter>include\Pathfinding</Filter>
     </ClInclude>
-    <ClInclude Include="include\Needs\NeedId.h">
-      <Filter>Header Files\Needs</Filter>
+    <ClInclude Include="include\Pathfinding\cost_map.h">
+      <Filter>include\Pathfinding</Filter>
     </ClInclude>
-    <ClInclude Include="include\Needs\NeedsConfig.h">
-      <Filter>Header Files\Needs</Filter>
+    <ClInclude Include="include\Pathfinding\path.h">
+      <Filter>include\Pathfinding</Filter>
     </ClInclude>
-    <ClInclude Include="include\PawnAI\PawnAI.h">
-      <Filter>Header Files\PawnAI</Filter>
+    <ClInclude Include="include\UI\FpsCounter.h">
+      <Filter>include\UI</Filter>
     </ClInclude>
-    <ClInclude Include="include\Providers\INeedProvider.h">
-      <Filter>Header Files\Providers</Filter>
+    <ClInclude Include="include\UI\SimulationSpeedControls.h">
+      <Filter>include\UI</Filter>
     </ClInclude>
-    <ClInclude Include="include\Providers\MapResourceProvider.h">
-      <Filter>Header Files\Providers</Filter>
+    <ClInclude Include="include\UI\VSyncToggle.h">
+      <Filter>include\UI</Filter>
     </ClInclude>
-    <ClInclude Include="include\Providers\ProviderRegistry.h">
-      <Filter>Header Files\Providers</Filter>
+    <ClInclude Include="include\UI\InfoPanel.h">
+      <Filter>include\UI</Filter>
     </ClInclude>
-    <ClInclude Include="include\Providers\ResourceNeedMapping.h">
-      <Filter>Header Files\Providers</Filter>
+    <ClInclude Include="include\ecs\PawnEcsManager.h">
+      <Filter>include\ecs</Filter>
     </ClInclude>
-    <ClInclude Include="include\Providers\ResourceProviderRegistry.h">
-      <Filter>Header Files\Providers</Filter>
+    <ClInclude Include="include\ecs\ComponentPool.h">
+      <Filter>include\ecs</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ecs\Entity.h">
+      <Filter>include\ecs</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ecs\PawnEcs.h">
+      <Filter>include\ecs</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ecs\PawnMovementUtils.h">
+      <Filter>include\ecs</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ecs\Registry.h">
+      <Filter>include\ecs</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ecs\System.h">
+      <Filter>include\ecs</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ecs\PawnInput.h">
+      <Filter>include\ecs</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ecs\PawnEcsSystems.h">
+      <Filter>include\ecs</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ecs\PawnFactory.h">
+      <Filter>include\ecs</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ecs\PawnSelection.h">
+      <Filter>include\ecs</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ecs\components\MovementComponent.h">
+      <Filter>include\ecs\components</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ecs\components\PawnComponents.h">
+      <Filter>include\ecs\components</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ecs\components\PawnStateComponent.h">
+      <Filter>include\ecs\components</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ecs\components\SpriteComponent.h">
+      <Filter>include\ecs\components</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ecs\components\TransformComponent.h">
+      <Filter>include\ecs\components</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ecs\components\NeedsComponent.h">
+      <Filter>include\ecs\components</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ecs\components\NeedsControllerComponent.h">
+      <Filter>include\ecs\components</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ecs\components\NeedSatisfactionComponent.h">
+      <Filter>include\ecs\components</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ecs\system\PawnAISystem.h">
+      <Filter>include\ecs\system</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ecs\system\PawnPathFollowSystem.h">
+      <Filter>include\ecs\system</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ecs\system\PawnMovementSystem.h">
+      <Filter>include\ecs\system</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ecs\system\PawnRenderSystem.h">
+      <Filter>include\ecs\system</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ecs\system\PawnNeedsSystem.h">
+      <Filter>include\ecs\system</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ecs\system\PawnNeedSatisfactionSystem.h">
+      <Filter>include\ecs\system</Filter>
+    </ClInclude>
+    <ClInclude Include="deps\src\deps\glfw3_2_1\include\GLFW\glfw3.h">
+      <Filter>deps\src\deps\glfw3_2_1\include\GLFW</Filter>
+    </ClInclude>
+    <ClInclude Include="deps\src\deps\glfw3_2_1\include\GLFW\glfw3native.h">
+      <Filter>deps\src\deps\glfw3_2_1\include\GLFW</Filter>
+    </ClInclude>
+    <ClInclude Include="deps\src\deps\glfw3_2_1\src\cocoa_joystick.h">
+      <Filter>deps\src\deps\glfw3_2_1\src</Filter>
+    </ClInclude>
+    <ClInclude Include="deps\src\deps\glfw3_2_1\src\cocoa_platform.h">
+      <Filter>deps\src\deps\glfw3_2_1\src</Filter>
+    </ClInclude>
+    <ClInclude Include="deps\src\deps\glfw3_2_1\src\egl_context.h">
+      <Filter>deps\src\deps\glfw3_2_1\src</Filter>
+    </ClInclude>
+    <ClInclude Include="deps\src\deps\glfw3_2_1\src\glx_context.h">
+      <Filter>deps\src\deps\glfw3_2_1\src</Filter>
+    </ClInclude>
+    <ClInclude Include="deps\src\deps\glfw3_2_1\src\internal.h">
+      <Filter>deps\src\deps\glfw3_2_1\src</Filter>
+    </ClInclude>
+    <ClInclude Include="deps\src\deps\glfw3_2_1\src\linux_joystick.h">
+      <Filter>deps\src\deps\glfw3_2_1\src</Filter>
+    </ClInclude>
+    <ClInclude Include="deps\src\deps\glfw3_2_1\src\mir_platform.h">
+      <Filter>deps\src\deps\glfw3_2_1\src</Filter>
+    </ClInclude>
+    <ClInclude Include="deps\src\deps\glfw3_2_1\src\nsgl_context.h">
+      <Filter>deps\src\deps\glfw3_2_1\src</Filter>
+    </ClInclude>
+    <ClInclude Include="deps\src\deps\glfw3_2_1\src\posix_time.h">
+      <Filter>deps\src\deps\glfw3_2_1\src</Filter>
+    </ClInclude>
+    <ClInclude Include="deps\src\deps\glfw3_2_1\src\posix_tls.h">
+      <Filter>deps\src\deps\glfw3_2_1\src</Filter>
+    </ClInclude>
+    <ClInclude Include="deps\src\deps\glfw3_2_1\src\wgl_context.h">
+      <Filter>deps\src\deps\glfw3_2_1\src</Filter>
+    </ClInclude>
+    <ClInclude Include="deps\src\deps\glfw3_2_1\src\win32_joystick.h">
+      <Filter>deps\src\deps\glfw3_2_1\src</Filter>
+    </ClInclude>
+    <ClInclude Include="deps\src\deps\glfw3_2_1\src\win32_platform.h">
+      <Filter>deps\src\deps\glfw3_2_1\src</Filter>
+    </ClInclude>
+    <ClInclude Include="deps\src\deps\glfw3_2_1\src\wl_platform.h">
+      <Filter>deps\src\deps\glfw3_2_1\src</Filter>
+    </ClInclude>
+    <ClInclude Include="deps\src\deps\glfw3_2_1\src\x11_platform.h">
+      <Filter>deps\src\deps\glfw3_2_1\src</Filter>
+    </ClInclude>
+    <ClInclude Include="deps\src\deps\glfw3_2_1\src\xkb_unicode.h">
+      <Filter>deps\src\deps\glfw3_2_1\src</Filter>
+    </ClInclude>
+    <ClInclude Include="deps\src\deps\glew2_0_0\include\GL\eglew.h">
+      <Filter>deps\src\deps\glew2_0_0\include\GL</Filter>
+    </ClInclude>
+    <ClInclude Include="deps\src\deps\glew2_0_0\include\GL\glew.h">
+      <Filter>deps\src\deps\glew2_0_0\include\GL</Filter>
+    </ClInclude>
+    <ClInclude Include="deps\src\deps\glew2_0_0\include\GL\glxew.h">
+      <Filter>deps\src\deps\glew2_0_0\include\GL</Filter>
+    </ClInclude>
+    <ClInclude Include="deps\src\deps\glew2_0_0\include\GL\wglew.h">
+      <Filter>deps\src\deps\glew2_0_0\include\GL</Filter>
+    </ClInclude>
+    <ClInclude Include="deps\src\deps\chipmunk-7.0.1\include\chipmunk\chipmunk.h">
+      <Filter>deps\src\deps\chipmunk-7.0.1\include\chipmunk</Filter>
+    </ClInclude>
+    <ClInclude Include="deps\src\deps\chipmunk-7.0.1\include\chipmunk\chipmunk_ffi.h">
+      <Filter>deps\src\deps\chipmunk-7.0.1\include\chipmunk</Filter>
+    </ClInclude>
+    <ClInclude Include="deps\src\deps\chipmunk-7.0.1\include\chipmunk\chipmunk_private.h">
+      <Filter>deps\src\deps\chipmunk-7.0.1\include\chipmunk</Filter>
+    </ClInclude>
+    <ClInclude Include="deps\src\deps\chipmunk-7.0.1\include\chipmunk\chipmunk_types.h">
+      <Filter>deps\src\deps\chipmunk-7.0.1\include\chipmunk</Filter>
+    </ClInclude>
+    <ClInclude Include="deps\src\deps\chipmunk-7.0.1\include\chipmunk\chipmunk_unsafe.h">
+      <Filter>deps\src\deps\chipmunk-7.0.1\include\chipmunk</Filter>
+    </ClInclude>
+    <ClInclude Include="deps\src\deps\chipmunk-7.0.1\include\chipmunk\cpArbiter.h">
+      <Filter>deps\src\deps\chipmunk-7.0.1\include\chipmunk</Filter>
+    </ClInclude>
+    <ClInclude Include="deps\src\deps\chipmunk-7.0.1\include\chipmunk\cpBB.h">
+      <Filter>deps\src\deps\chipmunk-7.0.1\include\chipmunk</Filter>
+    </ClInclude>
+    <ClInclude Include="deps\src\deps\chipmunk-7.0.1\include\chipmunk\cpBody.h">
+      <Filter>deps\src\deps\chipmunk-7.0.1\include\chipmunk</Filter>
+    </ClInclude>
+    <ClInclude Include="deps\src\deps\chipmunk-7.0.1\include\chipmunk\cpConstraint.h">
+      <Filter>deps\src\deps\chipmunk-7.0.1\include\chipmunk</Filter>
+    </ClInclude>
+    <ClInclude Include="deps\src\deps\chipmunk-7.0.1\include\chipmunk\cpDampedRotarySpring.h">
+      <Filter>deps\src\deps\chipmunk-7.0.1\include\chipmunk</Filter>
+    </ClInclude>
+    <ClInclude Include="deps\src\deps\chipmunk-7.0.1\include\chipmunk\cpDampedSpring.h">
+      <Filter>deps\src\deps\chipmunk-7.0.1\include\chipmunk</Filter>
+    </ClInclude>
+    <ClInclude Include="deps\src\deps\chipmunk-7.0.1\include\chipmunk\cpGearJoint.h">
+      <Filter>deps\src\deps\chipmunk-7.0.1\include\chipmunk</Filter>
+    </ClInclude>
+    <ClInclude Include="deps\src\deps\chipmunk-7.0.1\include\chipmunk\cpGrooveJoint.h">
+      <Filter>deps\src\deps\chipmunk-7.0.1\include\chipmunk</Filter>
+    </ClInclude>
+    <ClInclude Include="deps\src\deps\chipmunk-7.0.1\include\chipmunk\cpHastySpace.h">
+      <Filter>deps\src\deps\chipmunk-7.0.1\include\chipmunk</Filter>
+    </ClInclude>
+    <ClInclude Include="deps\src\deps\chipmunk-7.0.1\include\chipmunk\cpMarch.h">
+      <Filter>deps\src\deps\chipmunk-7.0.1\include\chipmunk</Filter>
+    </ClInclude>
+    <ClInclude Include="deps\src\deps\chipmunk-7.0.1\include\chipmunk\cpPinJoint.h">
+      <Filter>deps\src\deps\chipmunk-7.0.1\include\chipmunk</Filter>
+    </ClInclude>
+    <ClInclude Include="deps\src\deps\chipmunk-7.0.1\include\chipmunk\cpPivotJoint.h">
+      <Filter>deps\src\deps\chipmunk-7.0.1\include\chipmunk</Filter>
+    </ClInclude>
+    <ClInclude Include="deps\src\deps\chipmunk-7.0.1\include\chipmunk\cpPolyline.h">
+      <Filter>deps\src\deps\chipmunk-7.0.1\include\chipmunk</Filter>
+    </ClInclude>
+    <ClInclude Include="deps\src\deps\chipmunk-7.0.1\include\chipmunk\cpPolyShape.h">
+      <Filter>deps\src\deps\chipmunk-7.0.1\include\chipmunk</Filter>
+    </ClInclude>
+    <ClInclude Include="deps\src\deps\chipmunk-7.0.1\include\chipmunk\cpRatchetJoint.h">
+      <Filter>deps\src\deps\chipmunk-7.0.1\include\chipmunk</Filter>
+    </ClInclude>
+    <ClInclude Include="deps\src\deps\chipmunk-7.0.1\include\chipmunk\cpRobust.h">
+      <Filter>deps\src\deps\chipmunk-7.0.1\include\chipmunk</Filter>
+    </ClInclude>
+    <ClInclude Include="deps\src\deps\chipmunk-7.0.1\include\chipmunk\cpRotaryLimitJoint.h">
+      <Filter>deps\src\deps\chipmunk-7.0.1\include\chipmunk</Filter>
+    </ClInclude>
+    <ClInclude Include="deps\src\deps\chipmunk-7.0.1\include\chipmunk\cpShape.h">
+      <Filter>deps\src\deps\chipmunk-7.0.1\include\chipmunk</Filter>
+    </ClInclude>
+    <ClInclude Include="deps\src\deps\chipmunk-7.0.1\include\chipmunk\cpSimpleMotor.h">
+      <Filter>deps\src\deps\chipmunk-7.0.1\include\chipmunk</Filter>
+    </ClInclude>
+    <ClInclude Include="deps\src\deps\chipmunk-7.0.1\include\chipmunk\cpSlideJoint.h">
+      <Filter>deps\src\deps\chipmunk-7.0.1\include\chipmunk</Filter>
+    </ClInclude>
+    <ClInclude Include="deps\src\deps\chipmunk-7.0.1\include\chipmunk\cpSpace.h">
+      <Filter>deps\src\deps\chipmunk-7.0.1\include\chipmunk</Filter>
+    </ClInclude>
+    <ClInclude Include="deps\src\deps\chipmunk-7.0.1\include\chipmunk\cpSpatialIndex.h">
+      <Filter>deps\src\deps\chipmunk-7.0.1\include\chipmunk</Filter>
+    </ClInclude>
+    <ClInclude Include="deps\src\deps\chipmunk-7.0.1\include\chipmunk\cpTransform.h">
+      <Filter>deps\src\deps\chipmunk-7.0.1\include\chipmunk</Filter>
+    </ClInclude>
+    <ClInclude Include="deps\src\deps\chipmunk-7.0.1\include\chipmunk\cpVect.h">
+      <Filter>deps\src\deps\chipmunk-7.0.1\include\chipmunk</Filter>
+    </ClInclude>
+    <ClInclude Include="deps\src\deps\chipmunk-7.0.1\src\prime.h">
+      <Filter>deps\src\deps\chipmunk-7.0.1\src</Filter>
+    </ClInclude>
+    <ClInclude Include="deps\src\deps\SOIL\src\image_DXT.h">
+      <Filter>deps\src\deps\SOIL\src</Filter>
+    </ClInclude>
+    <ClInclude Include="deps\src\deps\SOIL\src\image_helper.h">
+      <Filter>deps\src\deps\SOIL\src</Filter>
+    </ClInclude>
+    <ClInclude Include="deps\src\deps\SOIL\src\SOIL.h">
+      <Filter>deps\src\deps\SOIL\src</Filter>
+    </ClInclude>
+    <ClInclude Include="deps\src\deps\SOIL\src\stbi_DDS_aug.h">
+      <Filter>deps\src\deps\SOIL\src</Filter>
+    </ClInclude>
+    <ClInclude Include="deps\src\deps\SOIL\src\stbi_DDS_aug_c.h">
+      <Filter>deps\src\deps\SOIL\src</Filter>
+    </ClInclude>
+    <ClInclude Include="deps\src\deps\SOIL\src\stb_image_aug.h">
+      <Filter>deps\src\deps\SOIL\src</Filter>
+    </ClInclude>
+    <ClInclude Include="deps\src\deps\sqlite3\sqlite3.h">
+      <Filter>deps\src\deps\sqlite3</Filter>
+    </ClInclude>
+    <ClInclude Include="deps\src\deps\sqlite3\sqlite3ext.h">
+      <Filter>deps\src\deps\sqlite3</Filter>
+    </ClInclude>
+    <ClInclude Include="deps\include\referenced.h">
+      <Filter>deps\include</Filter>
+    </ClInclude>
+    <ClInclude Include="deps\include\ref_ptr.h">
+      <Filter>deps\include</Filter>
+    </ClInclude>
+    <ClInclude Include="deps\include\types.h">
+      <Filter>deps\include</Filter>
+    </ClInclude>
+    <ClInclude Include="deps\include\Window.h">
+      <Filter>deps\include</Filter>
+    </ClInclude>
+    <ClInclude Include="deps\include\MOMOS\draw.h">
+      <Filter>deps\include\MOMOS</Filter>
+    </ClInclude>
+    <ClInclude Include="deps\include\MOMOS\input.h">
+      <Filter>deps\include\MOMOS</Filter>
+    </ClInclude>
+    <ClInclude Include="deps\include\MOMOS\math.h">
+      <Filter>deps\include\MOMOS</Filter>
+    </ClInclude>
+    <ClInclude Include="deps\include\MOMOS\momos.h">
+      <Filter>deps\include\MOMOS</Filter>
+    </ClInclude>
+    <ClInclude Include="deps\include\MOMOS\resource_manager.h">
+      <Filter>deps\include\MOMOS</Filter>
+    </ClInclude>
+    <ClInclude Include="deps\include\MOMOS\shader.h">
+      <Filter>deps\include\MOMOS</Filter>
+    </ClInclude>
+    <ClInclude Include="deps\include\MOMOS\sprite.h">
+      <Filter>deps\include\MOMOS</Filter>
+    </ClInclude>
+    <ClInclude Include="deps\include\MOMOS\sprite_renderer.h">
+      <Filter>deps\include\MOMOS</Filter>
+    </ClInclude>
+    <ClInclude Include="deps\include\MOMOS\texture.h">
+      <Filter>deps\include\MOMOS</Filter>
+    </ClInclude>
+    <ClInclude Include="deps\include\MOMOS\time.h">
+      <Filter>deps\include\MOMOS</Filter>
+    </ClInclude>
+    <ClInclude Include="deps\include\MOMOS\window.h">
+      <Filter>deps\include\MOMOS</Filter>
+    </ClInclude>
+    <ClInclude Include="deps\include\fontstash\fontstash.h">
+      <Filter>deps\include\fontstash</Filter>
+    </ClInclude>
+    <ClInclude Include="deps\include\fontstash\glfontstash.h">
+      <Filter>deps\include\fontstash</Filter>
+    </ClInclude>
+    <ClInclude Include="deps\include\fontstash\stb_truetype.h">
+      <Filter>deps\include\fontstash</Filter>
+    </ClInclude>
+    <ClInclude Include="tests\AncientMythosTests.h">
+      <Filter>tests</Filter>
+    </ClInclude>
+    <ClInclude Include="tests\PawnEcsTests.h">
+      <Filter>tests</Filter>
+    </ClInclude>
+    <ClInclude Include="tests\RegistryTests.h">
+      <Filter>tests</Filter>
+    </ClInclude>
+    <ClInclude Include="tests\TestFramework.h">
+      <Filter>tests</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\GameStatus.cc">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\main.cc">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Agents\Agent.cc">
-      <Filter>Source Files\Agents</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Agents\Pathfinder.cc">
-      <Filter>Source Files\Agents</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Pathfinding\astar.cc">
-      <Filter>Source Files\Pathfinding</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Pathfinding\cost_map.cc">
-      <Filter>Source Files\Pathfinding</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Pathfinding\path.cc">
-      <Filter>Source Files\Pathfinding</Filter>
-    </ClCompile>
-    <ClCompile Include="src\SpritesheetLoader.cc">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Camera.cc">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\ecs\PawnEcs.cc">
-      <Filter>Source Files\ecs</Filter>
-    </ClCompile>
-    <ClCompile Include="src\ecs\PawnFactory.cc">
-      <Filter>Source Files\ecs</Filter>
-    </ClCompile>
-    <ClCompile Include="src\ecs\PawnSelection.cc">
-      <Filter>Source Files\ecs</Filter>
-    </ClCompile>
-    <ClCompile Include="src\ecs\PawnEcsSystems.cc">
-      <Filter>Source Files\ecs</Filter>
-    </ClCompile>
-    <ClCompile Include="src\ecs\PawnInput.cc">
-      <Filter>Source Files\ecs</Filter>
-    </ClCompile>
-    <ClCompile Include="src\ecs\PawnMovementUtils.cc">
-      <Filter>Source Files\ecs</Filter>
-    </ClCompile>
-    <ClCompile Include="src\ecs\Registry.cc">
-      <Filter>Source Files\ecs</Filter>
-    </ClCompile>
-    <ClCompile Include="src\ecs\PawnEcsManager.cc">
-      <Filter>Source Files\ecs</Filter>
-    </ClCompile>
-    <ClCompile Include="src\ecs\system\PawnAISystem.cc">
-      <Filter>Source Files\ecs\system</Filter>
-    </ClCompile>
-    <ClCompile Include="src\ecs\system\PawnMovementSystem.cc">
-      <Filter>Source Files\ecs\system</Filter>
-    </ClCompile>
-    <ClCompile Include="src\ecs\system\PawnPathFollowSystem.cc">
-      <Filter>Source Files\ecs\system</Filter>
-    </ClCompile>
-    <ClCompile Include="src\ecs\system\PawnRenderSystem.cc">
-      <Filter>Source Files\ecs\system</Filter>
-    </ClCompile>
-    <ClCompile Include="src\ecs\system\PawnNeedsSystem.cc">
-      <Filter>Source Files\ecs\system</Filter>
-    </ClCompile>
-    <ClCompile Include="src\ecs\system\PawnNeedSatisfactionSystem.cc">
-      <Filter>Source Files\ecs\system</Filter>
+    <ClCompile Include="src\FSM\PawnFSM.cc">
+      <Filter>Source Files\FSM</Filter>
     </ClCompile>
     <ClCompile Include="src\Needs\Need.cc">
       <Filter>Source Files\Needs</Filter>
@@ -646,6 +580,9 @@
     </ClCompile>
     <ClCompile Include="src\Needs\NeedsController.cc">
       <Filter>Source Files\Needs</Filter>
+    </ClCompile>
+    <ClCompile Include="src\PawnAI\PawnAI.cc">
+      <Filter>Source Files\PawnAI</Filter>
     </ClCompile>
     <ClCompile Include="src\Providers\MapResourceProvider.cc">
       <Filter>Source Files\Providers</Filter>
@@ -658,90 +595,153 @@
     </ClCompile>
     <ClCompile Include="src\Providers\ResourceProviderRegistry.cc">
       <Filter>Source Files\Providers</Filter>
-    </ClCompile>
-    <ClCompile Include="src\PawnAI\PawnAI.cc">
-      <Filter>Source Files\PawnAI</Filter>
-    </ClCompile>
-    <ClCompile Include="src\FSM\PawnFSM.cc">
-      <Filter>Source Files\FSM</Filter>
-    </ClCompile>
-    <ClCompile Include="src\UI\VSyncToggle.cc">
-      <Filter>Source Files\UI</Filter>
-    </ClCompile>
-    <ClCompile Include="src\UI\SimulationSpeedControls.cc">
-      <Filter>Source Files\UI</Filter>
-    </ClCompile>
-    <ClCompile Include="src\UI\FpsCounter.cc">
-      <Filter>Source Files\UI</Filter>
-    </ClCompile>
-    <ClCompile Include="src\UI\InfoPanel.cc">
-      <Filter>Source Files\UI</Filter>
-    </ClCompile>
-    <ClCompile Include="tests\AncientMythosTests.cpp">
-      <Filter>Tests</Filter>
-    </ClCompile>
-    <ClCompile Include="tests\PawnEcsTests.cpp">
-      <Filter>Tests</Filter>
-    </ClCompile>
-    <ClCompile Include="tests\RegistryTests.cpp">
-      <Filter>Tests</Filter>
     </ClCompile>
     <ClCompile Include="src\game.cc">
-      <Filter>Source Files</Filter>
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\GameStatus.cc">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\main.cc">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\SpritesheetLoader.cc">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Camera.cc">
+      <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="src\Map\ResourceTypeManager.cc">
-      <Filter>Source Files</Filter>
+      <Filter>src\Map</Filter>
     </ClCompile>
     <ClCompile Include="src\Map\Map.cc">
-      <Filter>Source Files\Map</Filter>
+      <Filter>src\Map</Filter>
     </ClCompile>
     <ClCompile Include="src\Map\MapCell.cc">
-      <Filter>Source Files\Map</Filter>
+      <Filter>src\Map</Filter>
     </ClCompile>
     <ClCompile Include="src\Map\MapGenerator.cc">
-      <Filter>Source Files\Map</Filter>
+      <Filter>src\Map</Filter>
     </ClCompile>
     <ClCompile Include="src\Map\MapRenderer.cc">
-      <Filter>Source Files\Map</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Map\MapResource.cc">
-      <Filter>Source Files\Map</Filter>
+      <Filter>src\Map</Filter>
     </ClCompile>
     <ClCompile Include="src\Map\MapResourceType.cc">
-      <Filter>Source Files\Map</Filter>
+      <Filter>src\Map</Filter>
     </ClCompile>
-    <ClCompile Include="src\FSM\PawnFSM.cc">
-      <Filter>Source Files\FSM</Filter>
+    <ClCompile Include="src\Map\MapResource.cc">
+      <Filter>src\Map</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Agents\Agent.cc">
+      <Filter>src\Agents</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Agents\Pathfinder.cc">
+      <Filter>src\Agents</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Pathfinding\astar.cc">
+      <Filter>src\Pathfinding</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Pathfinding\cost_map.cc">
+      <Filter>src\Pathfinding</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Pathfinding\path.cc">
+      <Filter>src\Pathfinding</Filter>
+    </ClCompile>
+    <ClCompile Include="src\UI\FpsCounter.cc">
+      <Filter>src\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="src\UI\VSyncToggle.cc">
+      <Filter>src\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="src\UI\SimulationSpeedControls.cc">
+      <Filter>src\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="src\UI\InfoPanel.cc">
+      <Filter>src\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ecs\PawnEcsManager.cc">
+      <Filter>src\ecs</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ecs\Registry.cc">
+      <Filter>src\ecs</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ecs\PawnEcs.cc">
+      <Filter>src\ecs</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ecs\PawnFactory.cc">
+      <Filter>src\ecs</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ecs\PawnSelection.cc">
+      <Filter>src\ecs</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ecs\PawnMovementUtils.cc">
+      <Filter>src\ecs</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ecs\PawnInput.cc">
+      <Filter>src\ecs</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ecs\PawnEcsSystems.cc">
+      <Filter>src\ecs</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ecs\system\PawnAISystem.cc">
+      <Filter>src\ecs\system</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ecs\system\PawnPathFollowSystem.cc">
+      <Filter>src\ecs\system</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ecs\system\PawnMovementSystem.cc">
+      <Filter>src\ecs\system</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ecs\system\PawnRenderSystem.cc">
+      <Filter>src\ecs\system</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ecs\system\PawnNeedsSystem.cc">
+      <Filter>src\ecs\system</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ecs\system\PawnNeedSatisfactionSystem.cc">
+      <Filter>src\ecs\system</Filter>
     </ClCompile>
     <ClCompile Include="src\Needs\Need.cc">
-      <Filter>Source Files\Needs</Filter>
+      <Filter>src\Needs</Filter>
     </ClCompile>
     <ClCompile Include="src\Needs\NeedsConfig.cc">
-      <Filter>Source Files\Needs</Filter>
+      <Filter>src\Needs</Filter>
     </ClCompile>
     <ClCompile Include="src\Needs\NeedsController.cc">
-      <Filter>Source Files\Needs</Filter>
-    </ClCompile>
-    <ClCompile Include="src\PawnAI\PawnAI.cc">
-      <Filter>Source Files\PawnAI</Filter>
+      <Filter>src\Needs</Filter>
     </ClCompile>
     <ClCompile Include="src\Providers\MapResourceProvider.cc">
-      <Filter>Source Files\Providers</Filter>
+      <Filter>src\Providers</Filter>
     </ClCompile>
     <ClCompile Include="src\Providers\ProviderRegistry.cc">
-      <Filter>Source Files\Providers</Filter>
+      <Filter>src\Providers</Filter>
     </ClCompile>
     <ClCompile Include="src\Providers\ResourceNeedMapping.cc">
-      <Filter>Source Files\Providers</Filter>
+      <Filter>src\Providers</Filter>
     </ClCompile>
     <ClCompile Include="src\Providers\ResourceProviderRegistry.cc">
-      <Filter>Source Files\Providers</Filter>
+      <Filter>src\Providers</Filter>
+    </ClCompile>
+    <ClCompile Include="src\PawnAI\PawnAI.cc">
+      <Filter>src\PawnAI</Filter>
+    </ClCompile>
+    <ClCompile Include="src\FSM\PawnFSM.cc">
+      <Filter>src\FSM</Filter>
+    </ClCompile>
+    <ClCompile Include="tests\AncientMythosTests.cpp">
+      <Filter>tests</Filter>
+    </ClCompile>
+    <ClCompile Include="tests\PawnEcsTests.cpp">
+      <Filter>tests</Filter>
+    </ClCompile>
+    <ClCompile Include="tests\RegistryTests.cpp">
+      <Filter>tests</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="data\resource_types.json">
-      <Filter>Resource Files</Filter>
-    </None>
     <None Include="task.md" />
+    <None Include="data\resource_types.json">
+      <Filter>data</Filter>
+    </None>
   </ItemGroup>
 </Project>

@@ -16,7 +16,7 @@
 
 namespace ECS {
 
-void PawnNeedSatisfactionSystem::Update(Registry& registry, double delta_time) {
+void PawnNeedSatisfactionSystem::Update(Registry& registry, double delta_time, const GameContext* context) {
 	PawnAI ai;
 	PawnFSM fsm;
 
@@ -64,7 +64,7 @@ void PawnNeedSatisfactionSystem::Update(Registry& registry, double delta_time) {
 		}
 
 		// Update FSM for all states
-		fsm.Update(registry, entity, delta_time);
+		fsm.Update(registry, entity, delta_time, context);
 	});
 }
 

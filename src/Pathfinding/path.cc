@@ -1,5 +1,5 @@
 #include "../../include/Pathfinding/path.h"
-#include "../../include/Pathfinding/cost_map.h"
+#include "../../include/Map/Map.h"
 #include "../../include/Camera.h"
 
 Path::Path() {
@@ -27,7 +27,7 @@ MOMOS::Vec2 Path::NextPoint() {
 }
 
 
-void Path::Print(CostMap *map) {
+void Path::Print(Map *map) {
 	MOMOS::SpriteHandle sign = MOMOS::SpriteFromFile("data/bluedot.png");
 	float zoom = Camera::Zoom();
 	float half_width = MOMOS::SpriteWidth(sign) * 0.5f * zoom;

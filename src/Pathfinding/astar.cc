@@ -5,7 +5,7 @@ AStar::AStar() {}
 AStar::AStar(const AStar& orig) {}
 AStar::~AStar() {}
 
-bool AStar::PreProcess(CostMap *map) {
+bool AStar::PreProcess(Map *map) {
 	map_ = map;
 
 	// Initialize static memory to cache pointers to cells

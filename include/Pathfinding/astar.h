@@ -12,7 +12,7 @@
 
 #include "../../include/config.h"
 #include "path.h"
-#include "cost_map.h"
+#include "../Map/Map.h"
 #include "../Map/MapCell.h"
 
 class AStar
@@ -23,14 +23,14 @@ class AStar
 	std::vector<MapCell*> list_closed_;
 	MapCell*** list_closed_indexes_;
 
-	CostMap *map_;
+	Map *map_;
 
 public:
 	AStar();
 	AStar(const AStar& orig);
 	~AStar();
 
-	bool PreProcess(CostMap *map);
+	bool PreProcess(Map *map);
 	bool GeneratePath(::MOMOS::Vec2 origin, ::MOMOS::Vec2 destination, Path *path);
 };
 #endif // __ASTAR__

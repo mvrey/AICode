@@ -14,7 +14,7 @@
 namespace ECS {
 
 // Iterates every SpriteComponent and issues MOMOS draw calls if visible.
-void PawnRenderSystem::Update(Registry& registry, double delta_time) {
+void PawnRenderSystem::Update(Registry& registry, double /*delta_time*/, const GameContext* /*context*/) {
 	registry.ForEach<SpriteComponent>([&](Entity entity, SpriteComponent& sprite) {
 		if (!sprite.visible || sprite.sprite == nullptr)
 			return;

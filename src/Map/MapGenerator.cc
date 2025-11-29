@@ -2,7 +2,6 @@
 #include "../../include/Map/Map.h"
 #include "../../include/Map/ResourceTypeManager.h"
 #include "../../include/Providers/ResourceProviderRegistry.h"
-#include "../../include/Pathfinding/cost_map.h"
 #include "../../include/GameStatus.h"
 #include "../../include/Map/MapResource.h"
 #include <algorithm>
@@ -253,6 +252,8 @@ bool MapGenerator::GenerateTileMap(Map& map, int cols, int rows, float blocked_r
 	}
 	
 	// Re-register providers after adding resources
+	// Note: This should be called from game loop after map generation
+	// For now, using GameStatus for backward compatibility
 	auto* status = GameStatus::get();
 	if (status && status->map) {
 		ResourceProviderRegistry::Get().RegisterMapResources(*status->map);

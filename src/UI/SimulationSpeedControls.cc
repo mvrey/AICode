@@ -1,6 +1,5 @@
 #include "../../include/UI/SimulationSpeedControls.h"
 
-#include "../../include/GameStatus.h"
 #include "../../include/config.h"
 
 #include <MOMOS/draw.h>
@@ -27,7 +26,8 @@ SimulationSpeedControls::SimulationSpeedControls()
 	, last_nonzero_speed_index_(1)
 	, hovered_button_(-1)
 	, minus_key_was_pressed_(false)
-	, plus_key_was_pressed_(false) {
+	, plus_key_was_pressed_(false)
+	, on_speed_changed_(nullptr) {
 }
 
 void SimulationSpeedControls::Initialize() {
@@ -180,10 +180,19 @@ int SimulationSpeedControls::ButtonIndexAt(float x, float y) const {
 	return -1;
 }
 
+void SimulationSpeedControls::SetSpeedChangedCallback(std::function<void(float)> callback) {
+	on_speed_changed_ = callback;
+}
+
 void SimulationSpeedControls::ApplySpeedIndex(int index) {
 	index = std::max(0, std::min(kOptionCount - 1, index));
 	speed_index_ = index;
-	GameStatus::get()->simulation_speed_ = static_cast<float>(kOptions[index].multiplier);
+	float new_speed = static_cast<float>(kOptions[index].multiplier);
+	
+	// Call callback if set
+	if (on_speed_changed_) {
+		on_speed_changed_(new_speed);
+	}
 
 	if (kOptions[index].multiplier > 0.0) {
 		last_nonzero_speed_index_ = index;

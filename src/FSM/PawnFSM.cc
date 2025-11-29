@@ -3,6 +3,7 @@
 // Purpose: Implementation of PawnFSM
 //------------------------------------------------------------------------------
 #include "../../include/FSM/PawnFSM.h"
+#include "../../include/Core/GameContext.h"
 #include "../../include/ecs/components/PawnStateComponent.h"
 #include "../../include/ecs/components/NeedSatisfactionComponent.h"
 #include "../../include/ecs/components/NeedsControllerComponent.h"
@@ -11,15 +12,14 @@
 #include "../../include/ecs/PawnMovementUtils.h"
 #include "../../include/Needs/NeedsController.h"
 #include "../../include/Needs/INeed.h"
+#include "../../include/Needs/NeedId.h"
 #include "../../include/Providers/INeedProvider.h"
 #include "../../include/Providers/ProviderRegistry.h"
-#include "../../include/GameStatus.h"
-#include "../../include/Pathfinding/cost_map.h"
 #include <cmath>
 
 namespace MovementUtils = PawnECS::MovementUtils;
 
-void PawnFSM::Update(ECS::Registry& registry, ECS::Entity entity, double delta_time) {
+void PawnFSM::Update(ECS::Registry& registry, ECS::Entity entity, double delta_time, const GameContext* context) {
 	if (!registry.HasComponent<ECS::PawnStateComponent>(entity)) {
 		return;
 	}
@@ -31,7 +31,7 @@ void PawnFSM::Update(ECS::Registry& registry, ECS::Entity entity, double delta_t
 			HandleIdle(registry, entity);
 			break;
 		case kMoveToProvider:
-			HandleMoveToProvider(registry, entity, delta_time);
+			HandleMoveToProvider(registry, entity, delta_time, context);
 			break;
 		case kWorking:
 			HandleWorking(registry, entity, delta_time);
@@ -50,7 +50,7 @@ void PawnFSM::HandleIdle(ECS::Registry& registry, ECS::Entity entity) {
 	// No action needed here, PawnAI will transition to other states
 }
 
-void PawnFSM::HandleMoveToProvider(ECS::Registry& registry, ECS::Entity entity, double delta_time) {
+void PawnFSM::HandleMoveToProvider(ECS::Registry& registry, ECS::Entity entity, double delta_time, const GameContext* context) {
 	if (!registry.HasComponent<ECS::NeedSatisfactionComponent>(entity)) {
 		return;
 	}
@@ -83,7 +83,7 @@ void PawnFSM::HandleMoveToProvider(ECS::Registry& registry, ECS::Entity entity, 
 		auto& movement = registry.GetComponent<ECS::MovementComponent>(entity);
 		if (!movement.path_set && !movement.movement_finished) {
 			::MOMOS::Vec2 provider_pos = satisfaction.current_provider->GetPosition();
-			MovementUtils::RequestPathTo(registry, entity, provider_pos);
+			MovementUtils::RequestPathTo(registry, entity, provider_pos, context);
 		}
 	}
 }
