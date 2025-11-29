@@ -7,8 +7,12 @@
 #include "../../../include/ecs/components/PawnStateComponent.h"
 #include "../../../include/ecs/components/NeedsControllerComponent.h"
 #include "../../../include/ecs/components/TransformComponent.h"
+#include "../../../include/ecs/components/MovementComponent.h"
+#include "../../../include/ecs/PawnMovementUtils.h"
+#include "../../../include/Needs/INeed.h"
 #include "../../../include/PawnAI/PawnAI.h"
 #include "../../../include/FSM/PawnFSM.h"
+#include "../../../include/config.h"
 
 namespace ECS {
 
@@ -33,6 +37,26 @@ void PawnNeedSatisfactionSystem::Update(Registry& registry, double delta_time) {
 
 		auto& state = registry.GetComponent<PawnStateComponent>(entity);
 		auto& transform = registry.GetComponent<TransformComponent>(entity);
+
+		// Check if pawn has urgent needs
+		INeed* urgent_need = needs_comp.controller->GetMostUrgentNeed();
+		bool has_urgent_need = urgent_need && urgent_need->IsUrgent();
+
+		// If pawn has urgent needs and is not already handling them, interrupt current behavior
+		if (has_urgent_need && 
+			state.status != kMoveToProvider && 
+			state.status != kWorking && 
+			state.status != kSleeping) {
+			// Force pawn to idle so AI can make a decision
+			state.status = kIdle;
+			// Clear any wandering targets
+			state.has_wander_target = false;
+			// Clear movement if pawn is moving
+			if (registry.HasComponent<MovementComponent>(entity)) {
+				auto& movement = registry.GetComponent<MovementComponent>(entity);
+				PawnECS::MovementUtils::ClearMovement(registry, entity);
+			}
+		}
 
 		// If idle, let AI make a decision
 		if (state.status == kIdle) {

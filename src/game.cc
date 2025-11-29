@@ -43,6 +43,9 @@ namespace {
 void Input() {
 	g_speed_controls.HandleInput();
 
+	// Handle keyboard navigation for pawn selection
+	PawnSelection::HandleKeyboardNavigation();
+
 	static double last_input_time = 0.0;
 	double current_time = MOMOS::Time();
 	if (last_input_time == 0.0) {

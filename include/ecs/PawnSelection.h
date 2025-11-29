@@ -20,6 +20,10 @@ ECS::Entity GetSelectedPawn();
 /// Clears the current pawn selection
 void ClearSelection();
 
+/// Handles keyboard input for pawn navigation
+/// @return true if a pawn was selected, false otherwise
+bool HandleKeyboardNavigation();
+
 } // namespace PawnSelection
 
 #endif // PAWN_SELECTION_H

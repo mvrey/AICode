@@ -22,5 +22,9 @@ void Pan(const ::MOMOS::Vec2& delta);
 /// @param delta_seconds Time since last frame in seconds
 void HandleInput(float delta_seconds);
 
+/// Focuses the camera on a world position
+/// @param world_pos The world position to focus on
+void FocusOn(const ::MOMOS::Vec2& world_pos);
+
 } // namespace Camera
 

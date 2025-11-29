@@ -180,3 +180,6 @@
 		
 	* Cámara
 		TODO
+		
+	* Player tools
+		Mapas que muestran como de cubiertas están las necesidades de los pawns. e.g. un botón que colorea a los pawn según el hambre que tengan.

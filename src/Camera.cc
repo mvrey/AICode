@@ -123,6 +123,11 @@ void Pan(const ::MOMOS::Vec2& delta) {
 	ClampCenter();
 }
 
+void FocusOn(const ::MOMOS::Vec2& world_pos) {
+	g_center = world_pos;
+	ClampCenter();
+}
+
 void HandleInput(float delta_seconds) {
 	// Handle zoom
 	float wheel_delta = static_cast<float>(MOMOS::MouseWheelY());

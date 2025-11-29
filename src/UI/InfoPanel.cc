@@ -2,6 +2,7 @@
 #include "../../include/ecs/Registry.h"
 #include "../../include/ecs/Entity.h"
 #include "../../include/ecs/components/NeedsComponent.h"
+#include "../../include/ecs/components/PawnStateComponent.h"
 #include "../../include/ecs/PawnEcs.h"
 #include "../../include/Map/MapResource.h"
 #include <utility>
@@ -87,6 +88,13 @@ void InfoPanel::Draw() const {
 	if (showing_needs) {
 		// Get registry from PawnECS
 		auto& registry = PawnECS::GetRegistry();
+		
+		// Draw pawn state first
+		if (registry.HasComponent<ECS::PawnStateComponent>(selected_pawn_)) {
+			DrawPawnState(registry, selected_pawn_, current_y);
+			current_y += kResourceLineSpacing; // Add spacing after state
+		}
+		
 		if (registry.HasComponent<ECS::NeedsComponent>(selected_pawn_)) {
 			DrawNeedsBars(registry, selected_pawn_, current_y);
 			current_y += (kNeedBarHeight + kNeedBarSpacing) * 3.0f; // 3 need bars
@@ -210,6 +218,36 @@ void InfoPanel::DrawResourcesList(float start_y) const {
 	// If no valid resources were found, show a message
 	if (valid_resources == 0 && !selected_cell_resources_.empty()) {
 		MOMOS::DrawText(x, y, "  (resources have invalid data)");
+	}
+}
+
+void InfoPanel::DrawPawnState(const ECS::Registry& registry, ECS::Entity pawn, float start_y) const {
+	const auto& state = registry.GetComponent<ECS::PawnStateComponent>(pawn);
+	
+	MOMOS::DrawSetFillColor(255, 255, 255, 255);
+	MOMOS::DrawSetTextSize(kTextSize - 2.0f);
+	
+	float x = kTextPadding;
+	float y = start_y;
+	
+	char state_text[128];
+	snprintf(state_text, sizeof(state_text), "State: %s", GetStateName(state.status));
+	MOMOS::DrawText(x, y, state_text);
+}
+
+const char* InfoPanel::GetStateName(PawnStatus status) {
+	switch (status) {
+		case kIdle: return "Idle";
+		case kGoingToWork: return "Going To Work";
+		case kWorkingLoaded: return "Working (Loaded)";
+		case kWorkingUnloaded: return "Working (Unloaded)";
+		case kGoingToRest: return "Going To Rest";
+		case kResting: return "Resting";
+		case kEscaping: return "Escaping";
+		case kMoveToProvider: return "Moving To Provider";
+		case kWorking: return "Working";
+		case kSleeping: return "Sleeping";
+		default: return "Unknown";
 	}
 }
 

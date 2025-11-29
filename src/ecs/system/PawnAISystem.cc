@@ -55,6 +55,11 @@ void PawnAISystem::Update(Registry& registry, double /*delta_time*/) {
 	CostMap* map = status->map;
 
 	registry.ForEach<PawnStateComponent>([&](Entity entity, PawnStateComponent& state) {
+		// Skip pawns that are in need-satisfaction states - they're handled by PawnNeedSatisfactionSystem
+		if (state.status == kMoveToProvider || state.status == kWorking || state.status == kSleeping) {
+			return;
+		}
+		
 		if (!registry.HasComponent<MovementComponent>(entity) ||
 			!registry.HasComponent<TransformComponent>(entity)) {
 			return;

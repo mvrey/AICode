@@ -26,6 +26,8 @@ private:
 	void DrawNeedsBars(const ECS::Registry& registry, ECS::Entity pawn, float start_y) const;
 	void DrawNeedBar(const char* name, float value, float x, float y, float width, float height) const;
 	void DrawResourcesList(float start_y) const;
+	void DrawPawnState(const ECS::Registry& registry, ECS::Entity pawn, float start_y) const;
+	static const char* GetStateName(PawnStatus status);
 
 	std::string message_;
 	ECS::Entity selected_pawn_;

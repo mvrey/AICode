@@ -8,10 +8,14 @@
 #include "../../include/ecs/components/PawnStateComponent.h"
 #include "../../include/ecs/components/TransformComponent.h"
 #include "../../include/ecs/Registry.h"
+#include <vector>
+#include <algorithm>
 
 namespace PawnSelection {
 
 static ECS::Entity g_selected_pawn;
+static bool g_prev_key_was_pressed = false;
+static bool g_next_key_was_pressed = false;
 
 bool HandleClick() {
 	if (!MOMOS::MouseButtonDown(1)) {
@@ -104,6 +108,84 @@ ECS::Entity GetSelectedPawn() {
 
 void ClearSelection() {
 	g_selected_pawn = ECS::Entity();
+}
+
+bool HandleKeyboardNavigation() {
+	// Check if ',' (previous) or '.' (next) is pressed
+	bool prev_pressed = MOMOS::IsKeyPressed(',');
+	bool next_pressed = MOMOS::IsKeyPressed('.');
+	
+	// Only trigger on key press (not while held down)
+	bool prev_just_pressed = prev_pressed && !g_prev_key_was_pressed;
+	bool next_just_pressed = next_pressed && !g_next_key_was_pressed;
+	
+	g_prev_key_was_pressed = prev_pressed;
+	g_next_key_was_pressed = next_pressed;
+	
+	if (!prev_just_pressed && !next_just_pressed) {
+		return false;
+	}
+
+	auto& registry = PawnECS::GetRegistry();
+	
+	// Collect all pawns with PawnStateComponent
+	std::vector<ECS::Entity> pawns;
+	registry.ForEach<ECS::PawnStateComponent>([&](ECS::Entity entity, ECS::PawnStateComponent& /*state*/) {
+		pawns.push_back(entity);
+	});
+	
+	if (pawns.empty()) {
+		return false;
+	}
+	
+	// Find current selected pawn index
+	int current_index = -1;
+	if (g_selected_pawn.IsValid()) {
+		for (size_t i = 0; i < pawns.size(); ++i) {
+			if (pawns[i] == g_selected_pawn) {
+				current_index = static_cast<int>(i);
+				break;
+			}
+		}
+	}
+	
+	// If no pawn is selected, start from the first one
+	if (current_index == -1) {
+		current_index = 0;
+	} else {
+		// Navigate to previous or next
+		if (prev_just_pressed) {
+			current_index--;
+			if (current_index < 0) {
+				current_index = static_cast<int>(pawns.size()) - 1; // Wrap to end
+			}
+		} else if (next_just_pressed) {
+			current_index++;
+			if (current_index >= static_cast<int>(pawns.size())) {
+				current_index = 0; // Wrap to beginning
+			}
+		}
+	}
+	
+	// Select the pawn at the new index
+	g_selected_pawn = pawns[current_index];
+	
+	// Update InfoPanel and focus camera on the selected pawn
+	if (registry.HasComponent<ECS::PawnStateComponent>(g_selected_pawn)) {
+		const auto& state = registry.GetComponent<ECS::PawnStateComponent>(g_selected_pawn);
+		std::string pawn_name = state.name.empty() ? "Unnamed Pawn" : state.name;
+		InfoPanel::Get().SetMessage(pawn_name);
+		InfoPanel::Get().SetSelectedPawn(g_selected_pawn);
+		InfoPanel::Get().SetSelectedCellResources(std::vector<MapResource>());
+		
+		// Focus camera on the selected pawn
+		if (registry.HasComponent<ECS::TransformComponent>(g_selected_pawn)) {
+			const auto& transform = registry.GetComponent<ECS::TransformComponent>(g_selected_pawn);
+			Camera::FocusOn(transform.position);
+		}
+	}
+	
+	return true;
 }
 
 } // namespace PawnSelection

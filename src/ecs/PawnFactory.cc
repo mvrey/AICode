@@ -101,7 +101,7 @@ ECS::Entity SpawnPawn() {
 	movement.movement_finished = false;
 
 	auto& state = registry.AddComponent<ECS::PawnStateComponent>(entity);
-	state.status = kGoingToWork;
+	state.status = kIdle;  // Start in idle so need satisfaction system can take over
 	state.time_end_status = 0.0;
 	state.original_speed = base_speed;
 	state.name = PickRandomPawnName();
