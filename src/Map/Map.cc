@@ -26,6 +26,23 @@ void Map::Initialize(int width, int height,
 }
 
 void Map::reset() {
+	// Save resources from existing cells before deleting them
+	std::vector<std::vector<std::vector<MapResource>>> saved_resources;
+	if (width_ > 0 && height_ > 0) {
+		saved_resources.resize(width_);
+		for (int w = 0; w < width_; w++) {
+			saved_resources[w].resize(height_);
+			if (w < static_cast<int>(cost_map_.size())) {
+				for (int h = 0; h < height_; h++) {
+					if (h < static_cast<int>(cost_map_[w].size()) && cost_map_[w][h] != nullptr) {
+						// Copy resources from existing cell
+						saved_resources[w][h] = cost_map_[w][h]->resources;
+					}
+				}
+			}
+		}
+	}
+
 	// Delete existing cells
 	for (auto& column : cost_map_) {
 		for (MapCell* cell : column) {
@@ -47,7 +64,13 @@ void Map::reset() {
 			MapCell* cell = new MapCell();
 			cell->position_.x = static_cast<float>(w);
 			cell->position_.y = static_cast<float>(h);
-			cell->resources.clear(); // Initialize empty resources list
+			
+			// Restore resources if they were saved
+			if (w < static_cast<int>(saved_resources.size()) && h < static_cast<int>(saved_resources[w].size())) {
+				cell->resources = saved_resources[w][h];
+			} else {
+				cell->resources.clear(); // Initialize empty resources list
+			}
 
 			bool walkable = true;
 			float cost = 0.0f;
