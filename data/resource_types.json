@@ -31,6 +31,38 @@
             "destroy_on_use": false,
             "max_stack": 64,
             "outputs": {}
+        },
+        "TomatoPlant": {
+            "name": "TomatoPlant",
+            "image_names": ["TomatoPlant.png"],
+            "destroy_on_use": true,
+            "max_stack": 1,
+            "outputs": {
+                "Tomatoes": [1, 3]
+            }
+        },
+        "Tomatoes": {
+            "name": "Tomatoes",
+            "image_names": ["Tomatoes.png"],
+            "destroy_on_use": false,
+            "max_stack": 64,
+            "outputs": {}
+        },
+        "StrawberryPlant": {
+            "name": "StrawberryPlant",
+            "image_names": ["StrawberryPlant.png"],
+            "destroy_on_use": true,
+            "max_stack": 1,
+            "outputs": {
+                "Strawberries": [2, 5]
+            }
+        },
+        "Strawberries": {
+            "name": "Strawberries",
+            "image_names": ["Strawberries.png"],
+            "destroy_on_use": false,
+            "max_stack": 64,
+            "outputs": {}
         }
     }
 }

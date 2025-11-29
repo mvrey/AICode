@@ -182,7 +182,7 @@ bool MapGenerator::GenerateTileMap(Map& map, int cols, int rows, float blocked_r
 					// Check if this cell should have a tree (4% chance)
 					// Use deterministic hash based on cell position for consistent randomness
 					unsigned int tree_hash = static_cast<unsigned int>(x * 91234567u) ^ static_cast<unsigned int>(y * 45678901u);
-					if ((tree_hash % 100) < 4) {
+					if ((tree_hash % 100) < 2) {
 						MapCell* cell = map.getCellAt(x, y);
 						if (cell != nullptr) {
 							// Add a tree resource to this cell
