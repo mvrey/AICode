@@ -139,21 +139,15 @@ void Update(double m_iTimeStep) {
 }
 
 
-/// Entry point
-int game(int argc, char** argv) {
-
-	srand(static_cast<unsigned int>(time(NULL)));
-
-	MOMOS::WindowInit(Screen::width, Screen::height);
-	Camera::Initialize();
-
+void SetupCamera() {
 	::MOMOS::Vec2 initial_zoom_focus = {
 		static_cast<float>(Screen::width) * 0.5f,
 		static_cast<float>(Screen::height) * 0.5f
 	};
 	Camera::ZoomBy(Camera::kZoomStep * 2.0f, initial_zoom_focus);
-	g_vsync_toggle.Initialize(false);
+}
 
+void CreateServices() {
 	// Create services
 	g_time_service = new GameTimeService();
 	g_map_service = new MapService();
@@ -162,13 +156,16 @@ int game(int argc, char** argv) {
 	
 	// Create game context
 	g_game_context = new GameContext(g_time_service, g_map_service, g_pathfinding_service, g_state_service);
-	
+}
+
+void LoadStaticData() {
 	// Load resource types from JSON
 	ResourceTypeManager::Get().LoadFromJSON("data/resource_types.json");
-
 	// Load needs configuration from JSON
 	NeedsConfig::Get().LoadFromJSON("data/needs_config.json");
+}
 
+void CreateMap() {
 	// Create Map and load it
 	Map* map = new Map();
 	MapGenerator generator;
@@ -179,23 +176,21 @@ int game(int argc, char** argv) {
 	
 	// Create MapRenderer for drawing
 	g_map_renderer = new MapRenderer();
-	
+
 	// Register map resources as need providers (after map is loaded)
 	ResourceProviderRegistry::Get().RegisterMapResources(*map);
-	
+
 	// Create pathfinder and initialize it
 	Pathfinder* pathfinder = new Pathfinder();
 	pathfinder->init(map); // Initialize pathfinder with map
 	g_pathfinding_service->SetPathfinder(pathfinder);
-	
-	// Keep GameStatus for backward compatibility (legacy code still uses it)
-	// TODO: Remove this once all code is migrated
+
 	GameStatus::get()->map = map; // Store Map* for backward compatibility
 	GameStatus::get()->pathfinder_ = pathfinder;
-	GameStatus::get()->game_time = 0.0; // Initialize for backward compatibility
-	GameStatus::get()->simulation_speed_ = 1.0f; // Initialize for backward compatibility
-	GameStatus::get()->pawns_created = false; // Initialize for backward compatibility
-	
+}
+
+void SetupSpeedControls() {
+	// Initialize speed controls UI
 	g_speed_controls.Initialize();
 	// Wire speed controls to time service
 	// Note: g_time_service is static, so we can access it directly without capture
@@ -206,16 +201,18 @@ int game(int argc, char** argv) {
 				GameStatus::get()->simulation_speed_ = speed; // For backward compatibility
 			}
 		});
-	
-	// Create legacy agent manager
-	g_legacy_agent_manager = new LegacyAgentManager();
-	
+}
+
+
+void SetupInputHandlers() {
 	// Create and configure InputManager
 	g_input_manager = new InputManager();
 	g_input_manager->RegisterHandler(new UIInputHandler(&g_speed_controls, &g_vsync_toggle, &InfoPanel::Get()));
 	g_input_manager->RegisterHandler(new GameWorldInputHandler(g_map_service, &InfoPanel::Get()));
 	g_input_manager->RegisterHandler(new CameraInputHandler());
-	
+}
+
+void CreateSystems() {
 	// Create and configure SystemManager
 	g_system_manager = new SystemManager();
 	// Register systems in priority order (higher = updated first)
@@ -225,7 +222,7 @@ int game(int argc, char** argv) {
 			float delta_seconds = static_cast<float>(delta_time) / 1000.0f;
 			Camera::UpdateFollow(delta_seconds);
 		}
-	});
+		});
 	g_system_manager->RegisterSystem(80, [](double delta_time, const GameContext* context) {
 		// Legacy Agent AI system
 		if (g_legacy_agent_manager && context && context->time && delta_time > 0.0) {
@@ -234,12 +231,14 @@ int game(int argc, char** argv) {
 				g_legacy_agent_manager->Update(delta_time, context->time);
 			}
 		}
-	});
+		});
 	g_system_manager->RegisterSystem(50, [](double delta_time, const GameContext* context) {
 		// ECS systems
 		PawnECS::Systems::Get().Update(delta_time, context);
-	});
-	
+		});
+}
+
+void CreateRenderPipeline() {
 	// Create and configure RenderPipeline
 	g_render_pipeline = new RenderPipeline();
 	// Background layer - map
@@ -247,7 +246,7 @@ int game(int argc, char** argv) {
 		if (g_map_renderer && g_map_service && g_map_service->GetMap()) {
 			g_map_renderer->Draw(*g_map_service->GetMap());
 		}
-	});
+		});
 	// Entities layer - agents and pawns
 	g_render_pipeline->RegisterRenderer(RenderPipeline::Layer::Entities, []() {
 		// Draw legacy agents
@@ -256,25 +255,85 @@ int game(int argc, char** argv) {
 		}
 		// Draw ECS pawns
 		PawnECS::Systems::Get().Render(0.0, g_game_context);
-	});
+		});
 	// Overlay layer - selections and indicators
 	g_render_pipeline->RegisterRenderer(RenderPipeline::Layer::Overlay, []() {
 		PawnSelection::DrawSelection();
 		if (g_map_service && g_map_service->GetMap()) {
 			g_map_service->GetMap()->DrawCellSelection();
 		}
-	});
+		});
 	// UI layer - all UI elements
 	g_render_pipeline->RegisterRenderer(RenderPipeline::Layer::UI, []() {
 		g_fps_counter.Draw();
 		g_vsync_toggle.Draw(g_fps_counter.GetTextRight(), g_fps_counter.GetTextBaselineY());
 		g_speed_controls.Draw();
 		InfoPanel::Get().Draw();
-	});
+		});
 
 	MOMOS::DrawSetTextFont("data/medieval.ttf");
 	MOMOS::WindowSetMouseVisibility(true);
 	MOMOS::DrawSetFillColor(200, 50, 100, 255);
+}
+
+
+void Cleanup() {
+	// Cleanup handled in game() destructor section
+	delete g_render_pipeline;
+	g_render_pipeline = nullptr;
+	delete g_system_manager;
+	g_system_manager = nullptr;
+	delete g_input_manager;
+	g_input_manager = nullptr;
+	delete g_legacy_agent_manager;
+	g_legacy_agent_manager = nullptr;
+	delete g_map_renderer;
+	g_map_renderer = nullptr;
+	delete g_game_context;
+	g_game_context = nullptr;
+	delete g_state_service;
+	g_state_service = nullptr;
+	delete g_pathfinding_service;
+	g_pathfinding_service = nullptr;
+	delete g_map_service; // This will delete the map
+	g_map_service = nullptr;
+	delete g_time_service;
+	g_time_service = nullptr;
+}
+
+
+void InitGame() {
+	srand(static_cast<unsigned int>(time(NULL)));
+
+	MOMOS::WindowInit(Screen::width, Screen::height);
+	Camera::Initialize();
+	SetupCamera();
+	g_vsync_toggle.Initialize(false);
+	CreateServices();
+	LoadStaticData();
+	CreateMap();
+	CreateMap();
+
+	// Keep GameStatus for backward compatibility (legacy code still uses it)
+	// TODO: Remove this once all code is migrated
+	GameStatus::get()->game_time = 0.0; // Initialize for backward compatibility
+	GameStatus::get()->simulation_speed_ = 1.0f; // Initialize for backward compatibility
+	GameStatus::get()->pawns_created = false; // Initialize for backward compatibility
+
+	// Create legacy agent manager
+	g_legacy_agent_manager = new LegacyAgentManager();
+
+	SetupSpeedControls();
+	SetupInputHandlers();
+	CreateSystems();
+	CreateRenderPipeline();
+}
+
+
+/// Entry point
+int game(int argc, char** argv) {
+
+	InitGame();
 
 	// 40ms per frame
 	float m_iTimeStep = 16.0f;
@@ -299,27 +358,7 @@ int game(int argc, char** argv) {
 		Draw();
 	}
 
-	// Cleanup
-	delete g_render_pipeline;
-	g_render_pipeline = nullptr;
-	delete g_system_manager;
-	g_system_manager = nullptr;
-	delete g_input_manager;
-	g_input_manager = nullptr;
-	delete g_legacy_agent_manager;
-	g_legacy_agent_manager = nullptr;
-	delete g_map_renderer;
-	g_map_renderer = nullptr;
-	delete g_game_context;
-	g_game_context = nullptr;
-	delete g_state_service;
-	g_state_service = nullptr;
-	delete g_pathfinding_service;
-	g_pathfinding_service = nullptr;
-	delete g_map_service; // This will delete the map
-	g_map_service = nullptr;
-	delete g_time_service;
-	g_time_service = nullptr;
+	Cleanup();
 
 	return 0;
 }
