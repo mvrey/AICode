@@ -78,7 +78,24 @@ void Input() {
 }
 
 
-// UpdateAI removed - now handled by LegacyAgentManager via SystemManager
+/// Main update loop
+void Update(double m_iTimeStep) {
+	if (!g_time_service || !g_system_manager) {
+		return;
+	}
+
+	double effective_step = g_time_service->GetEffectiveTimeStep(m_iTimeStep);
+	g_time_service->AdvanceTime(m_iTimeStep);
+
+	// Keep GameStatus synchronized for backward compatibility
+	if (GameStatus::get()) {
+		GameStatus::get()->game_time = g_time_service->GetGameTime();
+		GameStatus::get()->simulation_speed_ = g_time_service->GetSimulationSpeed();
+	}
+
+	// Update all systems via SystemManager
+	g_system_manager->Update(effective_step, g_game_context);
+}
 
 
 void Draw() {
@@ -116,26 +133,6 @@ bool checkGameStarted() {
 	}
 
 	return g_state_service->ArePawnsCreated();
-}
-
-
-/// Main update loop
-void Update(double m_iTimeStep) {
-	if (!g_time_service || !g_system_manager) {
-		return;
-	}
-	
-	double effective_step = g_time_service->GetEffectiveTimeStep(m_iTimeStep);
-	g_time_service->AdvanceTime(m_iTimeStep);
-	
-	// Keep GameStatus synchronized for backward compatibility
-	if (GameStatus::get()) {
-		GameStatus::get()->game_time = g_time_service->GetGameTime();
-		GameStatus::get()->simulation_speed_ = g_time_service->GetSimulationSpeed();
-	}
-	
-	// Update all systems via SystemManager
-	g_system_manager->Update(effective_step, g_game_context);
 }
 
 

@@ -119,7 +119,7 @@ ECS::Entity SpawnPawn() {
 	// Create needs from config with random decay rates
 	// Range: 0.001 to 0.005 per second (needs will deplete in 20-100 seconds if not replenished)
 	constexpr float kMinDecreaseRate = 0.001f;
-	constexpr float kMaxDecreaseRate = 0.005f;
+	constexpr float kMaxDecreaseRate = 0.01f;
 	constexpr float kRateRange = kMaxDecreaseRate - kMinDecreaseRate;
 
 	// Hunger need

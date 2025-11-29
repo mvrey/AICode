@@ -330,7 +330,9 @@
     <ClCompile Include="tests\RegistryTests.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="data\needs_config.json" />
     <None Include="data\resource_types.json" />
+    <None Include="data\textures.json" />
     <None Include="task.md" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
