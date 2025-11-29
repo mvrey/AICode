@@ -49,6 +49,30 @@
     <Filter Include="Source Files\ecs\system">
       <UniqueIdentifier>{9bb1d111-8a62-486d-abce-e6781eeb8fa6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Needs">
+      <UniqueIdentifier>{a1b2c3d4-e5f6-7890-abcd-ef1234567890}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Needs">
+      <UniqueIdentifier>{b2c3d4e5-f6a7-8901-bcde-f23456789012}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Providers">
+      <UniqueIdentifier>{c3d4e5f6-a7b8-9012-cdef-345678901234}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Providers">
+      <UniqueIdentifier>{d4e5f6a7-b8c9-0123-def0-456789012345}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\PawnAI">
+      <UniqueIdentifier>{e5f6a7b8-c9d0-1234-ef01-567890123456}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\PawnAI">
+      <UniqueIdentifier>{f6a7b8c9-d0e1-2345-f012-678901234567}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\FSM">
+      <UniqueIdentifier>{a7b8c9d0-e1f2-3456-0123-789012345678}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\FSM">
+      <UniqueIdentifier>{b8c9d0e1-f2a3-4567-1234-890123456789}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Header Files\Managers">
       <UniqueIdentifier>{55dc6c61-f7be-490c-9414-4569a9eb85bb}</UniqueIdentifier>
     </Filter>
@@ -63,6 +87,30 @@
     </Filter>
     <Filter Include="Source Files\Map">
       <UniqueIdentifier>{ee1e6f65-6a64-4bd0-9098-ca0ebdcd53c4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\FSM">
+      <UniqueIdentifier>{d7dccce5-0aed-423f-a914-9054c4a66ba2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Needs">
+      <UniqueIdentifier>{42f2b21b-0b0d-471a-a4ed-4fe5598a9e6c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\PawnAI">
+      <UniqueIdentifier>{022632b5-a108-4660-b6fc-0075e72d26f9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Providers">
+      <UniqueIdentifier>{354a120e-9464-4f2f-82d9-a198af46edf5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\FSM">
+      <UniqueIdentifier>{0a65cbe3-e8be-4a8a-8772-4a1e80096e19}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Needs">
+      <UniqueIdentifier>{f2ffa3fc-271f-4b1d-8834-55ac349b863d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\PawnAI">
+      <UniqueIdentifier>{7f2d77e3-96a3-4874-b13e-21a7e9356107}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Providers">
+      <UniqueIdentifier>{885e0d43-2263-4b1b-89b2-e9a8be4738d0}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -381,8 +429,53 @@
     <ClInclude Include="include\ecs\system\PawnNeedsSystem.h">
       <Filter>Header Files\ecs\system</Filter>
     </ClInclude>
+    <ClInclude Include="include\ecs\system\PawnNeedSatisfactionSystem.h">
+      <Filter>Header Files\ecs\system</Filter>
+    </ClInclude>
     <ClInclude Include="include\ecs\components\NeedsComponent.h">
       <Filter>Header Files\ecs\components</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ecs\components\NeedsControllerComponent.h">
+      <Filter>Header Files\ecs\components</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ecs\components\NeedSatisfactionComponent.h">
+      <Filter>Header Files\ecs\components</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Needs\NeedId.h">
+      <Filter>Header Files\Needs</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Needs\INeed.h">
+      <Filter>Header Files\Needs</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Needs\Need.h">
+      <Filter>Header Files\Needs</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Needs\NeedsController.h">
+      <Filter>Header Files\Needs</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Needs\NeedsConfig.h">
+      <Filter>Header Files\Needs</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Providers\INeedProvider.h">
+      <Filter>Header Files\Providers</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Providers\ProviderRegistry.h">
+      <Filter>Header Files\Providers</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Providers\MapResourceProvider.h">
+      <Filter>Header Files\Providers</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Providers\ResourceNeedMapping.h">
+      <Filter>Header Files\Providers</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Providers\ResourceProviderRegistry.h">
+      <Filter>Header Files\Providers</Filter>
+    </ClInclude>
+    <ClInclude Include="include\PawnAI\PawnAI.h">
+      <Filter>Header Files\PawnAI</Filter>
+    </ClInclude>
+    <ClInclude Include="include\FSM\PawnFSM.h">
+      <Filter>Header Files\FSM</Filter>
     </ClInclude>
     <ClInclude Include="include\ecs\system\PawnPathFollowSystem.h">
       <Filter>Header Files\ecs\system</Filter>
@@ -437,6 +530,42 @@
     </ClInclude>
     <ClInclude Include="include\Map\MapResourceType.h">
       <Filter>Header Files\Map</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Needs\NeedsController.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\FSM\PawnFSM.h">
+      <Filter>Header Files\FSM</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Needs\INeed.h">
+      <Filter>Header Files\Needs</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Needs\Need.h">
+      <Filter>Header Files\Needs</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Needs\NeedId.h">
+      <Filter>Header Files\Needs</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Needs\NeedsConfig.h">
+      <Filter>Header Files\Needs</Filter>
+    </ClInclude>
+    <ClInclude Include="include\PawnAI\PawnAI.h">
+      <Filter>Header Files\PawnAI</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Providers\INeedProvider.h">
+      <Filter>Header Files\Providers</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Providers\MapResourceProvider.h">
+      <Filter>Header Files\Providers</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Providers\ProviderRegistry.h">
+      <Filter>Header Files\Providers</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Providers\ResourceNeedMapping.h">
+      <Filter>Header Files\Providers</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Providers\ResourceProviderRegistry.h">
+      <Filter>Header Files\Providers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -506,6 +635,36 @@
     <ClCompile Include="src\ecs\system\PawnNeedsSystem.cc">
       <Filter>Source Files\ecs\system</Filter>
     </ClCompile>
+    <ClCompile Include="src\ecs\system\PawnNeedSatisfactionSystem.cc">
+      <Filter>Source Files\ecs\system</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Needs\Need.cc">
+      <Filter>Source Files\Needs</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Needs\NeedsConfig.cc">
+      <Filter>Source Files\Needs</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Needs\NeedsController.cc">
+      <Filter>Source Files\Needs</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Providers\MapResourceProvider.cc">
+      <Filter>Source Files\Providers</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Providers\ProviderRegistry.cc">
+      <Filter>Source Files\Providers</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Providers\ResourceNeedMapping.cc">
+      <Filter>Source Files\Providers</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Providers\ResourceProviderRegistry.cc">
+      <Filter>Source Files\Providers</Filter>
+    </ClCompile>
+    <ClCompile Include="src\PawnAI\PawnAI.cc">
+      <Filter>Source Files\PawnAI</Filter>
+    </ClCompile>
+    <ClCompile Include="src\FSM\PawnFSM.cc">
+      <Filter>Source Files\FSM</Filter>
+    </ClCompile>
     <ClCompile Include="src\UI\VSyncToggle.cc">
       <Filter>Source Files\UI</Filter>
     </ClCompile>
@@ -551,10 +710,38 @@
     <ClCompile Include="src\Map\MapResourceType.cc">
       <Filter>Source Files\Map</Filter>
     </ClCompile>
+    <ClCompile Include="src\FSM\PawnFSM.cc">
+      <Filter>Source Files\FSM</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Needs\Need.cc">
+      <Filter>Source Files\Needs</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Needs\NeedsConfig.cc">
+      <Filter>Source Files\Needs</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Needs\NeedsController.cc">
+      <Filter>Source Files\Needs</Filter>
+    </ClCompile>
+    <ClCompile Include="src\PawnAI\PawnAI.cc">
+      <Filter>Source Files\PawnAI</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Providers\MapResourceProvider.cc">
+      <Filter>Source Files\Providers</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Providers\ProviderRegistry.cc">
+      <Filter>Source Files\Providers</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Providers\ResourceNeedMapping.cc">
+      <Filter>Source Files\Providers</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Providers\ResourceProviderRegistry.cc">
+      <Filter>Source Files\Providers</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="data\resource_types.json">
       <Filter>Resource Files</Filter>
     </None>
+    <None Include="task.md" />
   </ItemGroup>
 </Project>

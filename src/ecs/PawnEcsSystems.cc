@@ -10,6 +10,7 @@
 #include "../../include/ecs/system/PawnMovementSystem.h"
 #include "../../include/ecs/system/PawnRenderSystem.h"
 #include "../../include/ecs/system/PawnNeedsSystem.h"
+#include "../../include/ecs/system/PawnNeedSatisfactionSystem.h"
 
 namespace PawnECS {
 
@@ -31,6 +32,9 @@ Systems& Systems::Get() {
 	if (!instance.needs_system_) {
 		instance.needs_system_ = new ECS::PawnNeedsSystem();
 	}
+	if (!instance.need_satisfaction_system_) {
+		instance.need_satisfaction_system_ = new ECS::PawnNeedSatisfactionSystem();
+	}
 	return instance;
 }
 
@@ -38,6 +42,7 @@ Systems& Systems::Get() {
 void Systems::Update(double delta_time) {
 	auto& registry = PawnECS::GetRegistry();
 	needs_system_->Update(registry, delta_time);
+	need_satisfaction_system_->Update(registry, delta_time);
 	ai_system_->Update(registry, delta_time);
 	path_system_->Update(registry, delta_time);
 	movement_system_->Update(registry, delta_time);

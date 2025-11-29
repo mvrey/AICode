@@ -67,7 +67,10 @@ typedef enum {
 	kWorkingUnloaded,
 	kGoingToRest,
 	kResting,
-	kEscaping
+	kEscaping,
+	kMoveToProvider,  // Moving to a need provider
+	kWorking,         // Using a need provider
+	kSleeping         // Passive state that restores energy
 } PawnStatus;
 
 typedef enum {

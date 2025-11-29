@@ -1,28 +1,49 @@
 //------------------------------------------------------------------------------
 // File: PawnNeedsSystem.cc
-// Purpose: Implements the pawn needs system that decreases needs over time.
+// Purpose: Syncs NeedsController with NeedsComponent for UI compatibility
+//          The actual need decay is handled by NeedsController, this just syncs values
 //------------------------------------------------------------------------------
 #include "../../../include/ecs/system/PawnNeedsSystem.h"
 #include "../../../include/ecs/Registry.h"
 #include "../../../include/ecs/components/NeedsComponent.h"
-
-#include <algorithm>
+#include "../../../include/ecs/components/NeedsControllerComponent.h"
+#include "../../../include/Needs/NeedId.h"
+#include "../../../include/Needs/INeed.h"
 
 namespace ECS {
 
-void PawnNeedsSystem::Update(Registry& registry, double delta_time) {
-	const float delta_seconds = static_cast<float>(delta_time) / 1000.0f;
-	
-	registry.ForEach<NeedsComponent>([delta_seconds](Entity /*entity*/, NeedsComponent& needs) {
-		// Decrease each need based on its rate
-		needs.hunger -= needs.hunger_decrease_rate * delta_seconds;
-		needs.energy -= needs.energy_decrease_rate * delta_seconds;
-		needs.joy -= needs.joy_decrease_rate * delta_seconds;
-		
-		// Clamp values to [0, 1] range
-		needs.hunger = std::max(0.0f, std::min(1.0f, needs.hunger));
-		needs.energy = std::max(0.0f, std::min(1.0f, needs.energy));
-		needs.joy = std::max(0.0f, std::min(1.0f, needs.joy));
+void PawnNeedsSystem::Update(Registry& registry, double /*delta_time*/) {
+	// Sync NeedsController values to NeedsComponent for UI compatibility
+	registry.ForEach<NeedsControllerComponent>([&registry](Entity entity, NeedsControllerComponent& needs_comp) {
+		if (!needs_comp.controller) {
+			return;
+		}
+
+		// Get or create NeedsComponent for UI compatibility
+		if (!registry.HasComponent<NeedsComponent>(entity)) {
+			registry.AddComponent<NeedsComponent>(entity);
+		}
+
+		auto& needs = registry.GetComponent<NeedsComponent>(entity);
+
+		// Sync values from NeedsController
+		INeed* hunger_need = needs_comp.controller->GetNeed(NeedId::Hunger);
+		if (hunger_need) {
+			needs.hunger = hunger_need->GetValue();
+			needs.hunger_decrease_rate = hunger_need->GetDecayRate();
+		}
+
+		INeed* energy_need = needs_comp.controller->GetNeed(NeedId::Energy);
+		if (energy_need) {
+			needs.energy = energy_need->GetValue();
+			needs.energy_decrease_rate = energy_need->GetDecayRate();
+		}
+
+		INeed* joy_need = needs_comp.controller->GetNeed(NeedId::Joy);
+		if (joy_need) {
+			needs.joy = joy_need->GetValue();
+			needs.joy_decrease_rate = joy_need->GetDecayRate();
+		}
 	});
 }
 

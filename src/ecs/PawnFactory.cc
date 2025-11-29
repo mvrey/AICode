@@ -2,6 +2,11 @@
 
 #include "../../include/ecs/PawnEcs.h"
 #include "../../include/ecs/components/PawnComponents.h"
+#include "../../include/ecs/components/NeedsControllerComponent.h"
+#include "../../include/Needs/NeedsController.h"
+#include "../../include/Needs/Need.h"
+#include "../../include/Needs/NeedId.h"
+#include "../../include/Needs/NeedsConfig.h"
 #include "../../include/GameStatus.h"
 #include "../../include/config.h"
 #include "../../include/Pathfinding/cost_map.h"
@@ -13,6 +18,7 @@
 #include <mutex>
 #include <string>
 #include <vector>
+#include <memory>
 
 namespace {
 
@@ -100,22 +106,48 @@ ECS::Entity SpawnPawn() {
 	state.original_speed = base_speed;
 	state.name = PickRandomPawnName();
 
-	// Initialize needs component with random decrease rates
-	auto& needs = registry.AddComponent<ECS::NeedsComponent>(entity);
-	// All needs start at full (1.0)
-	needs.hunger = 1.0f;
-	needs.energy = 1.0f;
-	needs.joy = 1.0f;
-	
-	// Assign random decrease rates per second for each pawn
+	// Initialize needs using the new NeedsController system
+	auto& needs_controller_comp = registry.AddComponent<ECS::NeedsControllerComponent>(entity);
+	needs_controller_comp.controller = std::make_unique<NeedsController>();
+
+	// Load needs config
+	NeedsConfig& needs_config = NeedsConfig::Get();
+
+	// Create needs from config with random decay rates
 	// Range: 0.001 to 0.005 per second (needs will deplete in 20-100 seconds if not replenished)
 	constexpr float kMinDecreaseRate = 0.001f;
 	constexpr float kMaxDecreaseRate = 0.005f;
 	constexpr float kRateRange = kMaxDecreaseRate - kMinDecreaseRate;
-	
-	needs.hunger_decrease_rate = kMinDecreaseRate + (static_cast<float>(rand()) / static_cast<float>(RAND_MAX)) * kRateRange;
-	needs.energy_decrease_rate = kMinDecreaseRate + (static_cast<float>(rand()) / static_cast<float>(RAND_MAX)) * kRateRange;
-	needs.joy_decrease_rate = kMinDecreaseRate + (static_cast<float>(rand()) / static_cast<float>(RAND_MAX)) * kRateRange;
+
+	// Hunger need
+	NeedConfig hunger_config = needs_config.GetConfig(NeedId::Hunger);
+	float hunger_decay = kMinDecreaseRate + (static_cast<float>(rand()) / static_cast<float>(RAND_MAX)) * kRateRange;
+	needs_controller_comp.controller->AddNeed(
+		std::make_unique<Need>(NeedId::Hunger, 1.0f, hunger_decay, hunger_config.threshold)
+	);
+
+	// Energy need
+	NeedConfig energy_config = needs_config.GetConfig(NeedId::Energy);
+	float energy_decay = kMinDecreaseRate + (static_cast<float>(rand()) / static_cast<float>(RAND_MAX)) * kRateRange;
+	needs_controller_comp.controller->AddNeed(
+		std::make_unique<Need>(NeedId::Energy, 1.0f, energy_decay, energy_config.threshold)
+	);
+
+	// Joy need
+	NeedConfig joy_config = needs_config.GetConfig(NeedId::Joy);
+	float joy_decay = kMinDecreaseRate + (static_cast<float>(rand()) / static_cast<float>(RAND_MAX)) * kRateRange;
+	needs_controller_comp.controller->AddNeed(
+		std::make_unique<Need>(NeedId::Joy, 1.0f, joy_decay, joy_config.threshold)
+	);
+
+	// Also keep NeedsComponent for backward compatibility with UI
+	auto& needs = registry.AddComponent<ECS::NeedsComponent>(entity);
+	needs.hunger = 1.0f;
+	needs.energy = 1.0f;
+	needs.joy = 1.0f;
+	needs.hunger_decrease_rate = hunger_decay;
+	needs.energy_decrease_rate = energy_decay;
+	needs.joy_decrease_rate = joy_decay;
 
 	return entity;
 }

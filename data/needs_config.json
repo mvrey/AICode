@@ -1,0 +1,17 @@
+{
+    "needs": {
+        "Hunger": {
+            "threshold": 0.3,
+            "default_decay_rate": 0.003
+        },
+        "Energy": {
+            "threshold": 0.2,
+            "default_decay_rate": 0.002
+        },
+        "Joy": {
+            "threshold": 0.4,
+            "default_decay_rate": 0.001
+        }
+    }
+}
+

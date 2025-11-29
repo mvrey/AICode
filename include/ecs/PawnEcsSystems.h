@@ -14,6 +14,7 @@ class PawnPathFollowSystem;
 class PawnMovementSystem;
 class PawnRenderSystem;
 class PawnNeedsSystem;
+class PawnNeedSatisfactionSystem;
 } // namespace ECS
 
 namespace PawnECS {
@@ -37,6 +38,7 @@ private:
 	ECS::PawnMovementSystem* movement_system_ = nullptr;
 	ECS::PawnRenderSystem* render_system_ = nullptr;
 	ECS::PawnNeedsSystem* needs_system_ = nullptr;
+	ECS::PawnNeedSatisfactionSystem* need_satisfaction_system_ = nullptr;
 };
 
 } // namespace PawnECS

@@ -65,6 +65,10 @@ public:
 	
 	/// Clears the current cell selection
 	void ClearCellSelection();
+
+	/// Get access to the underlying Map (for provider registration)
+	Map& GetMap() { return map_; }
+	const Map& GetMap() const { return map_; }
 };
 
 #endif // __COST_MAP__

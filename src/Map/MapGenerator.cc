@@ -1,6 +1,9 @@
 #include "../../include/Map/MapGenerator.h"
 #include "../../include/Map/Map.h"
 #include "../../include/Map/ResourceTypeManager.h"
+#include "../../include/Providers/ResourceProviderRegistry.h"
+#include "../../include/Pathfinding/cost_map.h"
+#include "../../include/GameStatus.h"
 #include "../../include/Map/MapResource.h"
 #include <algorithm>
 #include <cstdlib>
@@ -247,6 +250,12 @@ bool MapGenerator::GenerateTileMap(Map& map, int cols, int rows, float blocked_r
 		}
 		// Debug: Print how many tomato plants were added
 		printf("Added %d tomato plant resources to map\n", tomato_plants_added);
+	}
+	
+	// Re-register providers after adding resources
+	auto* status = GameStatus::get();
+	if (status && status->map) {
+		ResourceProviderRegistry::Get().RegisterMapResources(*status->map);
 	}
 	
 	return true;

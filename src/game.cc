@@ -21,6 +21,8 @@
 #include "../include/ecs/PawnFactory.h"
 #include "../include/ecs/PawnSelection.h"
 #include "../include/Map/ResourceTypeManager.h"
+#include "../include/Needs/NeedsConfig.h"
+#include "../include/Providers/ResourceProviderRegistry.h"
 #include <MOMOS/momos.h>
 #include <MOMOS/draw.h>
 #include <MOMOS/input.h>
@@ -203,8 +205,15 @@ int game(int argc, char** argv) {
 	// Load resource types from JSON
 	ResourceTypeManager::Get().LoadFromJSON("data/resource_types.json");
 
+	// Load needs configuration from JSON
+	NeedsConfig::Get().LoadFromJSON("data/needs_config.json");
+
 	GameStatus::get()->map = new CostMap();
 	GameStatus::get()->map->Load("data/map_03_60x44_bw.bmp", "data/map_03_960x704_layoutAB.bmp");
+	
+	// Register map resources as need providers (after map is loaded)
+	ResourceProviderRegistry::Get().RegisterMapResources(*GameStatus::get()->map);
+	
 	GameStatus::get()->pathfinder_ = new Pathfinder();
 	g_speed_controls.Initialize();
 
