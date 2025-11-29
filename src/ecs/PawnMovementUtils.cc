@@ -95,7 +95,7 @@ void PopulateDeterministicSteps(ECS::MovementComponent& movement, Map* map, cons
 namespace PawnECS {
 namespace MovementUtils {
 
-void ClearMovement(ECS::Registry& registry, ECS::Entity entity) {
+void ClearMovement(ECS::Registry& registry, ECS::Entity entity, const GameContext* context) {
 	auto& movement = registry.GetComponent<ECS::MovementComponent>(entity);
 	auto& transform = registry.GetComponent<ECS::TransformComponent>(entity);
 
@@ -105,6 +105,11 @@ void ClearMovement(ECS::Registry& registry, ECS::Entity entity) {
 	movement.movement_finished = false;
 	movement.movement_path = nullptr;
 	if (movement.path_command) {
+		// Cancel the path command from pathfinder queue before deleting
+		// This prevents the pathfinder from accessing a deleted command
+		if (context && context->pathfinding && context->pathfinding->GetPathfinder()) {
+			context->pathfinding->GetPathfinder()->cancel(movement.path_command);
+		}
 		delete movement.path_command;
 		movement.path_command = nullptr;
 	}

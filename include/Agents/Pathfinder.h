@@ -56,6 +56,9 @@ public:
 	void update(double accumTime) override;
 	///Apends a PathCommand to the queue
 	void search(PathCommand* cmd);
+	///Removes a PathCommand from the queue (if it hasn't been processed yet)
+	///Useful when cancelling a path request
+	void cancel(PathCommand* cmd);
 	///Clears the pre-calculated paths
 	void clearCachedPaths();
 

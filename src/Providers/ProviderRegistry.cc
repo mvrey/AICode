@@ -55,6 +55,20 @@ INeedProvider* ProviderRegistry::FindNearestProvider(NeedId need_id, const ::MOM
 	return nearest;
 }
 
+bool ProviderRegistry::IsProviderValid(INeedProvider* provider) const {
+	if (!provider) {
+		return false;
+	}
+	
+	// Check if the provider is still in the registry
+	for (const auto& p : providers_) {
+		if (p.get() == provider) {
+			return true;
+		}
+	}
+	return false;
+}
+
 void ProviderRegistry::Clear() {
 	providers_.clear();
 }

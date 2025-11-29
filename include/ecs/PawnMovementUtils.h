@@ -24,7 +24,7 @@ enum class PathFinalizationResult {
 	kFailure,
 };
 
-void ClearMovement(ECS::Registry& registry, ECS::Entity entity);
+void ClearMovement(ECS::Registry& registry, ECS::Entity entity, const GameContext* context = nullptr);
 PathFinalizationResult TryFinalizePath(ECS::Registry& registry, ECS::Entity entity, const GameContext* context);
 bool RequestPathTo(ECS::Registry& registry, ECS::Entity entity, const ::MOMOS::Vec2& destination, const GameContext* context);
 void SetDoorRouteActive(ECS::Registry& registry, ECS::Entity entity, bool active);

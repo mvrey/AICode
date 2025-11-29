@@ -33,6 +33,11 @@ public:
 	/// @return The nearest available provider, or nullptr if none found
 	INeedProvider* FindNearestProvider(NeedId need_id, const ::MOMOS::Vec2& position) const;
 
+	/// Check if a provider is still registered (valid)
+	/// @param provider The provider to check
+	/// @return true if the provider is still in the registry, false otherwise
+	bool IsProviderValid(INeedProvider* provider) const;
+
 	/// Clear all registered providers
 	void Clear();
 

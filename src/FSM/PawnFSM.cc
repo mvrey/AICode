@@ -65,6 +65,17 @@ void PawnFSM::HandleMoveToProvider(ECS::Registry& registry, ECS::Entity entity, 
 		return;
 	}
 
+	// Verify provider is still valid
+	if (!ProviderRegistry::Get().IsProviderValid(satisfaction.current_provider)) {
+		// Provider was removed, go back to idle
+		satisfaction.current_provider = nullptr;
+		if (registry.HasComponent<ECS::PawnStateComponent>(entity)) {
+			auto& state = registry.GetComponent<ECS::PawnStateComponent>(entity);
+			state.status = kIdle;
+		}
+		return;
+	}
+
 	// Check if we've reached the provider
 	if (HasReachedProvider(registry, entity)) {
 		satisfaction.reached_provider = true;
@@ -82,8 +93,11 @@ void PawnFSM::HandleMoveToProvider(ECS::Registry& registry, ECS::Entity entity, 
 	if (registry.HasComponent<ECS::MovementComponent>(entity)) {
 		auto& movement = registry.GetComponent<ECS::MovementComponent>(entity);
 		if (!movement.path_set && !movement.movement_finished) {
-			::MOMOS::Vec2 provider_pos = satisfaction.current_provider->GetPosition();
-			MovementUtils::RequestPathTo(registry, entity, provider_pos, context);
+			// Verify provider is still valid before getting position
+			if (ProviderRegistry::Get().IsProviderValid(satisfaction.current_provider)) {
+				::MOMOS::Vec2 provider_pos = satisfaction.current_provider->GetPosition();
+				MovementUtils::RequestPathTo(registry, entity, provider_pos, context);
+			}
 		}
 	}
 }
@@ -96,6 +110,17 @@ void PawnFSM::HandleWorking(ECS::Registry& registry, ECS::Entity entity, double 
 	auto& satisfaction = registry.GetComponent<ECS::NeedSatisfactionComponent>(entity);
 	if (!satisfaction.current_provider) {
 		// Provider disappeared, go back to idle
+		if (registry.HasComponent<ECS::PawnStateComponent>(entity)) {
+			auto& state = registry.GetComponent<ECS::PawnStateComponent>(entity);
+			state.status = kIdle;
+		}
+		return;
+	}
+
+	// Verify provider is still valid
+	if (!ProviderRegistry::Get().IsProviderValid(satisfaction.current_provider)) {
+		// Provider was removed, go back to idle
+		satisfaction.current_provider = nullptr;
 		if (registry.HasComponent<ECS::PawnStateComponent>(entity)) {
 			auto& state = registry.GetComponent<ECS::PawnStateComponent>(entity);
 			state.status = kIdle;
@@ -179,6 +204,12 @@ bool PawnFSM::HasReachedProvider(ECS::Registry& registry, ECS::Entity entity) co
 		return false;
 	}
 
+	// Verify provider is still valid before accessing it
+	if (!ProviderRegistry::Get().IsProviderValid(satisfaction.current_provider)) {
+		return false;
+	}
+
+	// Get provider position (safe now that we've verified it's valid)
 	::MOMOS::Vec2 provider_pos = satisfaction.current_provider->GetPosition();
 	
 	// Check if we're close enough (within 32 pixels)

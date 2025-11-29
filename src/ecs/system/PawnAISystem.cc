@@ -78,7 +78,7 @@ void PawnAISystem::Update(Registry& registry, double /*delta_time*/, const GameC
 			}
 			state.wander_target = candidate;
 			state.has_wander_target = true;
-			MovementUtils::ClearMovement(registry, entity);
+			MovementUtils::ClearMovement(registry, entity, context);
 			return true;
 		};
 
@@ -86,7 +86,7 @@ void PawnAISystem::Update(Registry& registry, double /*delta_time*/, const GameC
 
 		if (movement.movement_finished) {
 			state.has_wander_target = false;
-			MovementUtils::ClearMovement(registry, entity);
+			MovementUtils::ClearMovement(registry, entity, context);
 		}
 
 		if (!ensureTarget()) {
@@ -97,7 +97,7 @@ void PawnAISystem::Update(Registry& registry, double /*delta_time*/, const GameC
 
 		if (finalize_result == MovementUtils::PathFinalizationResult::kFailure) {
 			state.has_wander_target = false;
-			MovementUtils::ClearMovement(registry, entity);
+			MovementUtils::ClearMovement(registry, entity, context);
 			if (!ensureTarget()) {
 				return;
 			}
@@ -112,7 +112,7 @@ void PawnAISystem::Update(Registry& registry, double /*delta_time*/, const GameC
 
 		if (movement.movement_finished) {
 			state.has_wander_target = false;
-			MovementUtils::ClearMovement(registry, entity);
+			MovementUtils::ClearMovement(registry, entity, context);
 			if (ensureTarget()) {
 				MovementUtils::RequestPathTo(registry, entity, state.wander_target, context);
 			}

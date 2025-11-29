@@ -4,14 +4,16 @@
 //------------------------------------------------------------------------------
 #include "../../include/Providers/MapResourceProvider.h"
 #include "../../include/Providers/IMapResourceQuery.h"
+#include "../../include/Core/MapService.h"
+#include "../../include/GameStatus.h"
+#include "../../include/Map/Map.h"
 #include "../../include/Map/MapCell.h"
 #include <algorithm>
 
-MapResourceProvider::MapResourceProvider(IMapResourceQuery* map_query, int cell_x, int cell_y, 
+MapResourceProvider::MapResourceProvider(int cell_x, int cell_y, 
 	const std::string& resource_type_name, NeedId need_id, 
 	float restore_amount, double use_duration)
-	: map_query_(map_query)
-	, cell_x_(cell_x)
+	: cell_x_(cell_x)
 	, cell_y_(cell_y)
 	, resource_type_name_(resource_type_name)
 	, need_id_(need_id)
@@ -20,12 +22,24 @@ MapResourceProvider::MapResourceProvider(IMapResourceQuery* map_query, int cell_
 {
 }
 
+IMapResourceQuery* MapResourceProvider::GetMapQuery() const {
+	// Get Map from GameStatus (Map implements IMapResourceQuery)
+	// TODO: In the future, get from MapService when it's accessible globally
+	auto* status = GameStatus::get();
+	if (status && status->map) {
+		// Map inherits from IMapResourceQuery, so this is safe
+		return static_cast<IMapResourceQuery*>(status->map);
+	}
+	return nullptr;
+}
+
 MapResource* MapResourceProvider::GetCurrentResource() const {
-	if (!map_query_) {
+	IMapResourceQuery* map_query = GetMapQuery();
+	if (!map_query) {
 		return nullptr;
 	}
 
-	MapCell* cell = map_query_->GetCellAt(cell_x_, cell_y_);
+	MapCell* cell = map_query->GetCellAt(cell_x_, cell_y_);
 	if (!cell) {
 		return nullptr;
 	}
@@ -51,11 +65,12 @@ void MapResourceProvider::OnUsed() {
 		return;
 	}
 
-	if (!map_query_) {
+	IMapResourceQuery* map_query = GetMapQuery();
+	if (!map_query) {
 		return;
 	}
 
-	MapCell* cell = map_query_->GetCellAt(cell_x_, cell_y_);
+	MapCell* cell = map_query->GetCellAt(cell_x_, cell_y_);
 	if (!cell) {
 		return;
 	}
@@ -78,11 +93,12 @@ void MapResourceProvider::OnUsed() {
 }
 
 ::MOMOS::Vec2 MapResourceProvider::GetPosition() const {
-	if (!map_query_) {
+	IMapResourceQuery* map_query = GetMapQuery();
+	if (!map_query) {
 		return { 0.0f, 0.0f };
 	}
 
 	// Convert cell coordinates to world/screen coordinates
-	return map_query_->CellToWorld(cell_x_, cell_y_);
+	return map_query->CellToWorld(cell_x_, cell_y_);
 }
 

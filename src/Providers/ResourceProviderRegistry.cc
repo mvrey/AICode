@@ -44,9 +44,10 @@ void ResourceProviderRegistry::RegisterMapResources(IMapResourceQuery& map_query
 				float restore_amount;
 				double use_duration;
 				if (mapping.GetNeedForResource(resource.type->name, need_id, restore_amount, use_duration)) {
-					// Create a provider for this resource using the interface
+					// Create a provider for this resource
+					// MapResourceProvider will get the Map from MapService/GameStatus when needed
 					auto provider = std::make_unique<MapResourceProvider>(
-						&map_query, x, y, resource.type->name, need_id, restore_amount, use_duration
+						x, y, resource.type->name, need_id, restore_amount, use_duration
 					);
 					provider_registry.RegisterProvider(std::move(provider));
 				}

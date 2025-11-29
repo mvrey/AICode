@@ -1,5 +1,6 @@
 #include "../../include/Agents/Pathfinder.h"
 #include "../../include/Map/Map.h"
+#include <algorithm>
 
 /*****************************/
 /************ AGENT **********/
@@ -81,25 +82,42 @@ void PathfinderMind::reason() {
 	}
 
 	PathCommand* command = owner_->commands_.front();
+	
+	// Safety check: verify command and path_ are valid
+	// This can happen if the command was deleted while still in the queue
+	if (!command || !command->path_) {
+		// Remove invalid command from queue
+		owner_->commands_.erase(owner_->commands_.begin());
+		return;
+	}
+	
 	PathKey key = MakePathKey(command->start, command->end);
 
 	auto cached = owner_->cached_paths_.find(key);
 	if (cached != owner_->cached_paths_.end()) {
-		command->path_->path_ = cached->second;
-		command->calculated = true;
-		command->pending_ = false;
-		owner_->calc_paths_.push_back(command);
+		// Double-check path_ is still valid before accessing
+		if (command->path_) {
+			command->path_->path_ = cached->second;
+			command->calculated = true;
+			command->pending_ = false;
+			owner_->calc_paths_.push_back(command);
+		}
 		owner_->commands_.erase(owner_->commands_.begin());
 		return;
 	}
 
 	map->reset();
-	owner_->astar_->GeneratePath(command->start, command->end, command->path_);
-	command->calculated = true;
-	command->pending_ = false;
+	// Double-check path_ is still valid before using
+	if (command->path_) {
+		owner_->astar_->GeneratePath(command->start, command->end, command->path_);
+		command->calculated = true;
+		command->pending_ = false;
 
-	owner_->calc_paths_.push_back(command);
-	owner_->cached_paths_[key] = command->path_->path_;
+		owner_->calc_paths_.push_back(command);
+		if (command->path_) {
+			owner_->cached_paths_[key] = command->path_->path_;
+		}
+	}
 	owner_->commands_.erase(owner_->commands_.begin());
 }
 
@@ -108,6 +126,15 @@ void Pathfinder::search(PathCommand* cmd) {
 	commands_.push_back(cmd);
 }
 
+void Pathfinder::cancel(PathCommand* cmd) {
+	// Remove from pending queue if it's still there
+	auto it = std::find(commands_.begin(), commands_.end(), cmd);
+	if (it != commands_.end()) {
+		commands_.erase(it);
+	}
+	// Note: We don't remove from calc_paths_ because it might already be processed
+	// The caller should handle cleanup of the PathCommand itself
+}
 
 void Pathfinder::clearCachedPaths() {
 	calc_paths_.clear();

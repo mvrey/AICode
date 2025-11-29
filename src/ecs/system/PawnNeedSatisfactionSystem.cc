@@ -54,7 +54,7 @@ void PawnNeedSatisfactionSystem::Update(Registry& registry, double delta_time, c
 			// Clear movement if pawn is moving
 			if (registry.HasComponent<MovementComponent>(entity)) {
 				auto& movement = registry.GetComponent<MovementComponent>(entity);
-				PawnECS::MovementUtils::ClearMovement(registry, entity);
+				PawnECS::MovementUtils::ClearMovement(registry, entity, context);
 			}
 		}
 
