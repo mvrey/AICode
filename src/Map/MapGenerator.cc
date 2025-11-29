@@ -171,7 +171,7 @@ bool MapGenerator::GenerateTileMap(Map& map, int cols, int rows, float blocked_r
 	// Initialize the map with generated data
 	map.Initialize(safe_cols, safe_rows, tile_walkable, tile_costs);
 	
-	// Add tree resources to cells (4% of walkable cells)
+	// Add tree resources to cells (2% of walkable cells)
 	const MapResourceType* tree_type = ResourceTypeManager::Get().GetResourceType("Tree");
 	if (tree_type != nullptr && !tree_type->image_names.empty()) {
 		int trees_added = 0;
@@ -179,7 +179,7 @@ bool MapGenerator::GenerateTileMap(Map& map, int cols, int rows, float blocked_r
 			for (int y = 0; y < safe_rows; ++y) {
 				// Only add trees to walkable cells (cost == 0.0f)
 				if (tile_walkable[x][y] && tile_costs[x][y] == 0.0f) {
-					// Check if this cell should have a tree (4% chance)
+					// Check if this cell should have a tree (2% chance)
 					// Use deterministic hash based on cell position for consistent randomness
 					unsigned int tree_hash = static_cast<unsigned int>(x * 91234567u) ^ static_cast<unsigned int>(y * 45678901u);
 					if ((tree_hash % 100) < 2) {
@@ -194,7 +194,59 @@ bool MapGenerator::GenerateTileMap(Map& map, int cols, int rows, float blocked_r
 			}
 		}
 		// Debug: Print how many trees were added (can be removed later)
-		 printf("Added %d tree resources to map\n", trees_added);
+		printf("Added %d tree resources to map\n", trees_added);
+	}
+	
+	// Add strawberry plant resources to cells (1.5% of walkable cells)
+	const MapResourceType* strawberry_plant_type = ResourceTypeManager::Get().GetResourceType("StrawberryPlant");
+	if (strawberry_plant_type != nullptr && !strawberry_plant_type->image_names.empty()) {
+		int strawberry_plants_added = 0;
+		for (int x = 0; x < safe_cols; ++x) {
+			for (int y = 0; y < safe_rows; ++y) {
+				// Only add strawberry plants to walkable cells (cost == 0.0f)
+				if (tile_walkable[x][y] && tile_costs[x][y] == 0.0f) {
+					// Check if this cell should have a strawberry plant (1.5% chance)
+					// Use different hash values to avoid overlap with trees
+					unsigned int plant_hash = static_cast<unsigned int>(x * 72345678u) ^ static_cast<unsigned int>(y * 34567890u);
+					if ((plant_hash % 1000) < 15) {
+						MapCell* cell = map.getCellAt(x, y);
+						if (cell != nullptr && cell->resources.empty()) {
+							// Only add if cell doesn't already have a resource (avoid stacking)
+							cell->resources.push_back(MapResource(strawberry_plant_type, 1));
+							strawberry_plants_added++;
+						}
+					}
+				}
+			}
+		}
+		// Debug: Print how many strawberry plants were added
+		printf("Added %d strawberry plant resources to map\n", strawberry_plants_added);
+	}
+	
+	// Add tomato plant resources to cells (1.5% of walkable cells)
+	const MapResourceType* tomato_plant_type = ResourceTypeManager::Get().GetResourceType("TomatoPlant");
+	if (tomato_plant_type != nullptr && !tomato_plant_type->image_names.empty()) {
+		int tomato_plants_added = 0;
+		for (int x = 0; x < safe_cols; ++x) {
+			for (int y = 0; y < safe_rows; ++y) {
+				// Only add tomato plants to walkable cells (cost == 0.0f)
+				if (tile_walkable[x][y] && tile_costs[x][y] == 0.0f) {
+					// Check if this cell should have a tomato plant (1.5% chance)
+					// Use different hash values to avoid overlap with trees and strawberry plants
+					unsigned int plant_hash = static_cast<unsigned int>(x * 63456789u) ^ static_cast<unsigned int>(y * 23456789u);
+					if ((plant_hash % 1000) < 15) {
+						MapCell* cell = map.getCellAt(x, y);
+						if (cell != nullptr && cell->resources.empty()) {
+							// Only add if cell doesn't already have a resource (avoid stacking)
+							cell->resources.push_back(MapResource(tomato_plant_type, 1));
+							tomato_plants_added++;
+						}
+					}
+				}
+			}
+		}
+		// Debug: Print how many tomato plants were added
+		printf("Added %d tomato plant resources to map\n", tomato_plants_added);
 	}
 	
 	return true;
