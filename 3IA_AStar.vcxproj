@@ -70,7 +70,7 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <OutDir>bin/Debug</OutDir>
+    <OutDir>bin/Debug\</OutDir>
     <IncludePath>D:\Projects2025\MOMOS25\include\MOMOS;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -78,7 +78,7 @@
     <IncludePath>D:\Projects2025\MOMOS25\include\MOMOS;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <OutDir>bin/Release</OutDir>
+    <OutDir>bin/Release\</OutDir>
     <IncludePath>D:\Projects2025\MOMOS25\include\MOMOS;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">

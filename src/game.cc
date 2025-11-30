@@ -126,7 +126,7 @@ bool checkGameStarted() {
 			Agent::agents_.push_back(g_pathfinding_service->GetPathfinder());
 		}
 
-		const int total_pawns = 100;
+		const int total_pawns = 1;
 		for (int i = 0; i < total_pawns; ++i) {
 			PawnECS::SpawnPawn();
 		}

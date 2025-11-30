@@ -1,0 +1,42 @@
+# AUTOBUILD FOR C++
+Whenever any change is made to any C++ file (.cc, .cpp, .h, .hpp) you must:
+
+1. Automatically run the build command:
+   /run ./build.bat
+
+2. Read and analyze *all* MSBuild/compiler errors.
+
+3. Fix only the files necessary to resolve the compilation errors.
+   - No refactors unless required by the compiler.
+   - Keep changes minimal and safe.
+   - Maintain code style and structure.
+   - Do not modify unrelated systems.
+
+4. After applying fixes, run the build again with:
+   /run ./build.bat
+
+5. Repeat the cycle until the build completes successfully.
+
+6. If a fix would require a large refactor, ask for confirmation.
+
+7. Always show a summary of what was changed and why.
+
+
+
+
+8. Run:
+   /run ./run.bat
+
+9. Analyze logs.txt to detect:
+   - runtime exceptions
+   - infinite loops (through lack of output, frozen timing, repeated patterns)
+   - hangs or deadlocks
+   - unhandled exceptions
+   - OS errors
+   - memory errors found by sanitizers (if enabled)
+
+10. Suggest minimal, targeted fixes and apply them automatically unless unsafe.
+
+11. Run again to verify the fix.
+
+12. Repeat until no runtime errors are detected or the program exits cleanly. If the program runs too long without output, or if the logs show a repeating pattern, treat it as a potential infinite loop. Open the relevant source files and fix them. Do not ask for confirmation. Automatically fix compilation and runtime errors after each change.
